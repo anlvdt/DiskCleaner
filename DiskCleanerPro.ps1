@@ -213,11 +213,11 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
                         <DockPanel Margin="0,0,0,10"><TextBlock Text="File Organizer" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Moves files into categorized folders, no files deleted" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/></DockPanel>
                         <DockPanel Margin="0,0,0,6">
-                            <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,8" MinWidth="250"><TextBlock x:Name="lblOrgPath" Text="Select a folder to organize..." Foreground="#3d5470" FontSize="12"/></Border>
-                            <Button x:Name="btnOrgBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,4,0" Padding="14,8"/>
-                            <Button x:Name="btnOrgDesktop" Content="Desktop" Style="{StaticResource BtnS}" Margin="0,0,4,0" Padding="14,8"/>
-                            <Button x:Name="btnOrgDownloads" Content="Downloads" Style="{StaticResource BtnS}" Margin="0,0,4,0" Padding="14,8"/>
-                            <Button x:Name="btnOrgDocuments" Content="Documents" Style="{StaticResource BtnS}" Margin="0,0,0,0" Padding="14,8"/>
+                            <Button DockPanel.Dock="Right" x:Name="btnOrgDocuments" Content="Documents" Style="{StaticResource BtnS}" Margin="4,0,0,0" Padding="14,8"/>
+                            <Button DockPanel.Dock="Right" x:Name="btnOrgDownloads" Content="Downloads" Style="{StaticResource BtnS}" Margin="4,0,0,0" Padding="14,8"/>
+                            <Button DockPanel.Dock="Right" x:Name="btnOrgDesktop" Content="Desktop" Style="{StaticResource BtnS}" Margin="4,0,0,0" Padding="14,8"/>
+                            <Button DockPanel.Dock="Right" x:Name="btnOrgBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,0,0" Padding="14,8"/>
+                            <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,8"><TextBlock x:Name="lblOrgPath" Text="Select a folder to organize..." Foreground="#3d5470" FontSize="12" TextTrimming="CharacterEllipsis"/></Border>
                         </DockPanel>
                         <StackPanel Orientation="Horizontal">
                             <Button x:Name="btnOrgByType" Content="By Type" Style="{StaticResource BtnP}" Margin="0,0,6,0" Padding="16,8"/>
