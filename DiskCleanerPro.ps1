@@ -222,7 +222,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                             <Button x:Name="btnOrgBySize" Content="By Size" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
                             <Button x:Name="btnOrgPreview" Content="Preview" Style="{StaticResource BtnP}" Margin="0,0,8,0"/>
                             <Button x:Name="btnOrgUndo" Content="Undo Last" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
-                            <Button x:Name="btnOrgAI" Content="🤖 AI Off" Style="{StaticResource BtnS}" FontSize="10" Padding="10,8" Foreground="#3d5470"/>
+                            <Button x:Name="btnOrgAI" Content="[AI] Off" Style="{StaticResource BtnS}" FontSize="10" Padding="10,8" Foreground="#3d5470"/>
                         </DockPanel>
                     </StackPanel></Border>
                     <Border Grid.Row="1" Margin="18,0,18,4"><UniformGrid Columns="3">
@@ -252,18 +252,18 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                 <!-- TAB: SETTINGS -->
                 <TabItem Header="  Settings  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#0b1120" Padding="32,24">
                     <StackPanel MaxWidth="550" HorizontalAlignment="Center">
-                        <TextBlock Text="⚙️ Settings" Foreground="#c8d6e5" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
+                        <TextBlock Text="Settings" Foreground="#c8d6e5" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
                         <!-- AI Classification Section -->
                         <Border Background="#0e1726" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
                                 <TextBlock Text="AI CLASSIFICATION (OPTIONAL)" Foreground="#34d399" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
                                 <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,8" Text="Enable AI to auto-classify files that can't be identified by extension. Uses Groq API with Llama 3.1 model."/>
-                                <TextBlock Foreground="#34d399" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5" Text="✅ 100% MIỄN PHÍ - KHÔNG CẦN THẺ TÍN DỤNG"/>
-                                <TextBlock Foreground="#34d399" FontSize="11" Margin="0,0,0,5" Text="✅ Miễn phí 14,400 lượt/ngày (dư dùng cho mọi nhu cầu)"/>
-                                <TextBlock Foreground="#f59e0b" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,12" Text="🔒 API key chỉ lưu trên máy bạn, KHÔNG gửi cho tác giả hay bất kỳ ai. Mã nguồn mở, bạn có thể kiểm tra."/>
+                                <TextBlock Foreground="#34d399" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5" Text="[v] 100% MIỄN PHÍ - KHÔNG CẦN THẺ TÍN DỤNG"/>
+                                <TextBlock Foreground="#34d399" FontSize="11" Margin="0,0,0,5" Text="[v] Miễn phí 14,400 lượt/ngày (dư dùng cho mọi nhu cầu)"/>
+                                <TextBlock Foreground="#f59e0b" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,12" Text="API key chỉ lưu trên máy bạn, KHÔNG gửi cho tác giả hay bất kỳ ai. Mã nguồn mở, bạn có thể kiểm tra."/>
                                 <DockPanel Margin="0,0,0,12">
                                     <TextBlock Text="Status:" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                                    <TextBlock x:Name="lblAIStatus" Text="❌ Disabled" Foreground="#ef4444" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="lblAIStatus" Text="[x] Disabled" Foreground="#ef4444" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 </DockPanel>
                                 <TextBlock Text="API Key:" Foreground="#6b7f99" FontSize="12" Margin="0,0,0,6"/>
                                 <DockPanel Margin="0,0,0,12">
@@ -279,7 +279,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                         <Border Background="#0e1726" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
                                 <TextBlock Text="HOW TO GET FREE API KEY" Foreground="#4a8fe7" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                                <TextBlock Foreground="#f59e0b" FontSize="11" Margin="0,0,0,10" Text="⚠️ 100% Miễn phí - Không cần thẻ tín dụng - Không tốn chi phí"/>
+                                <TextBlock Foreground="#f59e0b" FontSize="11" Margin="0,0,0,10" Text="(!) 100% Miễn phí - Không cần thẻ tín dụng - Không tốn chi phí"/>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#2563eb" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="1" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
                                     <StackPanel Grid.Column="1"><TextBlock Text="Go to console.groq.com" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Truy cập console.groq.com và đăng nhập bằng Google hoặc GitHub" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
@@ -298,7 +298,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                                 </Grid>
                             </StackPanel>
                         </Border>
-                        <Button x:Name="btnOpenGroq" Content="🔗 Open console.groq.com/keys" Style="{StaticResource BtnP}" HorizontalAlignment="Stretch" Padding="0,12" Margin="0,0,0,16" FontSize="13"/>
+                        <Button x:Name="btnOpenGroq" Content="Open console.groq.com/keys" Style="{StaticResource BtnP}" HorizontalAlignment="Stretch" Padding="0,12" Margin="0,0,0,16" FontSize="13"/>
                         <!-- AI Info -->
                         <Border Background="#0e1726" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
@@ -313,11 +313,11 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                                 </Grid>
                                 <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Cost" Foreground="#6b7f99" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="✅ FREE - 14,400 calls/day (không giới hạn thời gian)" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="FREE - 14,400 calls/day (không giới hạn thời gian)" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Credit Card" Foreground="#6b7f99" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="❌ KHÔNG cần thẻ tín dụng" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="KHÔNG cần thẻ tín dụng" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Rate Limit" Foreground="#6b7f99" FontSize="12"/>
@@ -931,12 +931,12 @@ $script:aiEnabled = $false
 # Sync AI status across Settings + Organize
 function Update-AIStatus {
     if ($script:aiEnabled) {
-        $ui['btnOrgAI'].Content = "\ud83e\udd16 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
-        $ui['lblAIStatus'].Text = "\u2705 Enabled"; $ui['lblAIStatus'].Foreground = MkColor '#34d399'
+        $ui['btnOrgAI'].Content = '[AI] On'; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
+        $ui['lblAIStatus'].Text = '[v] Enabled'; $ui['lblAIStatus'].Foreground = MkColor '#34d399'
     }
     else {
-        $ui['btnOrgAI'].Content = "\ud83e\udd16 AI Off"; $ui['btnOrgAI'].Foreground = MkColor '#3d5470'
-        $ui['lblAIStatus'].Text = "\u274c Disabled"; $ui['lblAIStatus'].Foreground = MkColor '#ef4444'
+        $ui['btnOrgAI'].Content = '[AI] Off'; $ui['btnOrgAI'].Foreground = MkColor '#3d5470'
+        $ui['lblAIStatus'].Text = '[x] Disabled'; $ui['lblAIStatus'].Foreground = MkColor '#ef4444'
     }
 }
 
@@ -975,16 +975,16 @@ $ui['btnApiKeySave'].Add_Click({
 $ui['btnApiKeyTest'].Add_Click({
         $key = $ui['txtApiKey'].Text.Trim()
         if ($key.Length -lt 10) { Show-Dialog "Nh\u1eadp API key tr\u01b0\u1edbc \u0111\u00e3." 'No Key' 'OK' 'Warning'; return }
-        $ui['lblAIStatus'].Text = "\u23f3 Testing..."; $ui['lblAIStatus'].Foreground = MkColor '#f59e0b'
+        $ui['lblAIStatus'].Text = 'Testing...'; $ui['lblAIStatus'].Foreground = MkColor '#f59e0b'
         [System.Windows.Forms.Application]::DoEvents()
         try {
             $body = @{ model = 'llama-3.1-8b-instant'; messages = @(@{ role = 'user'; content = 'Reply OK' }); max_tokens = 5 } | ConvertTo-Json -Depth 3
             $headers = @{ 'Authorization' = "Bearer $key"; 'Content-Type' = 'application/json' }
             $null = Invoke-RestMethod -Uri 'https://api.groq.com/openai/v1/chat/completions' -Method Post -Body $body -Headers $headers -TimeoutSec 10
-            $ui['lblAIStatus'].Text = "\u2705 Test OK - API key h\u1ee3p l\u1ec7!"; $ui['lblAIStatus'].Foreground = MkColor '#34d399'
+            $ui['lblAIStatus'].Text = '[v] Test OK - API key hop le!'; $ui['lblAIStatus'].Foreground = MkColor '#34d399'
         }
         catch {
-            $ui['lblAIStatus'].Text = "\u274c Test FAIL - Key kh\u00f4ng h\u1ee3p l\u1ec7"; $ui['lblAIStatus'].Foreground = MkColor '#ef4444'
+            $ui['lblAIStatus'].Text = '[x] Test FAIL - Key khong hop le'; $ui['lblAIStatus'].Foreground = MkColor '#ef4444'
         }
     })
 
