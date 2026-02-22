@@ -1538,5 +1538,94 @@ $ui['btnFacebook'].Add_Click({ Start-Process 'https://www.facebook.com/laptoplea
 $ui['btnShopee'].Add_Click({ Start-Process 'https://collshp.com/laptopleandotcom?view=storefront' })
 # ===== INIT =====
 $ui['lblTitle'].ToolTip = 'DiskCleaner Pro v4.0' + "`n" + 'by Le Van An (@anlvdt)'
+
+# --- Tooltips for all major buttons ---
+# Clean tab
+$ui['btnAnalyze'].ToolTip = 'Scan all categories to measure junk sizes'
+$ui['btnCleanChecked'].ToolTip = 'Clean all checked categories (files go to Recycle Bin)'
+$ui['btnSelectAll'].ToolTip = 'Check all categories'
+$ui['btnDeselectAll'].ToolTip = 'Uncheck all categories'
+# Dev tab
+$ui['btnDevScan'].ToolTip = 'Scan for node_modules, .vs, bin, obj, __pycache__'
+$ui['btnDevClean'].ToolTip = 'Delete selected dev artifacts'
+# Disk Analyzer
+$ui['btnBrowse'].ToolTip = 'Browse for a folder to scan'
+$ui['btnScan'].ToolTip = 'Scan selected folder for large, duplicate, junk & old files'
+$ui['btnExport'].ToolTip = 'Export scan results to CSV'
+# Smart Scan sub-tabs
+$ui['btnOL'].ToolTip = 'Open selected file in Explorer'
+$ui['btnDL'].ToolTip = 'Delete selected large files (Recycle Bin)'
+$ui['btnDD'].ToolTip = 'Delete selected duplicates (keep at least one!)'
+$ui['btnDJ'].ToolTip = 'Delete selected junk files'
+$ui['btnDA'].ToolTip = 'Delete selected old files'
+$ui['btnDE'].ToolTip = 'Remove selected empty folders'
+$ui['btnDB'].ToolTip = 'Delete selected broken files'
+# Organize tab
+$ui['btnOrgBrowse'].ToolTip = 'Browse for folder to organize'
+$ui['btnOrgDesktop'].ToolTip = 'Quick: organize Desktop folder'
+$ui['btnOrgDownloads'].ToolTip = 'Quick: organize Downloads folder'
+$ui['btnOrgDocuments'].ToolTip = 'Quick: organize Documents folder'
+$ui['btnOrgByType'].ToolTip = 'Group files by type (Images, Documents, Audio...)'
+$ui['btnOrgByDate'].ToolTip = 'Group files by date (Today, This Week, This Month...)'
+$ui['btnOrgBySize'].ToolTip = 'Group files by size (Tiny, Small, Medium, Large...)'
+$ui['btnOrgPreview'].ToolTip = 'Preview how files will be organized (no changes made)'
+$ui['btnOrgExecute'].ToolTip = 'Move files into organized folders'
+$ui['btnOrgUndo'].ToolTip = 'Undo the last organize operation'
+$ui['btnOrgWatch'].ToolTip = 'Auto-organize new files as they appear in this folder'
+$ui['btnOrgAI'].ToolTip = 'Toggle AI classification (requires API key in Settings)'
+# Rename tab
+$ui['btnRenBrowse'].ToolTip = 'Browse for folder containing files to rename'
+$ui['btnRenPrefix'].ToolTip = 'Add text before filename: PREFIX_filename.ext'
+$ui['btnRenSuffix'].ToolTip = 'Add text after filename: filename_SUFFIX.ext'
+$ui['btnRenReplace'].ToolTip = 'Find and replace text in filenames'
+$ui['btnRenSeq'].ToolTip = 'Rename files sequentially: name_001, name_002...'
+$ui['btnRenDate'].ToolTip = 'Add file date as prefix: 2026-02-22_filename.ext'
+$ui['btnRenPreview'].ToolTip = 'Preview name changes before applying'
+$ui['btnRenApply'].ToolTip = 'Apply all rename operations'
+# Disk Map
+$ui['btnMapBrowse'].ToolTip = 'Browse for folder to visualize'
+$ui['btnMapScan'].ToolTip = 'Scan folder sizes and draw treemap'
+# Settings
+$ui['btnScheduleEnable'].ToolTip = 'Create Windows Task to auto-clean every Sunday at 3AM'
+$ui['btnScheduleDisable'].ToolTip = 'Remove the scheduled cleanup task'
+
+# --- Default paths for convenience ---
+$downloadsPath = [Environment]::GetFolderPath('UserProfile') + '\Downloads'
+if ($ui['lblOrgPath'].Text -eq 'Select a folder to organize...') {
+    $ui['lblOrgPath'].Text = $downloadsPath
+    $ui['lblOrgPath'].Foreground = MkColor '#c8d6e5'
+}
+if ($ui['lblMapPath'].Text -eq 'Select a folder or drive...') {
+    $ui['lblMapPath'].Text = 'C:\'
+    $ui['lblMapPath'].Foreground = MkColor '#c8d6e5'
+}
+
+# --- Auto-analyze junk on first visit to Clean tab ---
+$script:autoAnalyzed = $false
+$ui['panelAdvanced'].Add_SelectionChanged({
+        param($s, $e)
+        if (-not $script:autoAnalyzed -and $ui['panelAdvanced'].SelectedIndex -eq 0) {
+            $script:autoAnalyzed = $true
+            $ui['btnAnalyze'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+        }
+    })
+
+# --- Auto-preview in Organize when quick folder buttons clicked ---
+$autoPreviewOrg = {
+    $Window.Dispatcher.BeginInvoke([Action] {
+            Start-Sleep -Milliseconds 300
+            if ($ui['lblOrgPath'].Text -and (Test-Path $ui['lblOrgPath'].Text)) {
+                $ui['btnOrgPreview'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+            }
+        })
+}
+$ui['btnOrgDesktop'].Add_Click($autoPreviewOrg)
+$ui['btnOrgDownloads'].Add_Click($autoPreviewOrg)
+$ui['btnOrgDocuments'].Add_Click($autoPreviewOrg)
+
+# --- Update title bar version ---
+$verBlock = $ui['lblTitle'].Parent.Children | Where-Object { $_ -is [System.Windows.Controls.TextBlock] -and $_.Text -match 'v\d' } | Select-Object -First 1
+if ($verBlock) { $verBlock.Text = '  v4.0' }
+
 $null = [Native.Win32]::ShowWindow([Native.Win32]::GetConsoleWindow(), 0)
 [void]$Window.ShowDialog()
