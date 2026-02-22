@@ -207,7 +207,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                     </TabControl>
                 </Grid></TabItem>
                 <!-- TAB: ORGANIZE -->
-                <TabItem Header="  Organize  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TabItem Header="  Organize  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
                         <DockPanel Margin="0,0,0,10"><TextBlock Text="File Organizer" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Moves files into categorized folders, no files deleted" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/></DockPanel>
                         <DockPanel>
@@ -233,9 +233,15 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                             <DataGridTextColumn Header="Size" Binding="{Binding SizeText}" Width="80"/>
                         </DataGrid.Columns></DataGrid>
                     </Border>
-                    <DockPanel Grid.Row="3" Margin="18,0,18,10">
-                        <TextBlock x:Name="lblOrgStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center"/>
+                    <DockPanel Grid.Row="3" Margin="18,0,18,4">
+                        <TextBlock DockPanel.Dock="Right" x:Name="lblOrgProgress" Text="" Foreground="#3d5470" FontSize="10" VerticalAlignment="Center"/>
+                        <Border Width="300" Height="10" Background="#131c2b" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <Border x:Name="orgProgressFill" Background="#34d399" CornerRadius="5" HorizontalAlignment="Left" Width="0"/>
+                        </Border>
+                    </DockPanel>
+                    <DockPanel Grid.Row="4" Margin="18,0,18,10">
                         <Button DockPanel.Dock="Right" x:Name="btnOrgExecute" Content="Organize Now" Style="{StaticResource BtnP}" IsEnabled="False"/>
+                        <TextBlock x:Name="lblOrgStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: ABOUT -->
