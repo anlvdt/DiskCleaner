@@ -29,6 +29,7 @@ $testFiles = @(
     'Test-BrokenFiles.ps1'
     'Test-ScanHistory.ps1'
     'Test-FolderOrganizer.ps1'
+    'Test-NewFeatures.ps1'
 )
 
 foreach ($tf in $testFiles) {
@@ -38,7 +39,8 @@ foreach ($tf in $testFiles) {
         Write-Host "Running $tf..." -ForegroundColor White
         try {
             . $path
-        } catch {
+        }
+        catch {
             Write-Host "  ERROR: $($_.Exception.Message)" -ForegroundColor Red
             $script:TotalFail++
         }
@@ -46,7 +48,8 @@ foreach ($tf in $testFiles) {
         $color = if ($f -eq 0) { 'Green' } else { 'Red' }
         Write-Host "  Result: $p passed, $f failed" -ForegroundColor $color
         Write-Host ""
-    } else {
+    }
+    else {
         Write-Host "MISSING: $tf" -ForegroundColor Red
     }
 }
