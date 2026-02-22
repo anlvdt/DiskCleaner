@@ -1,0 +1,19 @@
+# Logs and temp
+*.log
+*.tmp
+*.bak
+
+# User data
+config/
+data/
+scan-history/
+
+# IDE
+.vs/
+.vscode/
+*.code-workspace
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
