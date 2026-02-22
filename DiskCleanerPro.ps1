@@ -56,6 +56,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
         <Style TargetType="DataGridRow"><Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#152240"/></Trigger><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#0f1a2e"/></Trigger></Style.Triggers></Style>
         <Style TargetType="DataGridCell"><Setter Property="BorderThickness" Value="0"/><Setter Property="Foreground" Value="#c8d6e5"/><Style.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="Transparent"/><Setter Property="Foreground" Value="#93c5fd"/></Trigger></Style.Triggers></Style>
         <Style TargetType="CheckBox"><Setter Property="Foreground" Value="#c8d6e5"/><Setter Property="VerticalContentAlignment" Value="Center"/></Style>
+        <Style TargetType="TextBox"><Setter Property="Background" Value="#0d1525"/><Setter Property="Foreground" Value="#c8d6e5"/><Setter Property="CaretBrush" Value="#c8d6e5"/><Setter Property="SelectionBrush" Value="#2563eb"/><Setter Property="BorderBrush" Value="#1e2d42"/><Setter Property="BorderThickness" Value="1"/></Style>
         <Style TargetType="ToolTip"><Setter Property="Background" Value="#131c2b"/><Setter Property="Foreground" Value="#c8d6e5"/><Setter Property="BorderBrush" Value="#1e2d42"/><Setter Property="BorderThickness" Value="1"/><Setter Property="Padding" Value="10,6"/><Setter Property="FontSize" Value="12"/></Style>
     </Window.Resources>
     <Border Background="#0b1120" CornerRadius="10" BorderBrush="#1a2740" BorderThickness="1">
@@ -211,19 +212,21 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                 <TabItem Header="  Organize  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
                         <DockPanel Margin="0,0,0,10"><TextBlock Text="File Organizer" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Moves files into categorized folders, no files deleted" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/></DockPanel>
-                        <DockPanel>
+                        <DockPanel Margin="0,0,0,6">
                             <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="250"><TextBlock x:Name="lblOrgPath" Text="Select a folder to organize..." Foreground="#3d5470" FontSize="12.5"/></Border>
                             <Button x:Name="btnOrgBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,4,0"/>
                             <Button x:Name="btnOrgDesktop" Content="Desktop" Style="{StaticResource BtnS}" Margin="0,0,2,0" FontSize="10" Padding="10,8"/>
                             <Button x:Name="btnOrgDownloads" Content="Downloads" Style="{StaticResource BtnS}" Margin="0,0,2,0" FontSize="10" Padding="10,8"/>
-                            <Button x:Name="btnOrgDocuments" Content="Documents" Style="{StaticResource BtnS}" Margin="0,0,8,0" FontSize="10" Padding="10,8"/>
+                            <Button x:Name="btnOrgDocuments" Content="Documents" Style="{StaticResource BtnS}" Margin="0,0,0,0" FontSize="10" Padding="10,8"/>
+                        </DockPanel>
+                        <StackPanel Orientation="Horizontal">
                             <Button x:Name="btnOrgByType" Content="By Type" Style="{StaticResource BtnP}" Margin="0,0,4,0"/>
                             <Button x:Name="btnOrgByDate" Content="By Date" Style="{StaticResource BtnS}" Margin="0,0,4,0"/>
-                            <Button x:Name="btnOrgBySize" Content="By Size" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
+                            <Button x:Name="btnOrgBySize" Content="By Size" Style="{StaticResource BtnS}" Margin="0,0,12,0"/>
                             <Button x:Name="btnOrgPreview" Content="Preview" Style="{StaticResource BtnP}" Margin="0,0,8,0"/>
                             <Button x:Name="btnOrgUndo" Content="Undo Last" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
                             <Button x:Name="btnOrgAI" Content="[AI] Off" Style="{StaticResource BtnS}" FontSize="10" Padding="10,8" Foreground="#3d5470"/>
-                        </DockPanel>
+                        </StackPanel>
                     </StackPanel></Border>
                     <Border Grid.Row="1" Margin="18,0,18,4"><UniformGrid Columns="3">
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="FILES TO MOVE" Foreground="#3d5470" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statOrgFiles" Text="--" Foreground="#4a8fe7" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
@@ -473,17 +476,24 @@ function Show-Dialog {
     if ($Buttons -eq 'YesNo') {
         $btnNo = New-Object System.Windows.Controls.Button; $btnNo.Content = 'Cancel'; $btnNo.Padding = '20,9'; $btnNo.Margin = '0,0,8,0'
         $btnNo.Background = MkColor '#1e293b'; $btnNo.Foreground = MkColor '#8899b0'; $btnNo.BorderThickness = '0'; $btnNo.Cursor = 'Hand'; $btnNo.FontSize = 12.5; $btnNo.Tag = $dw
+        $tplNo = [System.Windows.Markup.XamlReader]::Parse('<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#2d3f55"/></Trigger></ControlTemplate.Triggers></ControlTemplate>')
+        $btnNo.Template = $tplNo
         $btnNo.Add_Click([System.Windows.RoutedEventHandler] { param($s, $e); $s.Tag.Tag = 'No'; $s.Tag.Close() })
         [void]$btnPanel.Children.Add($btnNo)
         $yesBg = if ($Icon -eq 'Warning') { '#dc2626' }else { '#2563eb' }
+        $yesHv = if ($Icon -eq 'Warning') { '#b91c1c' }else { '#1d4ed8' }
         $btnYes = New-Object System.Windows.Controls.Button; $btnYes.Content = 'Confirm'; $btnYes.Padding = '20,9'
         $btnYes.Background = MkColor $yesBg; $btnYes.Foreground = MkColor '#ffffff'; $btnYes.BorderThickness = '0'; $btnYes.Cursor = 'Hand'; $btnYes.FontSize = 12.5; $btnYes.FontWeight = 'Medium'; $btnYes.Tag = $dw
+        $tplYes = [System.Windows.Markup.XamlReader]::Parse("<ControlTemplate xmlns=`"http://schemas.microsoft.com/winfx/2006/xaml/presentation`" TargetType=`"Button`"><Border x:Name=`"bd`" Background=`"{TemplateBinding Background}`" CornerRadius=`"7`" Padding=`"{TemplateBinding Padding}`"><ContentPresenter HorizontalAlignment=`"Center`" VerticalAlignment=`"Center`"/></Border><ControlTemplate.Triggers><Trigger Property=`"IsMouseOver`" Value=`"True`"><Setter TargetName=`"bd`" Property=`"Background`" Value=`"$yesHv`"/></Trigger></ControlTemplate.Triggers></ControlTemplate>")
+        $btnYes.Template = $tplYes
         $btnYes.Add_Click([System.Windows.RoutedEventHandler] { param($s, $e); $s.Tag.Tag = 'Yes'; $s.Tag.Close() })
         [void]$btnPanel.Children.Add($btnYes)
     }
     else {
         $btnOk = New-Object System.Windows.Controls.Button; $btnOk.Content = 'OK'; $btnOk.Padding = '20,9'
         $btnOk.Background = MkColor '#2563eb'; $btnOk.Foreground = MkColor '#ffffff'; $btnOk.BorderThickness = '0'; $btnOk.Cursor = 'Hand'; $btnOk.FontSize = 12.5; $btnOk.FontWeight = 'Medium'; $btnOk.Tag = $dw
+        $tplOk = [System.Windows.Markup.XamlReader]::Parse('<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#1d4ed8"/></Trigger></ControlTemplate.Triggers></ControlTemplate>')
+        $btnOk.Template = $tplOk
         $btnOk.Add_Click([System.Windows.RoutedEventHandler] { param($s, $e); $s.Tag.Tag = 'OK'; $s.Tag.Close() })
         [void]$btnPanel.Children.Add($btnOk)
     }
