@@ -1090,6 +1090,59 @@ $ui['btnOrgUndo'].Add_Click({
         $result = Invoke-UndoOrganize
         Show-Dialog $result.Message 'Undo Result' 'OK' $(if ($result.Errors -eq 0) { 'Success' }else { 'Warning' })
     })
+
+# ===== QUICK ACCESS: Context Menu + Double-Click for all grids =====
+function New-DarkContextMenu {
+    $cm = New-Object System.Windows.Controls.ContextMenu
+    $cm.Background = MkColor '#0e1726'; $cm.BorderBrush = MkColor '#1e2d42'; $cm.BorderThickness = '1'; $cm.Foreground = MkColor '#c8d6e5'
+    return $cm
+}
+function New-DarkMenuItem([string]$Header, [string]$Icon) {
+    $mi = New-Object System.Windows.Controls.MenuItem
+    $mi.Header = "$Icon  $Header"; $mi.Foreground = MkColor '#c8d6e5'; $mi.FontSize = 12
+    $mi.Background = MkColor '#0e1726'; $mi.BorderThickness = '0'
+    return $mi
+}
+
+function Add-GridContextMenu($grid, [string]$pathProp = 'FullPath') {
+    $cm = New-DarkContextMenu
+    $miOpen = New-DarkMenuItem 'Open File' ([char]0xE8E5)
+    $miOpen.Tag = @{ Grid = $grid; Prop = $pathProp }
+    $miOpen.Add_Click({ param($s, $e); $item = $s.Tag.Grid.SelectedItem; if ($item) { $p = $item.($s.Tag.Prop); if ($p -and (Test-Path $p)) { Start-Process $p } } })
+    $miLoc = New-DarkMenuItem 'Open Location' ([char]0xE838)
+    $miLoc.Tag = @{ Grid = $grid; Prop = $pathProp }
+    $miLoc.Add_Click({ param($s, $e); $item = $s.Tag.Grid.SelectedItem; if ($item) { $p = $item.($s.Tag.Prop); if ($p -and (Test-Path $p)) { Start-Process explorer.exe "/select,`"$p`"" } } })
+    [void]$cm.Items.Add($miOpen); [void]$cm.Items.Add($miLoc)
+    $grid.ContextMenu = $cm
+    $grid.Add_MouseDoubleClick({
+            param($s, $e)
+            $item = $s.SelectedItem
+            if ($item) {
+                $p = $null
+                if ($item.PSObject.Properties['FullPath']) { $p = $item.FullPath }
+                elseif ($item.PSObject.Properties['Path']) { $p = $item.Path }
+                if ($p -and (Test-Path $p)) { Start-Process explorer.exe "/select,`"$p`"" }
+            }
+        })
+}
+
+# Apply to all file grids
+Add-GridContextMenu $ui['gridLarge'] 'FullPath'
+Add-GridContextMenu $ui['gridDup'] 'FullPath'
+Add-GridContextMenu $ui['gridJunk'] 'FullPath'
+Add-GridContextMenu $ui['gridAge'] 'FullPath'
+Add-GridContextMenu $ui['gridBroken'] 'FullPath'
+Add-GridContextMenu $ui['gridEmpty'] 'FullPath'
+
+# Dev grid uses FullPath too (from DevClean results)
+$cmDev = New-DarkContextMenu
+$miDevLoc = New-DarkMenuItem 'Open Location' ([char]0xE838)
+$miDevLoc.Tag = $ui['gridDev']
+$miDevLoc.Add_Click({ param($s, $e); $item = $s.Tag.SelectedItem; if ($item -and $item.FullPath -and (Test-Path $item.FullPath)) { Start-Process explorer.exe "/select,`"$($item.FullPath)`"" } })
+[void]$cmDev.Items.Add($miDevLoc)
+$ui['gridDev'].ContextMenu = $cmDev
+$ui['gridDev'].Add_MouseDoubleClick({ param($s, $e); $item = $s.SelectedItem; if ($item -and $item.FullPath -and (Test-Path $item.FullPath)) { Start-Process explorer.exe "/select,`"$($item.FullPath)`"" } })
+
 # ===== ABOUT TAB =====
 $ui['btnGithub'].Add_Click({ Start-Process 'https://github.com/anlvdt' })
 $ui['btnFacebook'].Add_Click({ Start-Process 'https://www.facebook.com/laptopleandotcom' })
