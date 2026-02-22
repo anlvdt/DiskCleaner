@@ -294,20 +294,23 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: DISK MAP -->
-                <TabItem Header="  Disk Map  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-                    <Border Grid.Row="0" Margin="18,14,18,8"><DockPanel>
+                <TabItem Header="  Disk Map  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                    <Border Grid.Row="0" Margin="18,14,18,4"><DockPanel>
                         <TextBlock Text="Disk Map" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         <TextBlock Text="  -  Visual disk usage treemap" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/>
-                        <Button DockPanel.Dock="Right" x:Name="btnMapScan" Content="Scan" Style="{StaticResource BtnP}" Padding="16,8"/>
-                        <Button DockPanel.Dock="Right" x:Name="btnMapBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
-                        <Border DockPanel.Dock="Right" Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,8" MinWidth="200" Margin="12,0,6,0">
-                            <TextBlock x:Name="lblMapPath" Text="Select a folder or drive..." Foreground="#3d5470" FontSize="12" TextTrimming="CharacterEllipsis"/>
-                        </Border>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="btnMapBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
+                            <Button x:Name="btnMapScan" Content="Scan" Style="{StaticResource BtnP}" Padding="16,8"/>
+                        </StackPanel>
                     </DockPanel></Border>
-                    <Border Grid.Row="1" Style="{StaticResource Card}" Margin="18,0,18,8">
+                    <!-- Drive buttons row -->
+                    <Border Grid.Row="1" Margin="18,4,18,8">
+                        <StackPanel x:Name="panelDrives" Orientation="Horizontal"/>
+                    </Border>
+                    <Border Grid.Row="2" Style="{StaticResource Card}" Margin="18,0,18,8">
                         <Canvas x:Name="canvasMap" Background="#0a0f1a" ClipToBounds="True"/>
                     </Border>
-                    <DockPanel Grid.Row="2" Margin="18,0,18,10">
+                    <DockPanel Grid.Row="3" Margin="18,0,18,10">
                         <TextBlock x:Name="lblMapStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center"/>
                         <TextBlock x:Name="lblMapHover" Text="" Foreground="#c8d6e5" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="SemiBold"/>
                     </DockPanel>
@@ -1420,13 +1423,86 @@ function Draw-Treemap($canvas, $items, $x, $y, $w, $h) {
     }
 }
 
+# --- Drive buttons ---
+$script:mapSelectedPath = ''
+
+function Update-MapDriveButtons {
+    $ui['panelDrives'].Children.Clear()
+    $drives = @(Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Used -gt 0 -or $_.Free -gt 0 })
+    foreach ($drv in $drives) {
+        $root = $drv.Root
+        $used = [long]$drv.Used; $free = [long]$drv.Free; $total = $used + $free
+        if ($total -le 0) { continue }
+        $pct = [math]::Round(($used / $total) * 100)
+        $label = if ($drv.Description) { $drv.Description } else { $drv.Name + ' Drive' }
+        # Create drive button card
+        $card = New-Object System.Windows.Controls.Border
+        $card.Background = MkColor '#0d1525'; $card.BorderBrush = MkColor '#1e2d42'; $card.BorderThickness = '1'
+        $card.CornerRadius = '8'; $card.Padding = '12,8'; $card.Margin = '0,0,8,0'; $card.Cursor = 'Hand'
+        $card.MinWidth = 140
+        $sp = New-Object System.Windows.Controls.StackPanel
+        # Drive letter + label
+        $header = New-Object System.Windows.Controls.StackPanel; $header.Orientation = 'Horizontal'
+        $lblDrv = New-Object System.Windows.Controls.TextBlock; $lblDrv.Text = "$root"; $lblDrv.FontWeight = 'Bold'
+        $lblDrv.Foreground = MkColor '#c8d6e5'; $lblDrv.FontSize = 13; $lblDrv.Margin = '0,0,6,0'
+        $lblName = New-Object System.Windows.Controls.TextBlock; $lblName.Text = $label
+        $lblName.Foreground = MkColor '#6b7f99'; $lblName.FontSize = 11; $lblName.VerticalAlignment = 'Center'
+        [void]$header.Children.Add($lblDrv); [void]$header.Children.Add($lblName)
+        # Usage bar
+        $barBg = New-Object System.Windows.Controls.Border
+        $barBg.Background = MkColor '#131c2b'; $barBg.CornerRadius = '3'; $barBg.Height = 6; $barBg.Margin = '0,5,0,3'
+        $barFill = New-Object System.Windows.Controls.Border
+        $barColor = if ($pct -gt 90) { '#ef4444' } elseif ($pct -gt 70) { '#f59e0b' } else { '#2563eb' }
+        $barFill.Background = MkColor $barColor; $barFill.CornerRadius = '3'; $barFill.HorizontalAlignment = 'Left'
+        $barFill.Width = [math]::Max(2, [math]::Round(116 * $pct / 100))
+        $barBg.Child = $barFill
+        # Size text
+        $lblSize = New-Object System.Windows.Controls.TextBlock
+        $lblSize.Text = "$(FmtSize $used) / $(FmtSize $total)  ($pct%)"; $lblSize.FontSize = 9.5
+        $lblSize.Foreground = MkColor '#4a6a8a'
+        [void]$sp.Children.Add($header); [void]$sp.Children.Add($barBg); [void]$sp.Children.Add($lblSize)
+        $card.Child = $sp
+        $card.Tag = $root
+        # Click handler
+        $card.Add_MouseLeftButtonDown({
+                param($s, $e)
+                $script:mapSelectedPath = $s.Tag
+                # Highlight selected
+                foreach ($child in $ui['panelDrives'].Children) {
+                    if ($child -is [System.Windows.Controls.Border]) {
+                        $child.BorderBrush = MkColor $(if ($child.Tag -eq $script:mapSelectedPath) { '#2563eb' } else { '#1e2d42' })
+                        $child.BorderThickness = $(if ($child.Tag -eq $script:mapSelectedPath) { '2' } else { '1' })
+                    }
+                }
+                # Auto-scan
+                $ui['btnMapScan'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+            })
+        [void]$ui['panelDrives'].Children.Add($card)
+    }
+    # Pre-select system drive
+    $sysDrive = $env:SystemDrive + '\'
+    $script:mapSelectedPath = $sysDrive
+    foreach ($child in $ui['panelDrives'].Children) {
+        if ($child -is [System.Windows.Controls.Border] -and $child.Tag -eq $sysDrive) {
+            $child.BorderBrush = MkColor '#2563eb'; $child.BorderThickness = '2'
+        }
+    }
+}
+
+Update-MapDriveButtons
+
 $ui['btnMapBrowse'].Add_Click({
         $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.Description = 'Select folder to visualize'
-        if ($dlg.ShowDialog() -eq 'OK') { $ui['lblMapPath'].Text = $dlg.SelectedPath }
+        if ($dlg.ShowDialog() -eq 'OK') {
+            $script:mapSelectedPath = $dlg.SelectedPath
+            # Deselect drive buttons
+            foreach ($child in $ui['panelDrives'].Children) { if ($child -is [System.Windows.Controls.Border]) { $child.BorderBrush = MkColor '#1e2d42'; $child.BorderThickness = '1' } }
+            $ui['btnMapScan'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+        }
     })
 
 $ui['btnMapScan'].Add_Click({
-        $folder = $ui['lblMapPath'].Text
+        $folder = $script:mapSelectedPath
         if (-not $folder -or -not (Test-Path $folder)) { Show-Dialog 'Select a folder first.' 'No Folder' 'OK' 'Warning'; return }
         $ui['lblMapStatus'].Text = 'Scanning...'; $ui['canvasMap'].Children.Clear()
         $ui['btnMapScan'].IsEnabled = $false; $ui['btnMapScan'].Content = 'Scanning...'
@@ -1595,10 +1671,7 @@ if ($ui['lblOrgPath'].Text -eq 'Select a folder to organize...') {
     $ui['lblOrgPath'].Text = $downloadsPath
     $ui['lblOrgPath'].Foreground = MkColor '#c8d6e5'
 }
-if ($ui['lblMapPath'].Text -eq 'Select a folder or drive...') {
-    $ui['lblMapPath'].Text = 'C:\'
-    $ui['lblMapPath'].Foreground = MkColor '#c8d6e5'
-}
+# (drive buttons handle default path)
 
 # --- Auto-analyze junk on first visit to Clean tab ---
 $script:autoAnalyzed = $false
