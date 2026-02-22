@@ -415,7 +415,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                 <TabItem Header="  About  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
                     <StackPanel MaxWidth="500" HorizontalAlignment="Center">
                         <TextBlock Text="DiskCleaner Pro" Foreground="#d4d4d4" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,4"/>
-                        <TextBlock Text="v3.0" Foreground="#569cd6" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                        <TextBlock Text="v4.1" Foreground="#569cd6" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,16"/>
                         <TextBlock Foreground="#94a3b8" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" LineHeight="22" Margin="0,0,0,6" Text="Free, open-source, AV-friendly disk cleanup tool for Windows. Built with PowerShell + WPF, no installation required. Outperforms Windows Storage Sense with deeper scanning, smarter analysis, and multi-layer safety protection."/>
                         <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" LineHeight="20" Margin="0,0,0,24" Text="Zero dependencies. Zero telemetry. 100% local processing. Your files never leave your machine."/>
                         <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
@@ -448,6 +448,26 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                                 <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#06b6d4" VerticalAlignment="Top" Margin="0,3,0,0"/>
                                     <StackPanel Grid.Column="1"><TextBlock Text="Scan History" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Tracks usage trends via JSON snapshots: size changes, file count, duplicates, junk metrics over time" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                </Grid>
+                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#c084fc" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Bulk Rename" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="5 rename modes: prefix, suffix, find-replace, sequential numbering, date prefix. Live preview before applying." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                </Grid>
+                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#f472b6" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Watch" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Auto-organize new files in real-time using FileSystemWatcher. Files sorted immediately as they appear." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                </Grid>
+                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#38bdf8" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Disk Map Treemap" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Visual treemap of disk usage with drive selection buttons, usage bars, right-click context menu. Async scanning, never freezes UI." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                </Grid>
+                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#a3e635" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Scheduled Auto-Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Windows Task Scheduler integration: automatic weekly cleanup every Sunday at 3AM. Enable/disable with one click." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                </Grid>
+                                <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#fbbf24" VerticalAlignment="Top" Margin="0,3,0,0"/>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart UX Automation" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="40+ tooltips, auto-analyze on tab visit, quick-select buttons on all tabs, size filters for scan results, default paths for convenience." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                             </StackPanel>
                         </Border>
