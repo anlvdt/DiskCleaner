@@ -396,9 +396,9 @@ Write-Host "    --- v4.1: Dark Scrollbar ---" -ForegroundColor DarkCyan
 # Verify scrollbar ControlTemplate exists with dark colors
 Assert-True ($mainScript -match 'TargetType="ScrollBar"') "Scrollbar: has ScrollBar style"
 Assert-True ($mainScript -match 'PART_Track') "Scrollbar: has PART_Track"
-Assert-True ($mainScript -match '#0a0f1a.*CornerRadius="5"') "Scrollbar: dark track background"
+Assert-True ($mainScript -match '#1e1e1e.*CornerRadius="5"') "Scrollbar: dark track background"
 Assert-True ($mainScript -match 'IsDragging.*Value="True"') "Scrollbar: has drag state trigger"
-Assert-True ($mainScript -match '#3b82f6') "Scrollbar: blue drag color"
+Assert-True ($mainScript -match '#1a8bff') "Scrollbar: blue drag color"
 Assert-True ($mainScript -match 'Orientation.*Horizontal') "Scrollbar: has horizontal template"
 Assert-True ($mainScript -match 'LineLeftCommand') "Scrollbar: horizontal left command"
 Assert-True ($mainScript -match 'LineRightCommand') "Scrollbar: horizontal right command"
@@ -441,7 +441,7 @@ Assert-True ($mainScript -match 'mapCtxPath') "TreemapRC: stores context path"
 Assert-True ($mainScript -match 'MouseRightButtonDown') "TreemapRC: attached to canvas"
 Assert-True ($mainScript -match 'Clipboard.*SetText.*mapCtxPath') "TreemapRC: Copy Path uses clipboard"
 # Verify context menu uses dark theme colors
-Assert-True ($mainScript -match 'mapContextMenu\.Background.*0e1726') "TreemapRC: dark background"
+Assert-True ($mainScript -match 'mapContextMenu\.Background.*2d2d30') "TreemapRC: dark background"
 
 # ========================================
 # v4.1: SIZE FILTER BUTTONS
@@ -455,7 +455,7 @@ Assert-True ($mainScript -match '500MB') "SizeFilter: has 500MB threshold"
 Assert-True ($mainScript -match '1GB') "SizeFilter: has 1GB threshold"
 # Verify filter logic
 Assert-True ($mainScript -match 'Where-Object.*Size.*-gt.*threshold') "SizeFilter: filters by size threshold"
-Assert-True ($mainScript -match '93c5fd.*6b7f99') "SizeFilter: highlights active filter"
+Assert-True ($mainScript -match '75beff.*858585') "SizeFilter: highlights active filter"
 
 # ========================================
 # v4.1: FUNCTIONAL TESTS
