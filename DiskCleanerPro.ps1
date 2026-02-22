@@ -392,6 +392,21 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                                 </Grid>
                             </StackPanel>
                         </Border>
+                        <!-- Scheduled Auto-Clean -->
+                        <Border Background="#0e1726" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="SCHEDULED AUTO-CLEAN" Foreground="#4a8fe7" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                <TextBlock Text="Run temp file cleanup automatically every week." Foreground="#6b7f99" FontSize="12" Margin="0,0,0,12" TextWrapping="Wrap"/>
+                                <DockPanel Margin="0,0,0,8">
+                                    <TextBlock Text="Status:" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock x:Name="lblScheduleStatus" Text="Not scheduled" Foreground="#ef4444" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                </DockPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="btnScheduleEnable" Content="Enable Weekly Clean" Style="{StaticResource BtnP}" Padding="16,8" Margin="0,0,8,0"/>
+                                    <Button x:Name="btnScheduleDisable" Content="Disable" Style="{StaticResource BtnS}" Padding="14,8"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Border></ScrollViewer></TabItem>
                 <!-- TAB: ABOUT -->
@@ -1414,36 +1429,114 @@ $ui['btnMapScan'].Add_Click({
         $folder = $ui['lblMapPath'].Text
         if (-not $folder -or -not (Test-Path $folder)) { Show-Dialog 'Select a folder first.' 'No Folder' 'OK' 'Warning'; return }
         $ui['lblMapStatus'].Text = 'Scanning...'; $ui['canvasMap'].Children.Clear()
-        $ui['btnMapScan'].IsEnabled = $false
-        $dirs = @(Get-ChildItem $folder -Directory -EA SilentlyContinue)
-        $items = @()
-        $idx = 0
-        foreach ($d in $dirs) {
-            try {
-                $size = (Get-ChildItem $d.FullName -Recurse -File -EA SilentlyContinue | Measure-Object Length -Sum).Sum
-                if ($size -gt 0) { $items += [PSCustomObject]@{ Name = $d.Name; Size = [long]$size; Index = $idx; FullPath = $d.FullName } }
-            }
-            catch {}
-            $idx++
-        }
-        # Also count loose files in root
-        $looseSize = (Get-ChildItem $folder -File -EA SilentlyContinue | Measure-Object Length -Sum).Sum
-        if ($looseSize -gt 0) { $items += [PSCustomObject]@{ Name = '(files)'; Size = [long]$looseSize; Index = $idx; FullPath = $folder } }
-        if ($items.Count -eq 0) { $ui['lblMapStatus'].Text = 'No data found'; $ui['btnMapScan'].IsEnabled = $true; return }
-        $items = @($items | Sort-Object Size -Descending)
-        $totalSize = ($items | Measure-Object Size -Sum).Sum
-        $cw = $ui['canvasMap'].ActualWidth; $ch = $ui['canvasMap'].ActualHeight
-        if ($cw -lt 10) { $cw = 600 }; if ($ch -lt 10) { $ch = 350 }
-        Draw-Treemap $ui['canvasMap'] $items 0 0 $cw $ch
-        $ui['lblMapStatus'].Text = "$($items.Count) folders | Total: $(FmtSize $totalSize)"
-        $ui['btnMapScan'].IsEnabled = $true
+        $ui['btnMapScan'].IsEnabled = $false; $ui['btnMapScan'].Content = 'Scanning...'
+        $script:mapSh = [hashtable]::Synchronized(@{ Done = $false; Error = $null; Items = @(); Status = 'Starting...' })
+        $script:mapRs = [runspacefactory]::CreateRunspace(); $script:mapRs.ApartmentState = 'STA'; $script:mapRs.Open()
+        $script:mapRs.SessionStateProxy.SetVariable('sh', $script:mapSh)
+        $script:mapRs.SessionStateProxy.SetVariable('scanPath', $folder)
+        $script:mapPs = [powershell]::Create(); $script:mapPs.Runspace = $script:mapRs
+        [void]$script:mapPs.AddScript({
+                try {
+                    $dirs = @(Get-ChildItem $scanPath -Directory -EA SilentlyContinue)
+                    $items = @(); $idx = 0
+                    foreach ($d in $dirs) {
+                        $sh.Status = $d.Name
+                        try {
+                            $size = (Get-ChildItem $d.FullName -Recurse -File -EA SilentlyContinue | Measure-Object Length -Sum).Sum
+                            if ($size -gt 0) { $items += @{ Name = $d.Name; Size = [long]$size; Index = $idx; FullPath = $d.FullName } }
+                        }
+                        catch {}
+                        $idx++
+                    }
+                    $looseSize = (Get-ChildItem $scanPath -File -EA SilentlyContinue | Measure-Object Length -Sum).Sum
+                    if ($looseSize -gt 0) { $items += @{ Name = '(files)'; Size = [long]$looseSize; Index = $idx; FullPath = $scanPath } }
+                    $sh.Items = $items
+                }
+                catch { $sh.Error = $_.Exception.Message }
+                $sh.Done = $true
+            })
+        $script:mapPs.BeginInvoke() | Out-Null
+        $script:mapTimer = New-Object System.Windows.Threading.DispatcherTimer
+        $script:mapTimer.Interval = [TimeSpan]::FromMilliseconds(300)
+        $script:mapTimer.Add_Tick({
+                $ui['lblMapStatus'].Text = "Scanning: $($script:mapSh.Status)..."
+                if ($script:mapSh.Done) {
+                    $script:mapTimer.Stop()
+                    try { $script:mapPs.Stop(); $script:mapPs.Dispose(); $script:mapRs.Close(); $script:mapRs.Dispose() } catch {}
+                    if ($script:mapSh.Error) { $ui['lblMapStatus'].Text = "Error: $($script:mapSh.Error)" }
+                    else {
+                        $rawItems = $script:mapSh.Items
+                        if ($rawItems.Count -eq 0) { $ui['lblMapStatus'].Text = 'No data found' }
+                        else {
+                            $items = @($rawItems | ForEach-Object { [PSCustomObject]$_ } | Sort-Object Size -Descending)
+                            $totalSize = ($items | Measure-Object Size -Sum).Sum
+                            $cw = $ui['canvasMap'].ActualWidth; $ch = $ui['canvasMap'].ActualHeight
+                            if ($cw -lt 10) { $cw = 600 }; if ($ch -lt 10) { $ch = 350 }
+                            Draw-Treemap $ui['canvasMap'] $items 0 0 $cw $ch
+                            $ui['lblMapStatus'].Text = "$($items.Count) folders | Total: $(FmtSize $totalSize)"
+                        }
+                    }
+                    $ui['btnMapScan'].IsEnabled = $true; $ui['btnMapScan'].Content = 'Scan'
+                }
+            })
+        $script:mapTimer.Start()
     })
+
+# ===== SCHEDULED CLEAN =====
+$script:schedTaskName = 'DiskCleanerPro_WeeklyClean'
+
+function Update-ScheduleStatus {
+    try {
+        $task = Get-ScheduledTask -TaskName $script:schedTaskName -EA SilentlyContinue
+        if ($task) {
+            $ui['lblScheduleStatus'].Text = 'Active (Weekly Sunday 3:00 AM)'
+            $ui['lblScheduleStatus'].Foreground = MkColor '#34d399'
+        }
+        else {
+            $ui['lblScheduleStatus'].Text = 'Not scheduled'
+            $ui['lblScheduleStatus'].Foreground = MkColor '#ef4444'
+        }
+    }
+    catch {
+        $ui['lblScheduleStatus'].Text = 'Not scheduled'
+        $ui['lblScheduleStatus'].Foreground = MkColor '#ef4444'
+    }
+}
+
+$ui['btnScheduleEnable'].Add_Click({
+        try {
+            $scriptPath = Join-Path $PSScriptRoot 'modules\SystemCleaner.ps1'
+            $cmd = "powershell -NoProfile -ExecutionPolicy Bypass -Command `"& { . '$scriptPath'; `$targets = Get-SystemJunkTargets; foreach (`$t in `$targets) { Invoke-CleanTarget @{Path=`$t.Path;Pattern=`$t.Pattern} }; Invoke-RecycleBinClear }`""
+            $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command `"$cmd`""
+            $trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Sunday -At 3am
+            $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+            Register-ScheduledTask -TaskName $script:schedTaskName -Action $action -Trigger $trigger -Settings $settings -Description 'DiskCleaner Pro weekly cleanup' -Force | Out-Null
+            Update-ScheduleStatus
+            Show-Dialog 'Weekly cleanup scheduled for Sundays at 3:00 AM.' 'Scheduled' 'OK' 'Success'
+        }
+        catch {
+            Show-Dialog "Failed to create schedule: $($_.Exception.Message)" 'Error' 'OK' 'Error'
+        }
+    })
+
+$ui['btnScheduleDisable'].Add_Click({
+        try {
+            Unregister-ScheduledTask -TaskName $script:schedTaskName -Confirm:$false -EA Stop
+            Update-ScheduleStatus
+            Show-Dialog 'Scheduled cleanup disabled.' 'Disabled' 'OK' 'Info'
+        }
+        catch {
+            Show-Dialog 'No scheduled task found.' 'Info' 'OK' 'Info'
+        }
+    })
+
+Update-ScheduleStatus
 
 # ===== ABOUT TAB =====
 $ui['btnGithub'].Add_Click({ Start-Process 'https://github.com/anlvdt' })
 $ui['btnFacebook'].Add_Click({ Start-Process 'https://www.facebook.com/laptopleandotcom' })
 $ui['btnShopee'].Add_Click({ Start-Process 'https://collshp.com/laptopleandotcom?view=storefront' })
 # ===== INIT =====
-$ui['lblTitle'].ToolTip = 'DiskCleaner Pro v3.0' + "`n" + 'by Le Van An (@anlvdt)'
+$ui['lblTitle'].ToolTip = 'DiskCleaner Pro v4.0' + "`n" + 'by Le Van An (@anlvdt)'
 $null = [Native.Win32]::ShowWindow([Native.Win32]::GetConsoleWindow(), 0)
 [void]$Window.ShowDialog()
