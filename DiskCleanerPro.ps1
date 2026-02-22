@@ -1752,13 +1752,13 @@ foreach ($dp in $devPaths) {
 $script:mapContextMenu = New-Object System.Windows.Controls.ContextMenu
 $script:mapContextMenu.Background = MkColor '#2d2d30'; $script:mapContextMenu.BorderBrush = MkColor '#3e3e42'
 $script:mapContextMenu.BorderThickness = '1'; $script:mapContextMenu.Foreground = MkColor '#d4d4d4'
-$miOpen = New-Object System.Windows.Controls.MenuItem; $miOpen.Header = '📂  Open Folder'
+$miOpen = New-Object System.Windows.Controls.MenuItem; $miOpen.Header = 'Open Folder'
 $miOpen.Foreground = MkColor '#d4d4d4'; $miOpen.FontSize = 12
 $miOpen.Add_Click({ if ($script:mapCtxPath -and (Test-Path $script:mapCtxPath)) { Start-Process explorer.exe "`"$($script:mapCtxPath)`"" } })
-$miExplorer = New-Object System.Windows.Controls.MenuItem; $miExplorer.Header = '📍  Show in Explorer'
+$miExplorer = New-Object System.Windows.Controls.MenuItem; $miExplorer.Header = 'Show in Explorer'
 $miExplorer.Foreground = MkColor '#d4d4d4'; $miExplorer.FontSize = 12
 $miExplorer.Add_Click({ if ($script:mapCtxPath -and (Test-Path $script:mapCtxPath)) { Start-Process explorer.exe "/select,`"$($script:mapCtxPath)`"" } })
-$miCopy = New-Object System.Windows.Controls.MenuItem; $miCopy.Header = '📋  Copy Path'
+$miCopy = New-Object System.Windows.Controls.MenuItem; $miCopy.Header = 'Copy Path'
 $miCopy.Foreground = MkColor '#d4d4d4'; $miCopy.FontSize = 12
 $miCopy.Add_Click({ if ($script:mapCtxPath) { [System.Windows.Clipboard]::SetText($script:mapCtxPath) } })
 [void]$script:mapContextMenu.Items.Add($miOpen)
