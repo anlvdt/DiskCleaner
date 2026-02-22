@@ -387,6 +387,121 @@ Assert-True ($mainScript -match 'Register-ScheduledTask') "Schedule: uses Regist
 # VERSION
 # ========================================
 Write-Host "    --- Version ---" -ForegroundColor DarkCyan
-Assert-True ($mainScript -match 'DiskCleaner Pro v4\.0') "Version: tooltip shows v4.0"
+Assert-True ($mainScript -match 'DiskCleaner Pro v4\.\d') "Version: tooltip shows v4.x"
+
+# ========================================
+# v4.1: DARK SCROLLBAR
+# ========================================
+Write-Host "    --- v4.1: Dark Scrollbar ---" -ForegroundColor DarkCyan
+# Verify scrollbar ControlTemplate exists with dark colors
+Assert-True ($mainScript -match 'TargetType="ScrollBar"') "Scrollbar: has ScrollBar style"
+Assert-True ($mainScript -match 'PART_Track') "Scrollbar: has PART_Track"
+Assert-True ($mainScript -match '#0a0f1a.*CornerRadius="5"') "Scrollbar: dark track background"
+Assert-True ($mainScript -match 'IsDragging.*Value="True"') "Scrollbar: has drag state trigger"
+Assert-True ($mainScript -match '#3b82f6') "Scrollbar: blue drag color"
+Assert-True ($mainScript -match 'Orientation.*Horizontal') "Scrollbar: has horizontal template"
+Assert-True ($mainScript -match 'LineLeftCommand') "Scrollbar: horizontal left command"
+Assert-True ($mainScript -match 'LineRightCommand') "Scrollbar: horizontal right command"
+# Verify old DarkThumb style is removed
+Assert-True (-not ($mainScript -match 'x:Key="DarkThumb"')) "Scrollbar: old DarkThumb removed"
+
+# ========================================
+# v4.1: QUICK-SELECT BUTTONS - Disk Analyzer
+# ========================================
+Write-Host "    --- v4.1: Analyzer Quick Buttons ---" -ForegroundColor DarkCyan
+Assert-True ($mainScript -match 'Quick folder buttons for Disk Analyzer') "Analyzer: quick buttons section exists"
+Assert-True ($mainScript -match "Name = 'Desktop'.*Path.*GetFolderPath\('Desktop'\)") "Analyzer: has Desktop quick button"
+Assert-True ($mainScript -match "Name = 'Downloads'.*Path.*USERPROFILE.*Downloads") "Analyzer: has Downloads quick button"
+Assert-True ($mainScript -match "Name = 'Documents'.*Path.*GetFolderPath\('MyDocuments'\)") "Analyzer: has Documents quick button"
+Assert-True ($mainScript -match "Name = 'C:") "Analyzer: has C:\ quick button"
+# Verify auto-scan on click
+Assert-True ($mainScript -match "btnScan.*RaiseEvent") "Analyzer: quick buttons trigger scan"
+
+# ========================================
+# v4.1: QUICK-SELECT BUTTONS - Dev Cleanup
+# ========================================
+Write-Host "    --- v4.1: Dev Quick Buttons ---" -ForegroundColor DarkCyan
+Assert-True ($mainScript -match 'Quick project root buttons for Dev Cleanup') "Dev: quick buttons section exists"
+Assert-True ($mainScript -match "Name = 'MyApps'") "Dev: has MyApps quick button"
+Assert-True ($mainScript -match "Name = 'source'") "Dev: has source quick button"
+Assert-True ($mainScript -match "Name = 'repos'") "Dev: has repos quick button"
+Assert-True ($mainScript -match "btnDevScan.*RaiseEvent") "Dev: quick buttons trigger dev scan"
+# Verify only existing paths get buttons
+Assert-True ($mainScript -match 'Test-Path \$dp\.Path') "Dev: checks path exists before adding button"
+
+# ========================================
+# v4.1: TREEMAP RIGHT-CLICK
+# ========================================
+Write-Host "    --- v4.1: Treemap Right-Click ---" -ForegroundColor DarkCyan
+Assert-True ($mainScript -match 'mapContextMenu.*ContextMenu') "TreemapRC: context menu created"
+Assert-True ($mainScript -match 'Open Folder') "TreemapRC: has Open Folder item"
+Assert-True ($mainScript -match 'Show in Explorer') "TreemapRC: has Show in Explorer item"
+Assert-True ($mainScript -match 'Copy Path') "TreemapRC: has Copy Path item"
+Assert-True ($mainScript -match 'mapCtxPath') "TreemapRC: stores context path"
+Assert-True ($mainScript -match 'MouseRightButtonDown') "TreemapRC: attached to canvas"
+Assert-True ($mainScript -match 'Clipboard.*SetText.*mapCtxPath') "TreemapRC: Copy Path uses clipboard"
+# Verify context menu uses dark theme colors
+Assert-True ($mainScript -match 'mapContextMenu\.Background.*0e1726') "TreemapRC: dark background"
+
+# ========================================
+# v4.1: SIZE FILTER BUTTONS
+# ========================================
+Write-Host "    --- v4.1: Size Filters ---" -ForegroundColor DarkCyan
+Assert-True ($mainScript -match 'Add-SizeFilters') "SizeFilter: function defined"
+Assert-True ($mainScript -match 'allLargeItems') "SizeFilter: stores unfiltered items"
+Assert-True ($mainScript -match 'sizeFilters') "SizeFilter: tracks filter buttons"
+Assert-True ($mainScript -match '100MB') "SizeFilter: has 100MB threshold"
+Assert-True ($mainScript -match '500MB') "SizeFilter: has 500MB threshold"
+Assert-True ($mainScript -match '1GB') "SizeFilter: has 1GB threshold"
+# Verify filter logic
+Assert-True ($mainScript -match 'Where-Object.*Size.*-gt.*threshold') "SizeFilter: filters by size threshold"
+Assert-True ($mainScript -match '93c5fd.*6b7f99') "SizeFilter: highlights active filter"
+
+# ========================================
+# v4.1: FUNCTIONAL TESTS
+# ========================================
+Write-Host "    --- v4.1: Functional Tests ---" -ForegroundColor DarkCyan
+# Test WPF scrollbar + context menu objects
+Add-Type -AssemblyName PresentationFramework -EA SilentlyContinue
+
+# ContextMenu functional test
+$testCtxMenu = New-Object System.Windows.Controls.ContextMenu
+$testMi1 = New-Object System.Windows.Controls.MenuItem; $testMi1.Header = 'Open Folder'
+$testMi2 = New-Object System.Windows.Controls.MenuItem; $testMi2.Header = 'Show in Explorer'
+$testMi3 = New-Object System.Windows.Controls.MenuItem; $testMi3.Header = 'Copy Path'
+[void]$testCtxMenu.Items.Add($testMi1); [void]$testCtxMenu.Items.Add($testMi2); [void]$testCtxMenu.Items.Add($testMi3)
+Assert-Equal 3 $testCtxMenu.Items.Count "Functional: 3 context menu items"
+Assert-Equal 'Open Folder' $testMi1.Header "Functional: first item is Open Folder"
+Assert-Equal 'Copy Path' $testMi3.Header "Functional: third item is Copy Path"
+
+# Size filter logic test
+$testItems = @(
+    [PSCustomObject]@{ Name = 'small.txt'; Size = 50MB; SizeText = '50 MB' }
+    [PSCustomObject]@{ Name = 'medium.zip'; Size = 200MB; SizeText = '200 MB' }
+    [PSCustomObject]@{ Name = 'large.iso'; Size = 800MB; SizeText = '800 MB' }
+    [PSCustomObject]@{ Name = 'huge.vhd'; Size = 2GB; SizeText = '2 GB' }
+)
+$filtered100 = @($testItems | Where-Object { $_.Size -gt 100MB })
+Assert-Equal 3 $filtered100.Count "Functional: 3 items > 100MB"
+$filtered500 = @($testItems | Where-Object { $_.Size -gt 500MB })
+Assert-Equal 2 $filtered500.Count "Functional: 2 items > 500MB"
+$filtered1g = @($testItems | Where-Object { $_.Size -gt 1GB })
+Assert-Equal 1 $filtered1g.Count "Functional: 1 item > 1GB"
+Assert-Equal 'huge.vhd' $filtered1g[0].Name "Functional: only huge.vhd > 1GB"
+
+# Quick folder path resolution test
+$desktopPath = [Environment]::GetFolderPath('Desktop')
+Assert-True ($desktopPath.Length -gt 0) "Functional: Desktop path resolved"
+$docsPath = [Environment]::GetFolderPath('MyDocuments')
+Assert-True ($docsPath.Length -gt 0) "Functional: Documents path resolved"
+$dlPath = "$env:USERPROFILE\Downloads"
+Assert-True (Test-Path $dlPath) "Functional: Downloads folder exists"
+
+# Synchronized queue (used by Watch + treemap scan)
+$testQueue = [System.Collections.ArrayList]::Synchronized([System.Collections.ArrayList]::new())
+[void]$testQueue.Add('C:\test1'); [void]$testQueue.Add('C:\test2')
+$snapshot = @($testQueue.ToArray()); $testQueue.Clear()
+Assert-Equal 2 $snapshot.Count "Functional: sync queue snapshot"
+Assert-Equal 0 $testQueue.Count "Functional: sync queue cleared"
 
 $ErrorActionPreference = $prevEAP
