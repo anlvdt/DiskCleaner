@@ -28,7 +28,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
 . (Join-Path $modPath 'SafeGuard.ps1')
 . (Join-Path $modPath 'FolderOrganizer.ps1')
 . (Join-Path $modPath 'DevClean.ps1')
-. (Join-Path $modPath 'GeminiClassifier.ps1')
+. (Join-Path $modPath 'AIClassifier.ps1')
 
 $AppArgs = @{ ScanResults = $null; IsScanning = $false }
 
@@ -225,7 +225,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                             <Button x:Name="btnOrgAI" Content="🤖 AI Off" Style="{StaticResource BtnS}" FontSize="10" Padding="10,8" Foreground="#3d5470"/>
                         </DockPanel>
                         <DockPanel Margin="0,6,0,0" x:Name="panelApiKey" Visibility="Collapsed">
-                            <TextBlock Text="Gemini API Key: " Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBlock Text="Groq API Key (free): " Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/>
                             <Button DockPanel.Dock="Right" x:Name="btnApiKeySave" Content="Save" Style="{StaticResource BtnS}" FontSize="10" Padding="10,6" Margin="8,0,0,0"/>
                             <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="5" Padding="8,5">
                                 <TextBox x:Name="txtApiKey" Background="Transparent" BorderThickness="0" Foreground="#c8d6e5" FontSize="11" FontFamily="Consolas"/>
@@ -855,7 +855,7 @@ $script:aiEnabled = $false
 
 # Load AI config on startup
 try {
-    $aiCfg = Get-GeminiConfig
+    $aiCfg = Get-AIConfig
     if ($aiCfg.Enabled -and $aiCfg.ApiKey) {
         $script:aiEnabled = $true
         $ui['btnOrgAI'].Content = "🤖 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
@@ -870,15 +870,15 @@ $ui['btnOrgAI'].Add_Click({
             $script:aiEnabled = $false
             $ui['btnOrgAI'].Content = "🤖 AI Off"; $ui['btnOrgAI'].Foreground = MkColor '#3d5470'
             $ui['panelApiKey'].Visibility = 'Collapsed'
-            $cfg = Get-GeminiConfig; $cfg.Enabled = $false; Save-GeminiConfig $cfg
+            $cfg = Get-AIConfig; $cfg.Enabled = $false; Save-AIConfig $cfg
         }
         else {
             $ui['panelApiKey'].Visibility = 'Visible'
-            $cfg = Get-GeminiConfig
+            $cfg = Get-AIConfig
             if ($cfg.ApiKey) {
                 $script:aiEnabled = $true
                 $ui['btnOrgAI'].Content = "🤖 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
-                $cfg.Enabled = $true; Save-GeminiConfig $cfg
+                $cfg.Enabled = $true; Save-AIConfig $cfg
             }
         }
     })
@@ -886,8 +886,8 @@ $ui['btnOrgAI'].Add_Click({
 # Save API key
 $ui['btnApiKeySave'].Add_Click({
         $key = $ui['txtApiKey'].Text.Trim()
-        if ($key.Length -lt 10) { Show-Dialog 'Please enter a valid Gemini API key.`nGet one free at: https://aistudio.google.com/apikey' 'Invalid Key' 'OK' 'Warning'; return }
-        $cfg = Get-GeminiConfig; $cfg.ApiKey = $key; $cfg.Enabled = $true; Save-GeminiConfig $cfg
+        if ($key.Length -lt 10) { Show-Dialog 'Please enter a valid Groq API key.`nGet one free at: https://console.groq.com/keys' 'Invalid Key' 'OK' 'Warning'; return }
+        $cfg = Get-AIConfig; $cfg.ApiKey = $key; $cfg.Enabled = $true; Save-AIConfig $cfg
         $script:aiEnabled = $true
         $ui['btnOrgAI'].Content = "🤖 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
         $ui['panelApiKey'].Visibility = 'Collapsed'
