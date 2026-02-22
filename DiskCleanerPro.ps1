@@ -474,27 +474,33 @@ function Show-Dialog {
     $ftr = New-Object System.Windows.Controls.Border; $ftr.Background = MkColor '#080e1a'; $ftr.CornerRadius = '0,0,12,12'; $ftr.Padding = '18,12'
     $btnPanel = New-Object System.Windows.Controls.StackPanel; $btnPanel.Orientation = 'Horizontal'; $btnPanel.HorizontalAlignment = 'Right'
     if ($Buttons -eq 'YesNo') {
-        $btnNo = New-Object System.Windows.Controls.Button; $btnNo.Content = 'Cancel'; $btnNo.Padding = '20,9'; $btnNo.Margin = '0,0,8,0'
-        $btnNo.Background = MkColor '#1e293b'; $btnNo.Foreground = MkColor '#8899b0'; $btnNo.BorderThickness = '0'; $btnNo.Cursor = 'Hand'; $btnNo.FontSize = 12.5; $btnNo.Tag = $dw
-        $tplNo = [System.Windows.Markup.XamlReader]::Parse('<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#2d3f55"/></Trigger></ControlTemplate.Triggers></ControlTemplate>')
-        $btnNo.Template = $tplNo
-        $btnNo.Add_Click([System.Windows.RoutedEventHandler] { param($s, $e); $s.Tag.Tag = 'No'; $s.Tag.Close() })
+        $btnNo = New-Object System.Windows.Controls.Border
+        $btnNo.Background = MkColor '#1e293b'; $btnNo.CornerRadius = '7'; $btnNo.Padding = '20,9'; $btnNo.Margin = '0,0,8,0'; $btnNo.Cursor = 'Hand'
+        $btnNoTb = New-Object System.Windows.Controls.TextBlock; $btnNoTb.Text = 'Cancel'; $btnNoTb.Foreground = MkColor '#8899b0'; $btnNoTb.FontSize = 12.5; $btnNoTb.HorizontalAlignment = 'Center'
+        $btnNo.Child = $btnNoTb; $btnNo.Tag = $dw
+        $btnNo.Add_MouseLeftButtonDown([System.Windows.Input.MouseButtonEventHandler] { param($s, $e); $s.Tag.Tag = 'No'; $s.Tag.Close() })
+        $btnNo.Add_MouseEnter([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor '#2d3f55' })
+        $btnNo.Add_MouseLeave([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor '#1e293b' })
         [void]$btnPanel.Children.Add($btnNo)
         $yesBg = if ($Icon -eq 'Warning') { '#dc2626' }else { '#2563eb' }
         $yesHv = if ($Icon -eq 'Warning') { '#b91c1c' }else { '#1d4ed8' }
-        $btnYes = New-Object System.Windows.Controls.Button; $btnYes.Content = 'Confirm'; $btnYes.Padding = '20,9'
-        $btnYes.Background = MkColor $yesBg; $btnYes.Foreground = MkColor '#ffffff'; $btnYes.BorderThickness = '0'; $btnYes.Cursor = 'Hand'; $btnYes.FontSize = 12.5; $btnYes.FontWeight = 'Medium'; $btnYes.Tag = $dw
-        $tplYes = [System.Windows.Markup.XamlReader]::Parse("<ControlTemplate xmlns=`"http://schemas.microsoft.com/winfx/2006/xaml/presentation`" TargetType=`"Button`"><Border x:Name=`"bd`" Background=`"{TemplateBinding Background}`" CornerRadius=`"7`" Padding=`"{TemplateBinding Padding}`"><ContentPresenter HorizontalAlignment=`"Center`" VerticalAlignment=`"Center`"/></Border><ControlTemplate.Triggers><Trigger Property=`"IsMouseOver`" Value=`"True`"><Setter TargetName=`"bd`" Property=`"Background`" Value=`"$yesHv`"/></Trigger></ControlTemplate.Triggers></ControlTemplate>")
-        $btnYes.Template = $tplYes
-        $btnYes.Add_Click([System.Windows.RoutedEventHandler] { param($s, $e); $s.Tag.Tag = 'Yes'; $s.Tag.Close() })
+        $btnYes = New-Object System.Windows.Controls.Border
+        $btnYes.Background = MkColor $yesBg; $btnYes.CornerRadius = '7'; $btnYes.Padding = '20,9'; $btnYes.Cursor = 'Hand'
+        $btnYesTb = New-Object System.Windows.Controls.TextBlock; $btnYesTb.Text = 'Confirm'; $btnYesTb.Foreground = MkColor '#ffffff'; $btnYesTb.FontSize = 12.5; $btnYesTb.FontWeight = 'Medium'; $btnYesTb.HorizontalAlignment = 'Center'
+        $btnYes.Child = $btnYesTb; $btnYes.Tag = @{ Window = $dw; Bg = $yesBg }
+        $btnYes.Add_MouseLeftButtonDown([System.Windows.Input.MouseButtonEventHandler] { param($s, $e); $s.Tag.Window.Tag = 'Yes'; $s.Tag.Window.Close() })
+        $btnYes.Add_MouseEnter([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor $s.Tag.Bg.Replace('2563eb', '1d4ed8').Replace('dc2626', 'b91c1c') })
+        $btnYes.Add_MouseLeave([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor $s.Tag.Bg })
         [void]$btnPanel.Children.Add($btnYes)
     }
     else {
-        $btnOk = New-Object System.Windows.Controls.Button; $btnOk.Content = 'OK'; $btnOk.Padding = '20,9'
-        $btnOk.Background = MkColor '#2563eb'; $btnOk.Foreground = MkColor '#ffffff'; $btnOk.BorderThickness = '0'; $btnOk.Cursor = 'Hand'; $btnOk.FontSize = 12.5; $btnOk.FontWeight = 'Medium'; $btnOk.Tag = $dw
-        $tplOk = [System.Windows.Markup.XamlReader]::Parse('<ControlTemplate xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#1d4ed8"/></Trigger></ControlTemplate.Triggers></ControlTemplate>')
-        $btnOk.Template = $tplOk
-        $btnOk.Add_Click([System.Windows.RoutedEventHandler] { param($s, $e); $s.Tag.Tag = 'OK'; $s.Tag.Close() })
+        $btnOk = New-Object System.Windows.Controls.Border
+        $btnOk.Background = MkColor '#2563eb'; $btnOk.CornerRadius = '7'; $btnOk.Padding = '20,9'; $btnOk.Cursor = 'Hand'
+        $btnOkTb = New-Object System.Windows.Controls.TextBlock; $btnOkTb.Text = 'OK'; $btnOkTb.Foreground = MkColor '#ffffff'; $btnOkTb.FontSize = 12.5; $btnOkTb.FontWeight = 'Medium'; $btnOkTb.HorizontalAlignment = 'Center'
+        $btnOk.Child = $btnOkTb; $btnOk.Tag = $dw
+        $btnOk.Add_MouseLeftButtonDown([System.Windows.Input.MouseButtonEventHandler] { param($s, $e); $s.Tag.Tag = 'OK'; $s.Tag.Close() })
+        $btnOk.Add_MouseEnter([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor '#1d4ed8' })
+        $btnOk.Add_MouseLeave([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor '#2563eb' })
         [void]$btnPanel.Children.Add($btnOk)
     }
     $ftr.Child = $btnPanel; [System.Windows.Controls.Grid]::SetRow($ftr, 2); [void]$grid.Children.Add($ftr)
