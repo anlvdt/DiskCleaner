@@ -258,9 +258,9 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                             <StackPanel>
                                 <TextBlock Text="AI CLASSIFICATION (OPTIONAL)" Foreground="#34d399" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
                                 <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,8" Text="Enable AI to auto-classify files that can't be identified by extension. Uses Groq API with Llama 3.1 model."/>
-                                <TextBlock Foreground="#34d399" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5" Text="[v] 100% MIỄN PHÍ - KHÔNG CẦN THẺ TÍN DỤNG"/>
-                                <TextBlock Foreground="#34d399" FontSize="11" Margin="0,0,0,5" Text="[v] Miễn phí 14,400 lượt/ngày (dư dùng cho mọi nhu cầu)"/>
-                                <TextBlock Foreground="#f59e0b" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,12" Text="API key chỉ lưu trên máy bạn, KHÔNG gửi cho tác giả hay bất kỳ ai. Mã nguồn mở, bạn có thể kiểm tra."/>
+                                <TextBlock Foreground="#34d399" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5" Text="[v] 100% FREE - NO CREDIT CARD NEEDED"/>
+                                <TextBlock Foreground="#34d399" FontSize="11" Margin="0,0,0,5" Text="[v] Free 14,400 calls/day (more than enough for any use)"/>
+                                <TextBlock Foreground="#f59e0b" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,12" Text="API key is stored locally on YOUR machine ONLY. Never sent to the app author or anyone else. Open source - you can verify."/>
                                 <DockPanel Margin="0,0,0,12">
                                     <TextBlock Text="Status:" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                     <TextBlock x:Name="lblAIStatus" Text="[x] Disabled" Foreground="#ef4444" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -279,22 +279,22 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                         <Border Background="#0e1726" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
                                 <TextBlock Text="HOW TO GET FREE API KEY" Foreground="#4a8fe7" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                                <TextBlock Foreground="#f59e0b" FontSize="11" Margin="0,0,0,10" Text="(!) 100% Miễn phí - Không cần thẻ tín dụng - Không tốn chi phí"/>
+                                <TextBlock Foreground="#f59e0b" FontSize="11" Margin="0,0,0,10" Text="(!) 100% Free - No credit card - No charges ever"/>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#2563eb" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="1" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Go to console.groq.com" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Truy cập console.groq.com và đăng nhập bằng Google hoặc GitHub" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Go to console.groq.com" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Sign in with your Google or GitHub account" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#2563eb" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="2" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Go to API Keys page" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Click vào mục API Keys (hoặc vào trực tiếp: console.groq.com/keys)" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Go to API Keys page" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Click on API Keys menu (or go directly to: console.groq.com/keys)" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#2563eb" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="3" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Create API Key" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Nhấn 'Create API Key' và copy key (bắt đầu bằng gsk_...)" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Create API Key" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Click 'Create API Key' and copy the key (starts with gsk_...)" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#22c55e" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="4" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Paste &amp; Save" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Dán key vào ô trên, nhấn Save Key. AI sẽ tự động bật!" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Paste &amp; Save" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Paste your key in the box above, click Save Key. AI is now active!" Foreground="#6b7f99" FontSize="11" TextWrapping="Wrap"/></StackPanel>
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -313,11 +313,11 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                                 </Grid>
                                 <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Cost" Foreground="#6b7f99" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="FREE - 14,400 calls/day (không giới hạn thời gian)" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="FREE - 14,400 calls/day (no time limit)" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Credit Card" Foreground="#6b7f99" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="KHÔNG cần thẻ tín dụng" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="NOT required" Foreground="#34d399" FontSize="12" FontWeight="SemiBold"/>
                                 </Grid>
                                 <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Rate Limit" Foreground="#6b7f99" FontSize="12"/>
@@ -325,7 +325,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                                 </Grid>
                                 <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <TextBlock Grid.Column="0" Text="Privacy" Foreground="#6b7f99" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="Key lưu local, KHÔNG gửi cho tác giả hay bất kỳ ai" Foreground="#f59e0b" FontSize="12" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="1" Text="Key stored locally ONLY, never sent to author or anyone" Foreground="#f59e0b" FontSize="12" TextWrapping="Wrap"/>
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -957,7 +957,7 @@ $ui['btnOrgAI'].Add_Click({
         $cfg = Get-AIConfig; $cfg.Enabled = $script:aiEnabled; Save-AIConfig $cfg
         Update-AIStatus
         if ($script:aiEnabled -and -not $cfg.ApiKey) {
-            Show-Dialog "Ch\u01b0a c\u00f3 API key!`nV\u00e0o tab Settings \u0111\u1ec3 l\u1ea5y key mi\u1ec5n ph\u00ed t\u1eeb Groq." 'API Key Required' 'OK' 'Warning'
+            Show-Dialog "No API key set!`nGo to Settings tab to get a free key from Groq." 'API Key Required' 'OK' 'Warning'
             $script:aiEnabled = $false; Update-AIStatus
         }
     })
@@ -965,16 +965,16 @@ $ui['btnOrgAI'].Add_Click({
 # Save API key (Settings tab)
 $ui['btnApiKeySave'].Add_Click({
         $key = $ui['txtApiKey'].Text.Trim()
-        if ($key.Length -lt 10) { Show-Dialog "Vui l\u00f2ng nh\u1eadp API key h\u1ee3p l\u1ec7.`nL\u1ea5y mi\u1ec5n ph\u00ed t\u1ea1i: console.groq.com/keys" 'Invalid Key' 'OK' 'Warning'; return }
+        if ($key.Length -lt 10) { Show-Dialog "Please enter a valid API key.`nGet one free at: console.groq.com/keys" 'Invalid Key' 'OK' 'Warning'; return }
         $cfg = Get-AIConfig; $cfg.ApiKey = $key; $cfg.Enabled = $true; Save-AIConfig $cfg
         $script:aiEnabled = $true; Update-AIStatus
-        Show-Dialog "\u0110\u00e3 l\u01b0u API key! AI classification \u0111\u00e3 b\u1eadt.`nKey ch\u1ec9 l\u01b0u tr\u00ean m\u00e1y b\u1ea1n, kh\u00f4ng g\u1eedi cho b\u1ea5t k\u1ef3 ai." 'AI Enabled' 'OK' 'Success'
+        Show-Dialog "API key saved! AI classification is now active.`nKey is stored locally only, never sent to anyone." 'AI Enabled' 'OK' 'Success'
     })
 
 # Test API key (Settings tab)
 $ui['btnApiKeyTest'].Add_Click({
         $key = $ui['txtApiKey'].Text.Trim()
-        if ($key.Length -lt 10) { Show-Dialog "Nh\u1eadp API key tr\u01b0\u1edbc \u0111\u00e3." 'No Key' 'OK' 'Warning'; return }
+        if ($key.Length -lt 10) { Show-Dialog 'Enter an API key first.' 'No Key' 'OK' 'Warning'; return }
         $ui['lblAIStatus'].Text = 'Testing...'; $ui['lblAIStatus'].Foreground = MkColor '#f59e0b'
         [System.Windows.Forms.Application]::DoEvents()
         try {
