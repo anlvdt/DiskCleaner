@@ -235,9 +235,9 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </UniformGrid></Border>
                     <Border Grid.Row="2" Style="{StaticResource Card}" Margin="18,4,18,8">
                         <DataGrid x:Name="gridOrganize"><DataGrid.Columns>
-                            <DataGridTextColumn Header="File" Binding="{Binding Name}" Width="200"/>
-                            <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="120"/>
-                            <DataGridTextColumn Header="Destination" Binding="{Binding DestFolder}" Width="*"/>
+                            <DataGridTextColumn Header="File" Binding="{Binding Name}" Width="2*"/>
+                            <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="100"/>
+                            <DataGridTextColumn Header="Destination" Binding="{Binding DestFolder}" Width="3*"/>
                             <DataGridTextColumn Header="Size" Binding="{Binding SizeText}" Width="80"/>
                         </DataGrid.Columns></DataGrid>
                     </Border>
@@ -250,6 +250,46 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <DockPanel Grid.Row="4" Margin="18,0,18,10">
                         <Button DockPanel.Dock="Right" x:Name="btnOrgExecute" Content="Organize Now" Style="{StaticResource BtnP}" IsEnabled="False"/>
                         <TextBlock x:Name="lblOrgStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    </DockPanel>
+                </Grid></TabItem>
+                <!-- TAB: RENAME -->
+                <TabItem Header="  Rename  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                    <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
+                        <DockPanel Margin="0,0,0,10"><TextBlock Text="Bulk Rename" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Rename multiple files at once with patterns" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/></DockPanel>
+                        <DockPanel Margin="0,0,0,8">
+                            <Button DockPanel.Dock="Right" x:Name="btnRenBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,0,0" Padding="14,8"/>
+                            <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,8"><TextBlock x:Name="lblRenPath" Text="Select a folder..." Foreground="#3d5470" FontSize="12" TextTrimming="CharacterEllipsis"/></Border>
+                        </DockPanel>
+                        <DockPanel>
+                            <TextBlock Text="Mode:" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <Button x:Name="btnRenPrefix" Content="Add Prefix" Style="{StaticResource BtnP}" Margin="0,0,6,0" Padding="14,8"/>
+                            <Button x:Name="btnRenSuffix" Content="Add Suffix" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
+                            <Button x:Name="btnRenReplace" Content="Replace Text" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
+                            <Button x:Name="btnRenSeq" Content="Sequential" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
+                            <Button x:Name="btnRenDate" Content="Date Prefix" Style="{StaticResource BtnS}" Margin="0,0,0,0" Padding="14,8"/>
+                        </DockPanel>
+                    </StackPanel></Border>
+                    <Border Grid.Row="1" Margin="18,0,18,8"><DockPanel>
+                        <TextBlock Text="Find:" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="10,7" MinWidth="150" Margin="0,0,12,0">
+                            <TextBox x:Name="txtRenFind" Background="Transparent" BorderThickness="0" Foreground="#c8d6e5" FontSize="12"/>
+                        </Border>
+                        <TextBlock Text="Replace:" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="10,7" MinWidth="150" Margin="0,0,12,0">
+                            <TextBox x:Name="txtRenReplace" Background="Transparent" BorderThickness="0" Foreground="#c8d6e5" FontSize="12"/>
+                        </Border>
+                        <Button x:Name="btnRenPreview" Content="Preview" Style="{StaticResource BtnP}" Padding="16,8"/>
+                    </DockPanel></Border>
+                    <Border Grid.Row="2" Style="{StaticResource Card}" Margin="18,0,18,8">
+                        <DataGrid x:Name="gridRename"><DataGrid.Columns>
+                            <DataGridTextColumn Header="Original Name" Binding="{Binding OldName}" Width="2*"/>
+                            <DataGridTextColumn Header="New Name" Binding="{Binding NewName}" Width="2*"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="80"/>
+                        </DataGrid.Columns></DataGrid>
+                    </Border>
+                    <DockPanel Grid.Row="3" Margin="18,0,18,10">
+                        <Button DockPanel.Dock="Right" x:Name="btnRenApply" Content="Rename All" Style="{StaticResource BtnGreen}" IsEnabled="False"/>
+                        <TextBlock x:Name="lblRenStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: SETTINGS -->
@@ -1142,6 +1182,97 @@ $miDevLoc.Add_Click({ param($s, $e); $item = $s.Tag.SelectedItem; if ($item -and
 [void]$cmDev.Items.Add($miDevLoc)
 $ui['gridDev'].ContextMenu = $cmDev
 $ui['gridDev'].Add_MouseDoubleClick({ param($s, $e); $item = $s.SelectedItem; if ($item -and $item.FullPath -and (Test-Path $item.FullPath)) { Start-Process explorer.exe "/select,`"$($item.FullPath)`"" } })
+
+# ===== RENAME TAB =====
+$script:renMode = 'Prefix'
+$script:renPlan = @()
+$script:renFolder = ''
+
+# Mode toggle buttons
+$renModeButtons = @{
+    Prefix = $ui['btnRenPrefix']; Suffix = $ui['btnRenSuffix']; Replace = $ui['btnRenReplace']
+    Seq = $ui['btnRenSeq']; DatePfx = $ui['btnRenDate']
+}
+function Set-RenMode([string]$mode) {
+    $script:renMode = $mode
+    foreach ($k in $renModeButtons.Keys) {
+        $renModeButtons[$k].SetValue([System.Windows.Controls.Control]::BackgroundProperty, (MkColor $(if ($k -eq $mode) { '#2563eb' } else { '#131c2b' })))
+        $renModeButtons[$k].Foreground = MkColor $(if ($k -eq $mode) { '#ffffff' } else { '#8899b0' })
+    }
+    # Toggle Find/Replace labels
+    switch ($mode) {
+        'Prefix' { $ui['txtRenFind'].Tag = 'Prefix text'; $ui['txtRenReplace'].Visibility = 'Collapsed' }
+        'Suffix' { $ui['txtRenFind'].Tag = 'Suffix text'; $ui['txtRenReplace'].Visibility = 'Collapsed' }
+        'Replace' { $ui['txtRenFind'].Tag = 'Find'; $ui['txtRenReplace'].Visibility = 'Visible' }
+        'Seq' { $ui['txtRenFind'].Tag = 'Base name'; $ui['txtRenReplace'].Visibility = 'Collapsed' }
+        'DatePfx' { $ui['txtRenFind'].Tag = 'Date format'; $ui['txtRenFind'].Text = 'yyyy-MM-dd'; $ui['txtRenReplace'].Visibility = 'Collapsed' }
+    }
+}
+
+$ui['btnRenPrefix'].Add_Click({ Set-RenMode 'Prefix' })
+$ui['btnRenSuffix'].Add_Click({ Set-RenMode 'Suffix' })
+$ui['btnRenReplace'].Add_Click({ Set-RenMode 'Replace' })
+$ui['btnRenSeq'].Add_Click({ Set-RenMode 'Seq' })
+$ui['btnRenDate'].Add_Click({ Set-RenMode 'DatePfx' })
+
+$ui['btnRenBrowse'].Add_Click({
+        $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.Description = 'Select folder to rename files'
+        if ($dlg.ShowDialog() -eq 'OK') {
+            $script:renFolder = $dlg.SelectedPath; $ui['lblRenPath'].Text = $script:renFolder
+            $files = @(Get-ChildItem $script:renFolder -File -EA SilentlyContinue)
+            $ui['lblRenStatus'].Text = "$($files.Count) files found"
+        }
+    })
+
+$ui['btnRenPreview'].Add_Click({
+        if (-not $script:renFolder -or -not (Test-Path $script:renFolder)) { Show-Dialog 'Select a folder first.' 'No Folder' 'OK' 'Warning'; return }
+        $files = @(Get-ChildItem $script:renFolder -File -EA SilentlyContinue)
+        if ($files.Count -eq 0) { Show-Dialog 'No files in this folder.' 'Empty' 'OK' 'Warning'; return }
+        $text = $ui['txtRenFind'].Text; $replace = $ui['txtRenReplace'].Text
+        $script:renPlan = @()
+        $counter = 1
+        foreach ($f in ($files | Sort-Object Name)) {
+            $ext = $f.Extension; $base = $f.BaseName
+            $newName = switch ($script:renMode) {
+                'Prefix' { if ($text) { "$text$($f.Name)" } else { $f.Name } }
+                'Suffix' { if ($text) { "$base$text$ext" } else { $f.Name } }
+                'Replace' { if ($text) { $f.Name.Replace($text, $replace) } else { $f.Name } }
+                'Seq' { $seqBase = if ($text) { $text } else { 'file' }; "$seqBase`_$($counter.ToString('D3'))$ext" }
+                'DatePfx' { $fmt = if ($text) { $text } else { 'yyyy-MM-dd' }; try { "$($f.LastWriteTime.ToString($fmt))_$($f.Name)" } catch { $f.Name } }
+            }
+            $status = if ($newName -eq $f.Name) { 'Skip' } else { 'Ready' }
+            $script:renPlan += [PSCustomObject]@{ OldName = $f.Name; NewName = $newName; FullPath = $f.FullName; Status = $status }
+            $counter++
+        }
+        $ui['gridRename'].ItemsSource = $script:renPlan
+        $toRename = @($script:renPlan | Where-Object { $_.Status -eq 'Ready' })
+        $ui['lblRenStatus'].Text = "$($toRename.Count) of $($files.Count) files will be renamed"
+        $ui['btnRenApply'].IsEnabled = $toRename.Count -gt 0
+    })
+
+$ui['btnRenApply'].Add_Click({
+        if (-not $script:renPlan -or $script:renPlan.Count -eq 0) { return }
+        $toRename = @($script:renPlan | Where-Object { $_.Status -eq 'Ready' })
+        if ($toRename.Count -eq 0) { return }
+        if ((Show-Dialog "Rename $($toRename.Count) files?`nThis cannot be undone easily." 'Confirm Rename' 'YesNo' 'Warning') -ne 'Yes') { return }
+        $ok = 0; $fail = 0
+        foreach ($item in $script:renPlan) {
+            if ($item.Status -ne 'Ready') { continue }
+            try {
+                $newPath = Join-Path (Split-Path $item.FullPath) $item.NewName
+                if (Test-Path $newPath) { $item.Status = 'Exists'; $fail++; continue }
+                Rename-Item -Path $item.FullPath -NewName $item.NewName -EA Stop
+                $item.Status = 'Done'; $ok++
+            }
+            catch { $item.Status = 'Error'; $fail++ }
+        }
+        $ui['gridRename'].Items.Refresh()
+        $ui['lblRenStatus'].Text = "Renamed $ok files. $fail failed."
+        $ui['btnRenApply'].IsEnabled = $false
+        Show-Dialog "Renamed $ok files successfully.$(if ($fail -gt 0) { "`n$fail files failed." })" 'Complete' 'OK' $(if ($fail -eq 0) { 'Success' } else { 'Warning' })
+    })
+
+Set-RenMode 'Prefix'
 
 # ===== ABOUT TAB =====
 $ui['btnGithub'].Add_Click({ Start-Process 'https://github.com/anlvdt' })
