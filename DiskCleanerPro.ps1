@@ -40,9 +40,8 @@ $modPath = Join-Path $PSScriptRoot 'modules'
         WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True"
         Background="Transparent" FontFamily="Segoe UI" FontSize="13">
     <Window.Resources>
-        <Style TargetType="ScrollBar"><Setter Property="Width" Value="10"/><Setter Property="MinWidth" Value="10"/><Setter Property="Background" Value="Transparent"/></Style>
+        <Style TargetType="ScrollBar"><Setter Property="Background" Value="#0a0f1a"/><Setter Property="Width" Value="10"/><Setter Property="MinWidth" Value="10"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Border Background="#0a0f1a" CornerRadius="5"><Track x:Name="PART_Track" IsDirectionReversed="True"><Track.Thumb><Thumb><Thumb.Template><ControlTemplate TargetType="Thumb"><Border x:Name="tb" Background="#1e2d42" CornerRadius="5" Margin="1"/><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="tb" Property="Background" Value="#2563eb"/></Trigger><Trigger Property="IsDragging" Value="True"><Setter TargetName="tb" Property="Background" Value="#3b82f6"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Thumb.Template></Thumb></Track.Thumb><Track.DecreaseRepeatButton><RepeatButton Command="ScrollBar.LineUpCommand" Opacity="0" Focusable="False"/></Track.DecreaseRepeatButton><Track.IncreaseRepeatButton><RepeatButton Command="ScrollBar.LineDownCommand" Opacity="0" Focusable="False"/></Track.IncreaseRepeatButton></Track></Border></ControlTemplate></Setter.Value></Setter><Style.Triggers><Trigger Property="Orientation" Value="Horizontal"><Setter Property="Height" Value="10"/><Setter Property="MinHeight" Value="10"/><Setter Property="Width" Value="Auto"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Border Background="#0a0f1a" CornerRadius="5"><Track x:Name="PART_Track" IsDirectionReversed="False"><Track.Thumb><Thumb><Thumb.Template><ControlTemplate TargetType="Thumb"><Border x:Name="tb" Background="#1e2d42" CornerRadius="5" Margin="1"/><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="tb" Property="Background" Value="#2563eb"/></Trigger><Trigger Property="IsDragging" Value="True"><Setter TargetName="tb" Property="Background" Value="#3b82f6"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Thumb.Template></Thumb></Track.Thumb><Track.DecreaseRepeatButton><RepeatButton Command="ScrollBar.LineLeftCommand" Opacity="0" Focusable="False"/></Track.DecreaseRepeatButton><Track.IncreaseRepeatButton><RepeatButton Command="ScrollBar.LineRightCommand" Opacity="0" Focusable="False"/></Track.IncreaseRepeatButton></Track></Border></ControlTemplate></Setter.Value></Setter></Trigger></Style.Triggers></Style>
         <Style TargetType="ScrollViewer"><Setter Property="Background" Value="Transparent"/></Style>
-        <Style x:Key="DarkThumb" TargetType="Thumb"><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Thumb"><Border x:Name="tb" Background="#1e2d42" CornerRadius="4" Margin="1"/><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="tb" Property="Background" Value="#2563eb"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
         <Style x:Key="Card" TargetType="Border"><Setter Property="Background" Value="#161f2e"/><Setter Property="BorderBrush" Value="#1e2d42"/><Setter Property="BorderThickness" Value="1"/><Setter Property="CornerRadius" Value="10"/><Setter Property="Padding" Value="18"/><Setter Property="Margin" Value="5"/></Style>
         <Style x:Key="BtnP" TargetType="Button"><Setter Property="Background" Value="#2563eb"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="12.5"/><Setter Property="Padding" Value="20,9"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#1d4ed8"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
         <Style x:Key="BtnD" TargetType="Button"><Setter Property="Background" Value="#dc2626"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="12.5"/><Setter Property="Padding" Value="20,9"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#b91c1c"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
@@ -1696,9 +1695,139 @@ $ui['btnOrgDesktop'].Add_Click($autoPreviewOrg)
 $ui['btnOrgDownloads'].Add_Click($autoPreviewOrg)
 $ui['btnOrgDocuments'].Add_Click($autoPreviewOrg)
 
+# --- Quick folder buttons for Disk Analyzer ---
+$analyzerToolbar = $ui['btnBrowse'].Parent  # StackPanel
+$qfLabel = New-Object System.Windows.Controls.TextBlock; $qfLabel.Text = '  Quick:'; $qfLabel.Foreground = MkColor '#3d5470'; $qfLabel.FontSize = 11; $qfLabel.VerticalAlignment = 'Center'; $qfLabel.Margin = '12,0,4,0'
+[void]$analyzerToolbar.Children.Add($qfLabel)
+$qFolders = @(
+    @{ Name = 'Desktop'; Path = [Environment]::GetFolderPath('Desktop') }
+    @{ Name = 'Downloads'; Path = "$env:USERPROFILE\Downloads" }
+    @{ Name = 'Documents'; Path = [Environment]::GetFolderPath('MyDocuments') }
+    @{ Name = 'C:\'; Path = 'C:\' }
+)
+foreach ($qf in $qFolders) {
+    $btn = New-Object System.Windows.Controls.Button; $btn.Content = $qf.Name; $btn.Padding = '10,6'
+    $btn.FontSize = 11; $btn.Cursor = 'Hand'; $btn.Margin = '2,0'
+    $btn.Background = MkColor '#131c2b'; $btn.Foreground = MkColor '#6b7f99'; $btn.BorderThickness = '0'
+    $btn.Template = $ui['btnBrowse'].Template
+    $btn.Tag = $qf.Path
+    $btn.ToolTip = "Scan $($qf.Name) folder"
+    $btn.Add_Click({
+            param($s, $e)
+            $ui['lblPath'].Text = $s.Tag; $ui['lblPath'].Foreground = MkColor '#c8d6e5'
+            $ui['btnScan'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+        })
+    [void]$analyzerToolbar.Children.Add($btn)
+}
+
+# --- Quick project root buttons for Dev Cleanup ---
+$devHeader = $ui['btnDevScan'].Parent  # StackPanel
+$devQLabel = New-Object System.Windows.Controls.TextBlock; $devQLabel.Text = 'Quick:'; $devQLabel.Foreground = MkColor '#3d5470'; $devQLabel.FontSize = 11; $devQLabel.VerticalAlignment = 'Center'; $devQLabel.Margin = '0,0,4,0'
+$devHeader.Children.Insert(0, $devQLabel)
+$devPaths = @(
+    @{ Name = 'MyApps'; Path = 'C:\MyApps' }
+    @{ Name = 'source'; Path = "$env:USERPROFILE\source" }
+    @{ Name = 'repos'; Path = "$env:USERPROFILE\repos" }
+    @{ Name = 'Desktop'; Path = [Environment]::GetFolderPath('Desktop') }
+)
+foreach ($dp in $devPaths) {
+    if (Test-Path $dp.Path) {
+        $btn = New-Object System.Windows.Controls.Button; $btn.Content = $dp.Name; $btn.Padding = '10,6'
+        $btn.FontSize = 11; $btn.Cursor = 'Hand'; $btn.Margin = '0,0,4,0'
+        $btn.Background = MkColor '#131c2b'; $btn.Foreground = MkColor '#6b7f99'; $btn.BorderThickness = '0'
+        $btn.Template = $ui['btnDevScan'].Template
+        $btn.Tag = $dp.Path
+        $btn.ToolTip = "Scan $($dp.Name) ($($dp.Path))"
+        $btn.Add_Click({
+                param($s, $e)
+                $ui['lblDevDesc'].Text = $s.Tag; $ui['lblDevDesc'].Tag = $s.Tag
+                $ui['btnDevScan'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+            })
+        $idx = [math]::Max(0, $devHeader.Children.IndexOf($ui['lblDevInfo']))
+        $devHeader.Children.Insert($idx, $btn)
+    }
+}
+
+# --- Treemap right-click context menu ---
+$script:mapContextMenu = New-Object System.Windows.Controls.ContextMenu
+$script:mapContextMenu.Background = MkColor '#0e1726'; $script:mapContextMenu.BorderBrush = MkColor '#1e2d42'
+$script:mapContextMenu.BorderThickness = '1'; $script:mapContextMenu.Foreground = MkColor '#c8d6e5'
+$miOpen = New-Object System.Windows.Controls.MenuItem; $miOpen.Header = '📂  Open Folder'
+$miOpen.Foreground = MkColor '#c8d6e5'; $miOpen.FontSize = 12
+$miOpen.Add_Click({ if ($script:mapCtxPath -and (Test-Path $script:mapCtxPath)) { Start-Process explorer.exe "`"$($script:mapCtxPath)`"" } })
+$miExplorer = New-Object System.Windows.Controls.MenuItem; $miExplorer.Header = '📍  Show in Explorer'
+$miExplorer.Foreground = MkColor '#c8d6e5'; $miExplorer.FontSize = 12
+$miExplorer.Add_Click({ if ($script:mapCtxPath -and (Test-Path $script:mapCtxPath)) { Start-Process explorer.exe "/select,`"$($script:mapCtxPath)`"" } })
+$miCopy = New-Object System.Windows.Controls.MenuItem; $miCopy.Header = '📋  Copy Path'
+$miCopy.Foreground = MkColor '#c8d6e5'; $miCopy.FontSize = 12
+$miCopy.Add_Click({ if ($script:mapCtxPath) { [System.Windows.Clipboard]::SetText($script:mapCtxPath) } })
+[void]$script:mapContextMenu.Items.Add($miOpen)
+[void]$script:mapContextMenu.Items.Add($miExplorer)
+[void]$script:mapContextMenu.Items.Add($miCopy)
+
+# Attach context menu to all treemap rectangles via canvas event
+$ui['canvasMap'].Add_MouseRightButtonDown({
+        param($s, $e)
+        $hit = $e.OriginalSource
+        if ($hit -is [System.Windows.Shapes.Rectangle] -and $hit.Tag) {
+            $script:mapCtxPath = $hit.Tag.FullPath
+            $script:mapContextMenu.IsOpen = $true
+        }
+    })
+
+# --- Size filter buttons for Smart Scan (Large Files tab) ---
+# Find the Large Files sub-tab and add filter buttons after scan
+$script:sizeFilters = @()
+$script:allLargeItems = @()  # store unfiltered items
+
+function Add-SizeFilters {
+    # Add filter buttons above gridLarge if not already added
+    if ($script:sizeFilters.Count -gt 0) { return }
+    $parent = $ui['gridLarge'].Parent  # Grid inside Large Files tab
+    if (-not $parent) { return }
+    $filterPanel = New-Object System.Windows.Controls.StackPanel
+    $filterPanel.Orientation = 'Horizontal'; $filterPanel.Margin = '0,4,0,4'; $filterPanel.HorizontalAlignment = 'Left'
+    $flbl = New-Object System.Windows.Controls.TextBlock; $flbl.Text = 'Filter:'; $flbl.Foreground = MkColor '#3d5470'
+    $flbl.FontSize = 11; $flbl.VerticalAlignment = 'Center'; $flbl.Margin = '0,0,6,0'
+    [void]$filterPanel.Children.Add($flbl)
+    foreach ($sz in @(@{L = 'All'; V = 0 }, @{L = '>100 MB'; V = 100MB }, @{L = '>500 MB'; V = 500MB }, @{L = '>1 GB'; V = 1GB })) {
+        $btn = New-Object System.Windows.Controls.Button; $btn.Content = $sz.L; $btn.Padding = '10,5'
+        $btn.FontSize = 10.5; $btn.Cursor = 'Hand'; $btn.Margin = '2,0'
+        $btn.Background = MkColor '#131c2b'; $btn.Foreground = MkColor '#6b7f99'; $btn.BorderThickness = '0'
+        $btn.Template = $ui['btnBrowse'].Template
+        $btn.Tag = $sz.V
+        $btn.Add_Click({
+                param($s, $e)
+                $threshold = [long]$s.Tag
+                if ($threshold -eq 0) { $ui['gridLarge'].ItemsSource = $script:allLargeItems }
+                else { $ui['gridLarge'].ItemsSource = @($script:allLargeItems | Where-Object { $_.Size -gt $threshold }) }
+                # Highlight selected
+                foreach ($child in $s.Parent.Children) {
+                    if ($child -is [System.Windows.Controls.Button]) {
+                        $child.Foreground = MkColor $(if ($child -eq $s) { '#93c5fd' } else { '#6b7f99' })
+                    }
+                }
+            })
+        [void]$filterPanel.Children.Add($btn)
+        $script:sizeFilters += $btn
+    }
+    # Insert filter panel at row 0 of the grid
+    [System.Windows.Controls.Grid]::SetRow($filterPanel, 0)
+    $parent.RowDefinitions.Insert(0, (New-Object System.Windows.Controls.RowDefinition -Property @{ Height = 'Auto' }))
+    # Shift existing children down by 1 row
+    foreach ($child in @($parent.Children)) {
+        $curRow = [System.Windows.Controls.Grid]::GetRow($child)
+        [System.Windows.Controls.Grid]::SetRow($child, $curRow + 1)
+    }
+    [void]$parent.Children.Add($filterPanel)
+}
+
+# Hook into scan completion to save large items and add filters
+$script:origScanCompleteHooked = $false
+
 # --- Update title bar version ---
 $verBlock = $ui['lblTitle'].Parent.Children | Where-Object { $_ -is [System.Windows.Controls.TextBlock] -and $_.Text -match 'v\d' } | Select-Object -First 1
-if ($verBlock) { $verBlock.Text = '  v4.0' }
+if ($verBlock) { $verBlock.Text = '  v4.1' }
 
 $null = [Native.Win32]::ShowWindow([Native.Win32]::GetConsoleWindow(), 0)
 [void]$Window.ShowDialog()
