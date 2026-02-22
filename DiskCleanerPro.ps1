@@ -28,6 +28,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
 . (Join-Path $modPath 'SafeGuard.ps1')
 . (Join-Path $modPath 'FolderOrganizer.ps1')
 . (Join-Path $modPath 'DevClean.ps1')
+. (Join-Path $modPath 'GeminiClassifier.ps1')
 
 $AppArgs = @{ ScanResults = $null; IsScanning = $false }
 
@@ -220,7 +221,15 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                             <Button x:Name="btnOrgByDate" Content="By Date" Style="{StaticResource BtnS}" Margin="0,0,4,0"/>
                             <Button x:Name="btnOrgBySize" Content="By Size" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
                             <Button x:Name="btnOrgPreview" Content="Preview" Style="{StaticResource BtnP}" Margin="0,0,8,0"/>
-                            <Button x:Name="btnOrgUndo" Content="Undo Last" Style="{StaticResource BtnS}"/>
+                            <Button x:Name="btnOrgUndo" Content="Undo Last" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
+                            <Button x:Name="btnOrgAI" Content="🤖 AI Off" Style="{StaticResource BtnS}" FontSize="10" Padding="10,8" Foreground="#3d5470"/>
+                        </DockPanel>
+                        <DockPanel Margin="0,6,0,0" x:Name="panelApiKey" Visibility="Collapsed">
+                            <TextBlock Text="Gemini API Key: " Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/>
+                            <Button DockPanel.Dock="Right" x:Name="btnApiKeySave" Content="Save" Style="{StaticResource BtnS}" FontSize="10" Padding="10,6" Margin="8,0,0,0"/>
+                            <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="5" Padding="8,5">
+                                <TextBox x:Name="txtApiKey" Background="Transparent" BorderThickness="0" Foreground="#c8d6e5" FontSize="11" FontFamily="Consolas"/>
+                            </Border>
                         </DockPanel>
                     </StackPanel></Border>
                     <Border Grid.Row="1" Margin="18,0,18,4"><UniformGrid Columns="3">
@@ -842,6 +851,48 @@ $ui['btnExport'].Add_Click({ if (-not $AppArgs.ScanResults) { Show-Dialog 'Scan 
 # ===== ORGANIZE TAB =====
 $script:orgMode = 'ByType'
 $script:orgPlan = $null
+$script:aiEnabled = $false
+
+# Load AI config on startup
+try {
+    $aiCfg = Get-GeminiConfig
+    if ($aiCfg.Enabled -and $aiCfg.ApiKey) {
+        $script:aiEnabled = $true
+        $ui['btnOrgAI'].Content = "🤖 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
+        $ui['txtApiKey'].Text = $aiCfg.ApiKey
+    }
+}
+catch {}
+
+# AI toggle button
+$ui['btnOrgAI'].Add_Click({
+        if ($script:aiEnabled) {
+            $script:aiEnabled = $false
+            $ui['btnOrgAI'].Content = "🤖 AI Off"; $ui['btnOrgAI'].Foreground = MkColor '#3d5470'
+            $ui['panelApiKey'].Visibility = 'Collapsed'
+            $cfg = Get-GeminiConfig; $cfg.Enabled = $false; Save-GeminiConfig $cfg
+        }
+        else {
+            $ui['panelApiKey'].Visibility = 'Visible'
+            $cfg = Get-GeminiConfig
+            if ($cfg.ApiKey) {
+                $script:aiEnabled = $true
+                $ui['btnOrgAI'].Content = "🤖 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
+                $cfg.Enabled = $true; Save-GeminiConfig $cfg
+            }
+        }
+    })
+
+# Save API key
+$ui['btnApiKeySave'].Add_Click({
+        $key = $ui['txtApiKey'].Text.Trim()
+        if ($key.Length -lt 10) { Show-Dialog 'Please enter a valid Gemini API key.`nGet one free at: https://aistudio.google.com/apikey' 'Invalid Key' 'OK' 'Warning'; return }
+        $cfg = Get-GeminiConfig; $cfg.ApiKey = $key; $cfg.Enabled = $true; Save-GeminiConfig $cfg
+        $script:aiEnabled = $true
+        $ui['btnOrgAI'].Content = "🤖 AI On"; $ui['btnOrgAI'].Foreground = MkColor '#34d399'
+        $ui['panelApiKey'].Visibility = 'Collapsed'
+        Show-Dialog 'API key saved! AI classification is now enabled.' 'AI Enabled' 'OK' 'Success'
+    })
 
 # Quick folder helpers
 function Set-OrgFolder([string]$path) { $ui['lblOrgPath'].Text = $path; $ui['lblOrgPath'].Foreground = MkColor '#c8d6e5' }
@@ -870,14 +921,38 @@ $ui['btnOrgPreview'].Add_Click({
         if ($folder -eq $desktopPath) { $excludeExts = @('.lnk', '.url') }
         $result = Get-OrganizePlan -FolderPath $folder -Mode $script:orgMode -SkipHidden -SkipSystem -ExcludeExtensions $excludeExts
         $script:orgPlan = $result.Plan
-        $ui['gridOrganize'].ItemsSource = $result.Plan
+        # AI re-classify 'Other' files if enabled
+        if ($script:aiEnabled -and $result.Plan.Count -gt 0) {
+            $otherFiles = @($result.Plan | Where-Object { $_.Category -eq 'Other' })
+            if ($otherFiles.Count -gt 0) {
+                $ui['lblOrgStatus'].Text = "AI classifying $($otherFiles.Count) files..."
+                [System.Windows.Forms.Application]::DoEvents()
+                try {
+                    $fileInfos = $otherFiles | ForEach-Object { [System.IO.FileInfo]::new($_.Source) }
+                    $aiResults = Invoke-AIClassify -Files $fileInfos
+                    if ($aiResults -and $aiResults.Count -gt 0) {
+                        foreach ($item in $script:orgPlan) {
+                            if ($item.Category -eq 'Other' -and $aiResults.ContainsKey($item.Source)) {
+                                $ai = $aiResults[$item.Source]
+                                $item.Category = "$($ai.Category) (AI)"
+                                $item.DestFolder = $ai.Category
+                                $item.Destination = Join-Path $folder (Join-Path $ai.Category $item.Name)
+                            }
+                        }
+                    }
+                }
+                catch {}
+            }
+        }
+        $ui['gridOrganize'].ItemsSource = $script:orgPlan
         $totalSize = ($result.Plan | Measure-Object Size -Sum).Sum
         $ui['statOrgFiles'].Text = "$($result.Total)"
         $ui['statOrgCats'].Text = "$($result.Stats.Count)"
         $ui['statOrgSize'].Text = FmtSize $totalSize
         $ui['btnOrgExecute'].IsEnabled = $result.Total -gt 0
         $ui['orgProgressFill'].Width = 300; $ui['lblOrgProgress'].Text = 'Done'
-        $ui['lblOrgStatus'].Text = "$($result.Total) files to organize into $($result.Stats.Count) categories"
+        $aiTag = if ($script:aiEnabled) { ' + AI' } else { '' }
+        $ui['lblOrgStatus'].Text = "$($result.Total) files to organize into $($result.Stats.Count) categories$aiTag"
         if ($folder -eq $desktopPath) { $ui['lblOrgStatus'].Text += ' (shortcuts excluded)' }
         if ($result.HasSensitive) { $ui['lblOrgStatus'].Text += ' (! sensitive data detected)'; $ui['lblOrgStatus'].Foreground = MkColor '#f59e0b' }
         else { $ui['lblOrgStatus'].Foreground = MkColor '#6b7f99' }
