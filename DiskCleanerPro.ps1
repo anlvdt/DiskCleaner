@@ -248,7 +248,8 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                         </Border>
                     </DockPanel>
                     <DockPanel Grid.Row="4" Margin="18,0,18,10">
-                        <Button DockPanel.Dock="Right" x:Name="btnOrgExecute" Content="Organize Now" Style="{StaticResource BtnP}" IsEnabled="False"/>
+                        <Button DockPanel.Dock="Right" x:Name="btnOrgExecute" Content="Organize Now" Style="{StaticResource BtnP}" IsEnabled="False" Margin="6,0,0,0"/>
+                        <Button DockPanel.Dock="Right" x:Name="btnOrgWatch" Content="Watch Off" Style="{StaticResource BtnS}" Padding="16,8" Foreground="#3d5470"/>
                         <TextBlock x:Name="lblOrgStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
                     </DockPanel>
                 </Grid></TabItem>
@@ -290,6 +291,25 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <DockPanel Grid.Row="3" Margin="18,0,18,10">
                         <Button DockPanel.Dock="Right" x:Name="btnRenApply" Content="Rename All" Style="{StaticResource BtnGreen}" IsEnabled="False"/>
                         <TextBlock x:Name="lblRenStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    </DockPanel>
+                </Grid></TabItem>
+                <!-- TAB: DISK MAP -->
+                <TabItem Header="  Disk Map  "><Grid Background="#0b1120"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                    <Border Grid.Row="0" Margin="18,14,18,8"><DockPanel>
+                        <TextBlock Text="Disk Map" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <TextBlock Text="  -  Visual disk usage treemap" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/>
+                        <Button DockPanel.Dock="Right" x:Name="btnMapScan" Content="Scan" Style="{StaticResource BtnP}" Padding="16,8"/>
+                        <Button DockPanel.Dock="Right" x:Name="btnMapBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
+                        <Border DockPanel.Dock="Right" Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,8" MinWidth="200" Margin="12,0,6,0">
+                            <TextBlock x:Name="lblMapPath" Text="Select a folder or drive..." Foreground="#3d5470" FontSize="12" TextTrimming="CharacterEllipsis"/>
+                        </Border>
+                    </DockPanel></Border>
+                    <Border Grid.Row="1" Style="{StaticResource Card}" Margin="18,0,18,8">
+                        <Canvas x:Name="canvasMap" Background="#0a0f1a" ClipToBounds="True"/>
+                    </Border>
+                    <DockPanel Grid.Row="2" Margin="18,0,18,10">
+                        <TextBlock x:Name="lblMapStatus" Text="" Foreground="#6b7f99" FontSize="12" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="lblMapHover" Text="" Foreground="#c8d6e5" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" FontWeight="SemiBold"/>
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: SETTINGS -->
@@ -1183,6 +1203,66 @@ $miDevLoc.Add_Click({ param($s, $e); $item = $s.Tag.SelectedItem; if ($item -and
 $ui['gridDev'].ContextMenu = $cmDev
 $ui['gridDev'].Add_MouseDoubleClick({ param($s, $e); $item = $s.SelectedItem; if ($item -and $item.FullPath -and (Test-Path $item.FullPath)) { Start-Process explorer.exe "/select,`"$($item.FullPath)`"" } })
 
+# ===== FOLDER WATCH MODE =====
+$script:watchActive = $false
+$script:watchFsw = $null
+$script:watchQueue = [System.Collections.ArrayList]::Synchronized([System.Collections.ArrayList]::new())
+
+$ui['btnOrgWatch'].Add_Click({
+        if ($script:watchActive) {
+            # Stop watching
+            if ($script:watchFsw) { $script:watchFsw.EnableRaisingEvents = $false; $script:watchFsw.Dispose(); $script:watchFsw = $null }
+            if ($script:watchTimer) { $script:watchTimer.Stop() }
+            $script:watchActive = $false
+            $ui['btnOrgWatch'].Content = 'Watch Off'; $ui['btnOrgWatch'].Foreground = MkColor '#3d5470'
+            $ui['lblOrgStatus'].Text = 'Watch stopped'; $ui['lblOrgStatus'].Foreground = MkColor '#6b7f99'
+            return
+        }
+        # Start watching
+        $folder = $ui['lblOrgPath'].Text
+        if (-not $folder -or -not (Test-Path $folder)) { Show-Dialog 'Select a folder first (use Browse or quick folders).' 'No Folder' 'OK' 'Warning'; return }
+        $script:watchActive = $true
+        $ui['btnOrgWatch'].Content = 'Watch On'; $ui['btnOrgWatch'].Foreground = MkColor '#34d399'
+        $ui['lblOrgStatus'].Text = "Watching: $folder"; $ui['lblOrgStatus'].Foreground = MkColor '#34d399'
+        $script:watchQueue.Clear()
+        $script:watchFsw = New-Object System.IO.FileSystemWatcher
+        $script:watchFsw.Path = $folder; $script:watchFsw.Filter = '*.*'
+        $script:watchFsw.NotifyFilter = [System.IO.NotifyFilters]::FileName
+        $script:watchFsw.IncludeSubdirectories = $false
+        $handler = { param($s, $e); $script:watchQueue.Add($e.FullPath) }
+        Register-ObjectEvent -InputObject $script:watchFsw -EventName Created -Action $handler | Out-Null
+        $script:watchFsw.EnableRaisingEvents = $true
+        # Timer to process queue on UI thread
+        $script:watchTimer = New-Object System.Windows.Threading.DispatcherTimer
+        $script:watchTimer.Interval = [TimeSpan]::FromSeconds(3)
+        $script:watchTimer.Add_Tick({
+                if ($script:watchQueue.Count -eq 0) { return }
+                $items = @($script:watchQueue.ToArray()); $script:watchQueue.Clear()
+                $moved = 0
+                foreach ($fp in $items) {
+                    if (-not (Test-Path $fp)) { continue }
+                    $fi = Get-Item $fp -EA SilentlyContinue; if (-not $fi -or $fi.PSIsContainer) { continue }
+                    $cat = Get-FileCategory $fi.Extension
+                    if ($cat -eq 'Other') { continue }
+                    $destDir = Join-Path $fi.DirectoryName $cat
+                    if (-not (Test-Path $destDir)) { New-Item $destDir -ItemType Directory -Force | Out-Null }
+                    $dest = Join-Path $destDir $fi.Name
+                    if (Test-Path $dest) { continue }
+                    try { Move-Item $fi.FullName $dest -EA Stop; $moved++ } catch {}
+                }
+                if ($moved -gt 0) { $ui['lblOrgStatus'].Text = "Watching: auto-moved $moved file(s) | $(Get-Date -Format 'HH:mm:ss')" }
+            })
+        $script:watchTimer.Start()
+    })
+
+# Stop watcher on window close
+$Window.Add_Closing({
+        if ($script:watchActive -and $script:watchFsw) {
+            $script:watchFsw.EnableRaisingEvents = $false; $script:watchFsw.Dispose()
+            if ($script:watchTimer) { $script:watchTimer.Stop() }
+        }
+    })
+
 # ===== RENAME TAB =====
 $script:renMode = 'Prefix'
 $script:renPlan = @()
@@ -1273,6 +1353,91 @@ $ui['btnRenApply'].Add_Click({
     })
 
 Set-RenMode 'Prefix'
+
+# ===== DISK MAP TAB =====
+$script:mapColors = @('#2563eb', '#dc2626', '#16a34a', '#d97706', '#9333ea', '#0891b2', '#e11d48', '#4f46e5', '#059669', '#ca8a04', '#7c3aed', '#0d9488')
+
+function Draw-Treemap($canvas, $items, $x, $y, $w, $h) {
+    if ($items.Count -eq 0 -or $w -lt 2 -or $h -lt 2) { return }
+    $totalSize = ($items | Measure-Object Size -Sum).Sum
+    if ($totalSize -le 0) { return }
+    $cx = $x; $cy = $y
+    $horizontal = $w -ge $h
+    $remaining = $items | Sort-Object Size -Descending
+    foreach ($item in $remaining) {
+        $ratio = $item.Size / $totalSize
+        if ($horizontal) {
+            $rw = [math]::Max(2, [math]::Round($w * $ratio)); $rh = $h
+            if ($cx + $rw -gt $x + $w) { $rw = $x + $w - $cx }
+        }
+        else {
+            $rw = $w; $rh = [math]::Max(2, [math]::Round($h * $ratio))
+            if ($cy + $rh -gt $y + $h) { $rh = $y + $h - $cy }
+        }
+        if ($rw -lt 1 -or $rh -lt 1) { continue }
+        $color = $script:mapColors[$item.Index % $script:mapColors.Count]
+        $rect = New-Object System.Windows.Shapes.Rectangle
+        $rect.Width = $rw; $rect.Height = $rh; $rect.Fill = MkColor $color; $rect.Opacity = 0.85
+        $rect.RadiusX = 3; $rect.RadiusY = 3; $rect.Stroke = MkColor '#0a0f1a'; $rect.StrokeThickness = 1.5
+        $rect.Tag = $item
+        $rect.Add_MouseEnter({ param($s, $e); $s.Opacity = 1.0; $ui['lblMapHover'].Text = "$($s.Tag.Name)  -  $(FmtSize $s.Tag.Size)" })
+        $rect.Add_MouseLeave({ param($s, $e); $s.Opacity = 0.85; $ui['lblMapHover'].Text = '' })
+        [System.Windows.Controls.Canvas]::SetLeft($rect, $cx)
+        [System.Windows.Controls.Canvas]::SetTop($rect, $cy)
+        [void]$canvas.Children.Add($rect)
+        # Add label if rect is large enough
+        if ($rw -gt 60 -and $rh -gt 22) {
+            $lbl = New-Object System.Windows.Controls.TextBlock
+            $lbl.Text = $item.Name; $lbl.Foreground = MkColor '#ffffff'; $lbl.FontSize = 10
+            $lbl.MaxWidth = $rw - 8; $lbl.TextTrimming = 'CharacterEllipsis'; $lbl.IsHitTestVisible = $false
+            [System.Windows.Controls.Canvas]::SetLeft($lbl, $cx + 4)
+            [System.Windows.Controls.Canvas]::SetTop($lbl, $cy + 3)
+            [void]$canvas.Children.Add($lbl)
+            if ($rh -gt 38) {
+                $szLbl = New-Object System.Windows.Controls.TextBlock
+                $szLbl.Text = FmtSize $item.Size; $szLbl.Foreground = MkColor '#ffffffaa'; $szLbl.FontSize = 9; $szLbl.IsHitTestVisible = $false
+                [System.Windows.Controls.Canvas]::SetLeft($szLbl, $cx + 4)
+                [System.Windows.Controls.Canvas]::SetTop($szLbl, $cy + 18)
+                [void]$canvas.Children.Add($szLbl)
+            }
+        }
+        if ($horizontal) { $cx += $rw } else { $cy += $rh }
+    }
+}
+
+$ui['btnMapBrowse'].Add_Click({
+        $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.Description = 'Select folder to visualize'
+        if ($dlg.ShowDialog() -eq 'OK') { $ui['lblMapPath'].Text = $dlg.SelectedPath }
+    })
+
+$ui['btnMapScan'].Add_Click({
+        $folder = $ui['lblMapPath'].Text
+        if (-not $folder -or -not (Test-Path $folder)) { Show-Dialog 'Select a folder first.' 'No Folder' 'OK' 'Warning'; return }
+        $ui['lblMapStatus'].Text = 'Scanning...'; $ui['canvasMap'].Children.Clear()
+        $ui['btnMapScan'].IsEnabled = $false
+        $dirs = @(Get-ChildItem $folder -Directory -EA SilentlyContinue)
+        $items = @()
+        $idx = 0
+        foreach ($d in $dirs) {
+            try {
+                $size = (Get-ChildItem $d.FullName -Recurse -File -EA SilentlyContinue | Measure-Object Length -Sum).Sum
+                if ($size -gt 0) { $items += [PSCustomObject]@{ Name = $d.Name; Size = [long]$size; Index = $idx; FullPath = $d.FullName } }
+            }
+            catch {}
+            $idx++
+        }
+        # Also count loose files in root
+        $looseSize = (Get-ChildItem $folder -File -EA SilentlyContinue | Measure-Object Length -Sum).Sum
+        if ($looseSize -gt 0) { $items += [PSCustomObject]@{ Name = '(files)'; Size = [long]$looseSize; Index = $idx; FullPath = $folder } }
+        if ($items.Count -eq 0) { $ui['lblMapStatus'].Text = 'No data found'; $ui['btnMapScan'].IsEnabled = $true; return }
+        $items = @($items | Sort-Object Size -Descending)
+        $totalSize = ($items | Measure-Object Size -Sum).Sum
+        $cw = $ui['canvasMap'].ActualWidth; $ch = $ui['canvasMap'].ActualHeight
+        if ($cw -lt 10) { $cw = 600 }; if ($ch -lt 10) { $ch = 350 }
+        Draw-Treemap $ui['canvasMap'] $items 0 0 $cw $ch
+        $ui['lblMapStatus'].Text = "$($items.Count) folders | Total: $(FmtSize $totalSize)"
+        $ui['btnMapScan'].IsEnabled = $true
+    })
 
 # ===== ABOUT TAB =====
 $ui['btnGithub'].Add_Click({ Start-Process 'https://github.com/anlvdt' })
