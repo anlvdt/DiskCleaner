@@ -211,8 +211,11 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                     <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
                         <DockPanel Margin="0,0,0,10"><TextBlock Text="File Organizer" Foreground="#c8d6e5" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Moves files into categorized folders, no files deleted" Foreground="#3d5470" FontSize="11" VerticalAlignment="Center"/></DockPanel>
                         <DockPanel>
-                            <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="300"><TextBlock x:Name="lblOrgPath" Text="Select a folder to organize..." Foreground="#3d5470" FontSize="12.5"/></Border>
-                            <Button x:Name="btnOrgBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,8,0"/>
+                            <Border Background="#0d1525" BorderBrush="#1e2d42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="250"><TextBlock x:Name="lblOrgPath" Text="Select a folder to organize..." Foreground="#3d5470" FontSize="12.5"/></Border>
+                            <Button x:Name="btnOrgBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,4,0"/>
+                            <Button x:Name="btnOrgDesktop" Content="Desktop" Style="{StaticResource BtnS}" Margin="0,0,2,0" FontSize="10" Padding="10,8"/>
+                            <Button x:Name="btnOrgDownloads" Content="Downloads" Style="{StaticResource BtnS}" Margin="0,0,2,0" FontSize="10" Padding="10,8"/>
+                            <Button x:Name="btnOrgDocuments" Content="Documents" Style="{StaticResource BtnS}" Margin="0,0,8,0" FontSize="10" Padding="10,8"/>
                             <Button x:Name="btnOrgByType" Content="By Type" Style="{StaticResource BtnP}" Margin="0,0,4,0"/>
                             <Button x:Name="btnOrgByDate" Content="By Date" Style="{StaticResource BtnS}" Margin="0,0,4,0"/>
                             <Button x:Name="btnOrgBySize" Content="By Size" Style="{StaticResource BtnS}" Margin="0,0,8,0"/>
@@ -450,41 +453,44 @@ $ui['btnSimpleClean'].Add_Click({
         $script:simpleRs.SessionStateProxy.SetVariable('modPath', (Join-Path $PSScriptRoot 'modules'))
         $script:simplePs = [powershell]::Create(); $script:simplePs.Runspace = $script:simpleRs
         [void]$script:simplePs.AddScript({
-            try {
-                . (Join-Path $modPath 'SystemCleaner.ps1')
-                $targets = Get-SystemJunkTargets -AdminMode:$false; $sh.Total = $targets.Count
-                for ($i = 0; $i -lt $targets.Count; $i++) {
-                    $t = $targets[$i]; $sh.Status = $t.Name; $sh.Current = $i + 1
-                    $cr = Invoke-CleanTarget $t; $sh.Cleaned += $cr.Cleaned; $sh.Errors += $cr.Errors
+                try {
+                    . (Join-Path $modPath 'SystemCleaner.ps1')
+                    $targets = Get-SystemJunkTargets -AdminMode:$false; $sh.Total = $targets.Count
+                    for ($i = 0; $i -lt $targets.Count; $i++) {
+                        $t = $targets[$i]; $sh.Status = $t.Name; $sh.Current = $i + 1
+                        $cr = Invoke-CleanTarget $t; $sh.Cleaned += $cr.Cleaned; $sh.Errors += $cr.Errors
+                    }
+                    $sh.Status = 'Clearing Recycle Bin...'
+                    Invoke-RecycleBinClear | Out-Null
                 }
-                $sh.Status = 'Clearing Recycle Bin...'
-                Invoke-RecycleBinClear | Out-Null
-            } catch { $sh.Error = $_.Exception.Message }
-            $sh.Done = $true
-        })
+                catch { $sh.Error = $_.Exception.Message }
+                $sh.Done = $true
+            })
         $script:simplePs.BeginInvoke() | Out-Null
         $script:simpleTimer = New-Object System.Windows.Threading.DispatcherTimer
         $script:simpleTimer.Interval = [TimeSpan]::FromMilliseconds(200)
         $script:simpleTimer.Add_Tick({
-            try {
-                $pct = if ($script:simpleSh.Total -gt 0) { [math]::Round($script:simpleSh.Current / $script:simpleSh.Total * 400) } else { 0 }
-                $ui['simpleProgressFill'].Width = [math]::Min(400, $pct)
-                $ui['lblSimpleProgress'].Text = if ($script:simpleSh.Total -gt 0) { "$($script:simpleSh.Status) ($($script:simpleSh.Current)/$($script:simpleSh.Total))" } else { 'Preparing...' }
-                if ($script:simpleSh.Done) {
-                    $script:simpleTimer.Stop()
-                    try { $script:simplePs.Stop(); $script:simplePs.Dispose(); $script:simpleRs.Close(); $script:simpleRs.Dispose() } catch {}
-                    $ui['simpleProgressFill'].Width = 400
-                    if ($script:simpleSh.Error) {
-                        $ui['lblSimpleResult'].Text = "Error: $($script:simpleSh.Error)"; $ui['lblSimpleResult'].Foreground = MkColor '#ef4444'
-                    } else {
-                        $ui['lblSimpleResult'].Text = "Cleaned $(FmtSize $script:simpleSh.Cleaned)!"; $ui['lblSimpleResult'].Foreground = MkColor '#34d399'
+                try {
+                    $pct = if ($script:simpleSh.Total -gt 0) { [math]::Round($script:simpleSh.Current / $script:simpleSh.Total * 400) } else { 0 }
+                    $ui['simpleProgressFill'].Width = [math]::Min(400, $pct)
+                    $ui['lblSimpleProgress'].Text = if ($script:simpleSh.Total -gt 0) { "$($script:simpleSh.Status) ($($script:simpleSh.Current)/$($script:simpleSh.Total))" } else { 'Preparing...' }
+                    if ($script:simpleSh.Done) {
+                        $script:simpleTimer.Stop()
+                        try { $script:simplePs.Stop(); $script:simplePs.Dispose(); $script:simpleRs.Close(); $script:simpleRs.Dispose() } catch {}
+                        $ui['simpleProgressFill'].Width = 400
+                        if ($script:simpleSh.Error) {
+                            $ui['lblSimpleResult'].Text = "Error: $($script:simpleSh.Error)"; $ui['lblSimpleResult'].Foreground = MkColor '#ef4444'
+                        }
+                        else {
+                            $ui['lblSimpleResult'].Text = "Cleaned $(FmtSize $script:simpleSh.Cleaned)!"; $ui['lblSimpleResult'].Foreground = MkColor '#34d399'
+                        }
+                        $elapsed = [math]::Round(([DateTime]::Now - $script:simpleSh.StartTime).TotalSeconds)
+                        $ui['lblSimpleProgress'].Text = "Done in ${elapsed}s"
+                        Update-DiskInfo; $ui['btnSimpleClean'].Content = 'Clean My Disk'; $script:simpleCleaning = $false
                     }
-                    $elapsed = [math]::Round(([DateTime]::Now - $script:simpleSh.StartTime).TotalSeconds)
-                    $ui['lblSimpleProgress'].Text = "Done in ${elapsed}s"
-                    Update-DiskInfo; $ui['btnSimpleClean'].Content = 'Clean My Disk'; $script:simpleCleaning = $false
                 }
-            } catch { $script:simpleTimer.Stop(); $ui['lblSimpleResult'].Text = "Error: $($_.Exception.Message)"; $ui['lblSimpleResult'].Foreground = MkColor '#ef4444'; $ui['btnSimpleClean'].Content = 'Clean My Disk'; $script:simpleCleaning = $false }
-        })
+                catch { $script:simpleTimer.Stop(); $ui['lblSimpleResult'].Text = "Error: $($_.Exception.Message)"; $ui['lblSimpleResult'].Foreground = MkColor '#ef4444'; $ui['btnSimpleClean'].Content = 'Clean My Disk'; $script:simpleCleaning = $false }
+            })
         $script:simpleTimer.Start()
     })
 
@@ -554,47 +560,49 @@ $ui['btnAnalyze'].Add_Click({
         $script:analyzeRs.SessionStateProxy.SetVariable('modPath', (Join-Path $PSScriptRoot 'modules'))
         $script:analyzePs = [powershell]::Create(); $script:analyzePs.Runspace = $script:analyzeRs
         [void]$script:analyzePs.AddScript({
-            try {
-                . (Join-Path $modPath 'SystemCleaner.ps1')
-                $results = @()
-                for ($i = 0; $i -lt $targets.Count; $i++) {
-                    $t = $targets[$i]; $sh.Status = $t.Name; $sh.Current = $i + 1
-                    $m = Measure-TargetSize @{Path = $t.Path; Pattern = $t.Pattern }
-                    $results += @{Name = $t.Name; Size = $m.Size; Count = $m.Count }
+                try {
+                    . (Join-Path $modPath 'SystemCleaner.ps1')
+                    $results = @()
+                    for ($i = 0; $i -lt $targets.Count; $i++) {
+                        $t = $targets[$i]; $sh.Status = $t.Name; $sh.Current = $i + 1
+                        $m = Measure-TargetSize @{Path = $t.Path; Pattern = $t.Pattern }
+                        $results += @{Name = $t.Name; Size = $m.Size; Count = $m.Count }
+                    }
+                    $sh.Results = $results
                 }
-                $sh.Results = $results
-            } catch { $sh.Error = $_.Exception.Message }
-            $sh.Done = $true
-        })
+                catch { $sh.Error = $_.Exception.Message }
+                $sh.Done = $true
+            })
         $script:analyzePs.BeginInvoke() | Out-Null
         $script:analyzeTimer = New-Object System.Windows.Threading.DispatcherTimer
         $script:analyzeTimer.Interval = [TimeSpan]::FromMilliseconds(200)
         $script:analyzeTimer.Add_Tick({
-            try {
-                $pct = if ($script:analyzeSh.Total -gt 0) { [math]::Round($script:analyzeSh.Current / $script:analyzeSh.Total * 300) } else { 0 }
-                $ui['cleanProgressFill'].Width = [math]::Min(300, $pct)
-                $ui['lblCleanTotal'].Text = "Analyzing... $($script:analyzeSh.Status) ($($script:analyzeSh.Current)/$($script:analyzeSh.Total))"
-                $ui['lblCleanProgress'].Text = if ($script:analyzeSh.Total -gt 0) { "$($script:analyzeSh.Status)" } else { 'Preparing...' }
-                if ($script:analyzeSh.Done) {
-                    $script:analyzeTimer.Stop()
-                    try { $script:analyzePs.Stop(); $script:analyzePs.Dispose(); $script:analyzeRs.Close(); $script:analyzeRs.Dispose() } catch {}
-                    if ($script:analyzeSh.Error) { $ui['lblCleanTotal'].Text = "Error: $($script:analyzeSh.Error)"; $ui['lblCleanProgress'].Text = '' }
-                    else {
-                        $totalSize = [long]0; $totalFiles = 0
-                        foreach ($r in $script:analyzeSh.Results) {
-                            $match = $script:cleanItems | Where-Object { $_.Name -eq $r.Name } | Select-Object -First 1
-                            if ($match) { $match.Size = $r.Size; $match.SizeText = FmtSize $r.Size; $match.FileCount = $r.Count }
-                            $totalSize += $r.Size; $totalFiles += $r.Count
+                try {
+                    $pct = if ($script:analyzeSh.Total -gt 0) { [math]::Round($script:analyzeSh.Current / $script:analyzeSh.Total * 300) } else { 0 }
+                    $ui['cleanProgressFill'].Width = [math]::Min(300, $pct)
+                    $ui['lblCleanTotal'].Text = "Analyzing... $($script:analyzeSh.Status) ($($script:analyzeSh.Current)/$($script:analyzeSh.Total))"
+                    $ui['lblCleanProgress'].Text = if ($script:analyzeSh.Total -gt 0) { "$($script:analyzeSh.Status)" } else { 'Preparing...' }
+                    if ($script:analyzeSh.Done) {
+                        $script:analyzeTimer.Stop()
+                        try { $script:analyzePs.Stop(); $script:analyzePs.Dispose(); $script:analyzeRs.Close(); $script:analyzeRs.Dispose() } catch {}
+                        if ($script:analyzeSh.Error) { $ui['lblCleanTotal'].Text = "Error: $($script:analyzeSh.Error)"; $ui['lblCleanProgress'].Text = '' }
+                        else {
+                            $totalSize = [long]0; $totalFiles = 0
+                            foreach ($r in $script:analyzeSh.Results) {
+                                $match = $script:cleanItems | Where-Object { $_.Name -eq $r.Name } | Select-Object -First 1
+                                if ($match) { $match.Size = $r.Size; $match.SizeText = FmtSize $r.Size; $match.FileCount = $r.Count }
+                                $totalSize += $r.Size; $totalFiles += $r.Count
+                            }
+                            $ui['gridClean'].Items.Refresh()
+                            $ui['lblCleanTotal'].Text = "Total: $(FmtSize $totalSize) in $totalFiles files"
+                            $ui['lblCleanProgress'].Text = "Analysis complete"
                         }
-                        $ui['gridClean'].Items.Refresh()
-                        $ui['lblCleanTotal'].Text = "Total: $(FmtSize $totalSize) in $totalFiles files"
-                        $ui['lblCleanProgress'].Text = "Analysis complete"
+                        $ui['cleanProgressFill'].Width = 300
+                        $ui['btnAnalyze'].Content = 'Analyze'; $script:analyzing = $false
                     }
-                    $ui['cleanProgressFill'].Width = 300
-                    $ui['btnAnalyze'].Content = 'Analyze'; $script:analyzing = $false
                 }
-            } catch { $script:analyzeTimer.Stop(); $ui['lblCleanTotal'].Text = "Error: $($_.Exception.Message)"; $ui['btnAnalyze'].Content = 'Analyze'; $script:analyzing = $false; $ui['lblCleanProgress'].Text = '' }
-        })
+                catch { $script:analyzeTimer.Stop(); $ui['lblCleanTotal'].Text = "Error: $($_.Exception.Message)"; $ui['btnAnalyze'].Content = 'Analyze'; $script:analyzing = $false; $ui['lblCleanProgress'].Text = '' }
+            })
         $script:analyzeTimer.Start()
     })
 
@@ -614,37 +622,39 @@ $ui['btnCleanChecked'].Add_Click({
         $script:cleanRs.SessionStateProxy.SetVariable('modPath', (Join-Path $PSScriptRoot 'modules'))
         $script:cleanPs = [powershell]::Create(); $script:cleanPs.Runspace = $script:cleanRs
         [void]$script:cleanPs.AddScript({
-            try {
-                . (Join-Path $modPath 'SystemCleaner.ps1')
-                for ($i = 0; $i -lt $targets.Count; $i++) {
-                    $t = $targets[$i]; $sh.Status = $t.Name; $sh.Current = $i + 1
-                    $cr = Invoke-CleanTarget @{Path = $t.Path; Pattern = $t.Pattern }
-                    $sh.Cleaned += $cr.Cleaned; $sh.Errors += $cr.Errors
+                try {
+                    . (Join-Path $modPath 'SystemCleaner.ps1')
+                    for ($i = 0; $i -lt $targets.Count; $i++) {
+                        $t = $targets[$i]; $sh.Status = $t.Name; $sh.Current = $i + 1
+                        $cr = Invoke-CleanTarget @{Path = $t.Path; Pattern = $t.Pattern }
+                        $sh.Cleaned += $cr.Cleaned; $sh.Errors += $cr.Errors
+                    }
+                    $sh.Status = 'Clearing Recycle Bin...'
+                    Invoke-RecycleBinClear | Out-Null
                 }
-                $sh.Status = 'Clearing Recycle Bin...'
-                Invoke-RecycleBinClear | Out-Null
-            } catch { $sh.Error = $_.Exception.Message }
-            $sh.Done = $true
-        })
+                catch { $sh.Error = $_.Exception.Message }
+                $sh.Done = $true
+            })
         $script:cleanPs.BeginInvoke() | Out-Null
         $script:cleanTimer = New-Object System.Windows.Threading.DispatcherTimer
         $script:cleanTimer.Interval = [TimeSpan]::FromMilliseconds(200)
         $script:cleanTimer.Add_Tick({
-            try {
-                $pct = if ($script:cleanSh.Total -gt 0) { [math]::Round($script:cleanSh.Current / $script:cleanSh.Total * 300) } else { 0 }
-                $ui['cleanProgressFill'].Width = [math]::Min(300, $pct)
-                $ui['lblCleanProgress'].Text = if ($script:cleanSh.Total -gt 0) { "$($script:cleanSh.Status) ($($script:cleanSh.Current)/$($script:cleanSh.Total))" } else { 'Preparing...' }
-                if ($script:cleanSh.Done) {
-                    $script:cleanTimer.Stop()
-                    try { $script:cleanPs.Stop(); $script:cleanPs.Dispose(); $script:cleanRs.Close(); $script:cleanRs.Dispose() } catch {}
-                    $ui['cleanProgressFill'].Width = 300; $ui['btnCleanChecked'].IsEnabled = $true
-                    $ui['lblCleanProgress'].Text = "Freed $(FmtSize $script:cleanSh.Cleaned)"
-                    Show-Dialog "Freed $(FmtSize $script:cleanSh.Cleaned)!`n$($script:cleanSh.Errors) files locked/skipped." 'Complete' 'OK' 'Success'
-                    $ui['btnAnalyze'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
-                    Update-DiskInfo
+                try {
+                    $pct = if ($script:cleanSh.Total -gt 0) { [math]::Round($script:cleanSh.Current / $script:cleanSh.Total * 300) } else { 0 }
+                    $ui['cleanProgressFill'].Width = [math]::Min(300, $pct)
+                    $ui['lblCleanProgress'].Text = if ($script:cleanSh.Total -gt 0) { "$($script:cleanSh.Status) ($($script:cleanSh.Current)/$($script:cleanSh.Total))" } else { 'Preparing...' }
+                    if ($script:cleanSh.Done) {
+                        $script:cleanTimer.Stop()
+                        try { $script:cleanPs.Stop(); $script:cleanPs.Dispose(); $script:cleanRs.Close(); $script:cleanRs.Dispose() } catch {}
+                        $ui['cleanProgressFill'].Width = 300; $ui['btnCleanChecked'].IsEnabled = $true
+                        $ui['lblCleanProgress'].Text = "Freed $(FmtSize $script:cleanSh.Cleaned)"
+                        Show-Dialog "Freed $(FmtSize $script:cleanSh.Cleaned)!`n$($script:cleanSh.Errors) files locked/skipped." 'Complete' 'OK' 'Success'
+                        $ui['btnAnalyze'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent)))
+                        Update-DiskInfo
+                    }
                 }
-            } catch { $script:cleanTimer.Stop(); $ui['lblCleanProgress'].Text = "Error: $($_.Exception.Message)"; $ui['btnCleanChecked'].IsEnabled = $true }
-        })
+                catch { $script:cleanTimer.Stop(); $ui['lblCleanProgress'].Text = "Error: $($_.Exception.Message)"; $ui['btnCleanChecked'].IsEnabled = $true }
+            })
         $script:cleanTimer.Start()
     })
 
@@ -718,7 +728,8 @@ $ui['btnDevClean'].Add_Click({
                 if (-not (Test-Path $item.FullPath)) { continue }
                 $result = Invoke-SafeDelete -Path $item.FullPath -UseRecycleBin $true
                 if ($result.Deleted) { $ok++ } else { $skip++ }
-            } catch { $fail++ }
+            }
+            catch { $fail++ }
         }
         $details = "Deleted: $ok"
         if ($skip -gt 0) { $details += ", Protected: $skip" }
@@ -794,8 +805,9 @@ function Remove-SafeSelectedGrid($grid, $msg, [switch]$IsDupGrid) {
         try {
             if (-not (Test-Path $item.FullPath)) { continue }
             $result = Invoke-SafeDelete -Path $item.FullPath -ScanDir '' -UseRecycleBin $true
-            if ($result.Deleted) { $ok++ } else { $skip++  }
-        } catch { $fail++ }
+            if ($result.Deleted) { $ok++ } else { $skip++ }
+        }
+        catch { $fail++ }
     }
     $details = "Deleted: $ok"
     if ($skip -gt 0) { $details += ", Protected: $skip" }
@@ -807,19 +819,20 @@ $ui['btnDD'].Add_Click({ Remove-SafeSelectedGrid $ui['gridDup'] 'Keep at least o
 $ui['btnDJ'].Add_Click({ Remove-SafeSelectedGrid $ui['gridJunk'] 'Junk files will be moved to Recycle Bin.' })
 $ui['btnDA'].Add_Click({ Remove-SafeSelectedGrid $ui['gridAge'] 'Old files will be moved to Recycle Bin.' })
 $ui['btnDE'].Add_Click({
-    $sel = @($ui['gridEmpty'].SelectedItems); if ($sel.Count -eq 0) { Show-Dialog 'Select folders.' 'Nothing' 'OK' 'Warning'; return }
-    if ((Show-Dialog "Remove $($sel.Count) empty folders?" 'Confirm' 'YesNo' 'Warning') -ne 'Yes') { return }
-    $ok = 0; $skip = 0
-    foreach ($f in $sel) {
-        try {
-            $result = Invoke-SafeDelete -Path $f.FullPath -UseRecycleBin $false
-            if ($result.Deleted) { $ok++ } else { $skip++ }
-        } catch {}
-    }
-    $msg = "Removed $ok folders."
-    if ($skip -gt 0) { $msg += " $skip protected." }
-    Show-Dialog $msg 'Complete' 'OK' 'Success'
-})
+        $sel = @($ui['gridEmpty'].SelectedItems); if ($sel.Count -eq 0) { Show-Dialog 'Select folders.' 'Nothing' 'OK' 'Warning'; return }
+        if ((Show-Dialog "Remove $($sel.Count) empty folders?" 'Confirm' 'YesNo' 'Warning') -ne 'Yes') { return }
+        $ok = 0; $skip = 0
+        foreach ($f in $sel) {
+            try {
+                $result = Invoke-SafeDelete -Path $f.FullPath -UseRecycleBin $false
+                if ($result.Deleted) { $ok++ } else { $skip++ }
+            }
+            catch {}
+        }
+        $msg = "Removed $ok folders."
+        if ($skip -gt 0) { $msg += " $skip protected." }
+        Show-Dialog $msg 'Complete' 'OK' 'Success'
+    })
 $ui['btnDB'].Add_Click({ Remove-SafeSelectedGrid $ui['gridBroken'] 'Broken files will be moved to Recycle Bin.' })
 $ui['btnOL'].Add_Click({ $sel = $ui['gridLarge'].SelectedItem; if ($sel) { Start-Process explorer.exe "/select,`"$($sel.FullPath)`"" } })
 $ui['btnExport'].Add_Click({ if (-not $AppArgs.ScanResults) { Show-Dialog 'Scan first.' 'No Data' 'OK' 'Warning'; return }; $dlg = New-Object System.Windows.Forms.SaveFileDialog; $dlg.Filter = 'CSV|*.csv'; $dlg.FileName = 'DiskCleaner_Export.csv'; if ($dlg.ShowDialog() -eq 'OK') { $AppArgs.ScanResults.Files | Export-Csv $dlg.FileName -NoTypeInformation -Encoding UTF8; Show-Dialog "Exported to:`n$($dlg.FileName)" 'Export' 'OK' 'Success' } })
@@ -830,53 +843,65 @@ $ui['btnExport'].Add_Click({ if (-not $AppArgs.ScanResults) { Show-Dialog 'Scan 
 $script:orgMode = 'ByType'
 $script:orgPlan = $null
 
+# Quick folder helpers
+function Set-OrgFolder([string]$path) { $ui['lblOrgPath'].Text = $path; $ui['lblOrgPath'].Foreground = MkColor '#c8d6e5' }
+$ui['btnOrgDesktop'].Add_Click({ Set-OrgFolder ([Environment]::GetFolderPath('Desktop')) })
+$ui['btnOrgDownloads'].Add_Click({ Set-OrgFolder (Join-Path $env:USERPROFILE 'Downloads') })
+$ui['btnOrgDocuments'].Add_Click({ Set-OrgFolder ([Environment]::GetFolderPath('MyDocuments')) })
 $ui['btnOrgBrowse'].Add_Click({
-    $dlg = New-Object System.Windows.Forms.FolderBrowserDialog
-    $dlg.Description = 'Select folder to organize'
-    if($dlg.ShowDialog() -eq 'OK'){ $ui['lblOrgPath'].Text = $dlg.SelectedPath; $ui['lblOrgPath'].Foreground = MkColor '#c8d6e5' }
-})
+        $dlg = New-Object System.Windows.Forms.FolderBrowserDialog
+        $dlg.Description = 'Select folder to organize'
+        if ($dlg.ShowDialog() -eq 'OK') { Set-OrgFolder $dlg.SelectedPath }
+    })
 
-$ui['btnOrgByType'].Add_Click({ $script:orgMode='ByType'; $ui['btnOrgByType'].Background=MkColor '#2563eb'; $ui['btnOrgByDate'].Background=MkColor '#1e293b'; $ui['btnOrgBySize'].Background=MkColor '#1e293b' })
-$ui['btnOrgByDate'].Add_Click({ $script:orgMode='ByDate'; $ui['btnOrgByDate'].Background=MkColor '#2563eb'; $ui['btnOrgByType'].Background=MkColor '#1e293b'; $ui['btnOrgBySize'].Background=MkColor '#1e293b' })
-$ui['btnOrgBySize'].Add_Click({ $script:orgMode='BySize'; $ui['btnOrgBySize'].Background=MkColor '#2563eb'; $ui['btnOrgByType'].Background=MkColor '#1e293b'; $ui['btnOrgByDate'].Background=MkColor '#1e293b' })
+$ui['btnOrgByType'].Add_Click({ $script:orgMode = 'ByType'; $ui['btnOrgByType'].Background = MkColor '#2563eb'; $ui['btnOrgByDate'].Background = MkColor '#1e293b'; $ui['btnOrgBySize'].Background = MkColor '#1e293b' })
+$ui['btnOrgByDate'].Add_Click({ $script:orgMode = 'ByDate'; $ui['btnOrgByDate'].Background = MkColor '#2563eb'; $ui['btnOrgByType'].Background = MkColor '#1e293b'; $ui['btnOrgBySize'].Background = MkColor '#1e293b' })
+$ui['btnOrgBySize'].Add_Click({ $script:orgMode = 'BySize'; $ui['btnOrgBySize'].Background = MkColor '#2563eb'; $ui['btnOrgByType'].Background = MkColor '#1e293b'; $ui['btnOrgByDate'].Background = MkColor '#1e293b' })
 
 $ui['btnOrgPreview'].Add_Click({
-    $folder = $ui['lblOrgPath'].Text
-    if(-not $folder -or -not (Test-Path $folder)){ Show-Dialog 'Select a valid folder first.' 'No Folder' 'OK' 'Warning'; return }
-    $ui['btnOrgPreview'].IsEnabled = $false; $ui['lblOrgStatus'].Text = 'Scanning...'
-    [System.Windows.Forms.Application]::DoEvents()
-    $result = Get-OrganizePlan -FolderPath $folder -Mode $script:orgMode -SkipHidden -SkipSystem
-    $script:orgPlan = $result.Plan
-    $ui['gridOrganize'].ItemsSource = $result.Plan
-    $totalSize = ($result.Plan | Measure-Object Size -Sum).Sum
-    $ui['statOrgFiles'].Text = "$($result.Total)"
-    $ui['statOrgCats'].Text = "$($result.Stats.Count)"
-    $ui['statOrgSize'].Text = FmtSize $totalSize
-    $ui['btnOrgExecute'].IsEnabled = $result.Total -gt 0
-    $ui['lblOrgStatus'].Text = "$($result.Total) files to organize into $($result.Stats.Count) categories"
-    if($result.HasSensitive){ $ui['lblOrgStatus'].Text += ' (! sensitive data detected)'; $ui['lblOrgStatus'].Foreground = MkColor '#f59e0b' }
-    else { $ui['lblOrgStatus'].Foreground = MkColor '#6b7f99' }
-    $ui['btnOrgPreview'].IsEnabled = $true
-})
+        $folder = $ui['lblOrgPath'].Text
+        if (-not $folder -or -not (Test-Path $folder)) { Show-Dialog 'Select a valid folder first.' 'No Folder' 'OK' 'Warning'; return }
+        $ui['btnOrgPreview'].Content = 'Stop'; $ui['lblOrgStatus'].Text = 'Scanning...'
+        $ui['orgProgressFill'].Width = 0; $ui['lblOrgProgress'].Text = ''
+        [System.Windows.Forms.Application]::DoEvents()
+        # Exclude .lnk and .url on Desktop (shortcuts for quick access)
+        $desktopPath = [Environment]::GetFolderPath('Desktop')
+        $excludeExts = @()
+        if ($folder -eq $desktopPath) { $excludeExts = @('.lnk', '.url') }
+        $result = Get-OrganizePlan -FolderPath $folder -Mode $script:orgMode -SkipHidden -SkipSystem -ExcludeExtensions $excludeExts
+        $script:orgPlan = $result.Plan
+        $ui['gridOrganize'].ItemsSource = $result.Plan
+        $totalSize = ($result.Plan | Measure-Object Size -Sum).Sum
+        $ui['statOrgFiles'].Text = "$($result.Total)"
+        $ui['statOrgCats'].Text = "$($result.Stats.Count)"
+        $ui['statOrgSize'].Text = FmtSize $totalSize
+        $ui['btnOrgExecute'].IsEnabled = $result.Total -gt 0
+        $ui['orgProgressFill'].Width = 300; $ui['lblOrgProgress'].Text = 'Done'
+        $ui['lblOrgStatus'].Text = "$($result.Total) files to organize into $($result.Stats.Count) categories"
+        if ($folder -eq $desktopPath) { $ui['lblOrgStatus'].Text += ' (shortcuts excluded)' }
+        if ($result.HasSensitive) { $ui['lblOrgStatus'].Text += ' (! sensitive data detected)'; $ui['lblOrgStatus'].Foreground = MkColor '#f59e0b' }
+        else { $ui['lblOrgStatus'].Foreground = MkColor '#6b7f99' }
+        $ui['btnOrgPreview'].Content = 'Preview'
+    })
 
 $ui['btnOrgExecute'].Add_Click({
-    if(-not $script:orgPlan -or $script:orgPlan.Count -eq 0){ return }
-    $folder = $ui['lblOrgPath'].Text
-    if((Show-Dialog "Move $($script:orgPlan.Count) files into categorized folders?`nOriginal locations are logged for undo." 'Confirm Organize' 'YesNo' 'Warning') -ne 'Yes'){ return }
-    $ui['btnOrgExecute'].IsEnabled = $false
-    $result = Invoke-OrganizeFiles -Plan $script:orgPlan -FolderPath $folder
-    $ui['lblOrgStatus'].Text = "Done! Moved $($result.Moved) files ($($result.Errors) errors)"
-    $ui['lblOrgStatus'].Foreground = if($result.Errors -eq 0){MkColor '#34d399'}else{MkColor '#f59e0b'}
-    $script:orgPlan = $null
-    $ui['gridOrganize'].ItemsSource = $null
-    $ui['statOrgFiles'].Text = '--'; $ui['statOrgCats'].Text = '--'; $ui['statOrgSize'].Text = '--'
-})
+        if (-not $script:orgPlan -or $script:orgPlan.Count -eq 0) { return }
+        $folder = $ui['lblOrgPath'].Text
+        if ((Show-Dialog "Move $($script:orgPlan.Count) files into categorized folders?`nOriginal locations are logged for undo." 'Confirm Organize' 'YesNo' 'Warning') -ne 'Yes') { return }
+        $ui['btnOrgExecute'].IsEnabled = $false
+        $result = Invoke-OrganizeFiles -Plan $script:orgPlan -FolderPath $folder
+        $ui['lblOrgStatus'].Text = "Done! Moved $($result.Moved) files ($($result.Errors) errors)"
+        $ui['lblOrgStatus'].Foreground = if ($result.Errors -eq 0) { MkColor '#34d399' }else { MkColor '#f59e0b' }
+        $script:orgPlan = $null
+        $ui['gridOrganize'].ItemsSource = $null
+        $ui['statOrgFiles'].Text = '--'; $ui['statOrgCats'].Text = '--'; $ui['statOrgSize'].Text = '--'
+    })
 
 $ui['btnOrgUndo'].Add_Click({
-    if((Show-Dialog 'Undo the last organize operation?`nFiles will be moved back to original locations.' 'Confirm Undo' 'YesNo' 'Info') -ne 'Yes'){ return }
-    $result = Invoke-UndoOrganize
-    Show-Dialog $result.Message 'Undo Result' 'OK' $(if($result.Errors -eq 0){'Success'}else{'Warning'})
-})
+        if ((Show-Dialog 'Undo the last organize operation?`nFiles will be moved back to original locations.' 'Confirm Undo' 'YesNo' 'Info') -ne 'Yes') { return }
+        $result = Invoke-UndoOrganize
+        Show-Dialog $result.Message 'Undo Result' 'OK' $(if ($result.Errors -eq 0) { 'Success' }else { 'Warning' })
+    })
 # ===== ABOUT TAB =====
 $ui['btnGithub'].Add_Click({ Start-Process 'https://github.com/anlvdt' })
 $ui['btnFacebook'].Add_Click({ Start-Process 'https://www.facebook.com/laptopleandotcom' })
