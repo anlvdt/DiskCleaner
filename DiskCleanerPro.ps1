@@ -1,10 +1,11 @@
 <#
 .SYNOPSIS
-    DiskCleaner Pro v2.0 - Windows Native Disk Cleanup Tool
+    DiskCleaner Pro v3.0 - Windows Native Disk Cleanup Tool
 .DESCRIPTION
     Modular PowerShell WPF app. AV-friendly. Beats Storage Sense.
     Features: System Cleaner, File Age Analysis, Folder Sizes,
-    Smart Recommendations, Multi-tier Duplicate Detection, One-Click Safe Clean.
+    Smart Recommendations, Multi-tier Duplicate Detection, One-Click Safe Clean,
+    AI-powered File Classification (Groq/Llama 3.1), Folder Organizer.
 .AUTHOR
     Le Van An (@anlvdt)
 #>
@@ -30,7 +31,6 @@ $modPath = Join-Path $PSScriptRoot 'modules'
 . (Join-Path $modPath 'DevClean.ps1')
 . (Join-Path $modPath 'AIClassifier.ps1')
 
-$AppArgs = @{ ScanResults = $null; IsScanning = $false }
 
 
 [xml]$XAML = @"
@@ -355,7 +355,7 @@ $AppArgs = @{ ScanResults = $null; IsScanning = $false }
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#22c55e" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Organizer" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Organizes files in 4 modes: by type, date, size, content with PII detection, undo support, exclusion rules" Foreground="#6b7f99" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Organizer + AI" Foreground="#c8d6e5" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Organizes files in 4 modes: by type, date, size, content. AI classification (Groq, free), PII detection, undo support" Foreground="#6b7f99" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#ef4444" VerticalAlignment="Top" Margin="0,3,0,0"/>
