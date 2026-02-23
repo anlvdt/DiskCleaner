@@ -117,3 +117,57 @@ Assert-Equal 0 $afterCount "All .tmp files removed after cleaning"
 Remove-TestSandbox $sandbox
 Remove-TestSandbox $cleanSandbox
 
+# ========================================
+# v4.2: EXPANDED TARGETS (57+)
+# ========================================
+Write-Host "    --- v4.2: Expanded Targets ---" -ForegroundColor DarkCyan
+$allTargets = Get-SystemJunkTargets -AdminMode
+Assert-GreaterThan $allTargets.Count 50 "v4.2: 50+ total targets (admin mode)"
+
+$allNames = $allTargets | ForEach-Object { $_.Name }
+
+# GPU shader caches
+Assert-Contains $allNames 'NVIDIA Shader Cache' "v4.2: has NVIDIA Shader Cache"
+Assert-Contains $allNames 'AMD Shader Cache' "v4.2: has AMD Shader Cache"
+Assert-Contains $allNames 'Intel Shader Cache' "v4.2: has Intel Shader Cache"
+Assert-Contains $allNames 'NVIDIA GL Cache' "v4.2: has NVIDIA GL Cache"
+
+# New browsers
+Assert-Contains $allNames 'Brave Cache' "v4.2: has Brave Cache"
+Assert-Contains $allNames 'Opera Cache' "v4.2: has Opera Cache"
+Assert-Contains $allNames 'Vivaldi Cache' "v4.2: has Vivaldi Cache"
+Assert-Contains $allNames 'Chrome GPU Cache' "v4.2: has Chrome GPU Cache"
+Assert-Contains $allNames 'Edge GPU Cache' "v4.2: has Edge GPU Cache"
+
+# New dev caches
+Assert-Contains $allNames 'Yarn Cache' "v4.2: has Yarn Cache"
+Assert-Contains $allNames 'pnpm Store' "v4.2: has pnpm Store"
+Assert-Contains $allNames 'Go Module Cache' "v4.2: has Go Module Cache"
+Assert-Contains $allNames 'Gradle Cache' "v4.2: has Gradle Cache"
+Assert-Contains $allNames 'Maven Cache' "v4.2: has Maven Cache"
+
+# New app caches
+Assert-Contains $allNames 'Telegram Cache' "v4.2: has Telegram Cache"
+Assert-Contains $allNames 'WhatsApp Cache' "v4.2: has WhatsApp Cache"
+Assert-Contains $allNames 'Notion Cache' "v4.2: has Notion Cache"
+Assert-Contains $allNames 'Figma Cache' "v4.2: has Figma Cache"
+Assert-Contains $allNames 'Postman Cache' "v4.2: has Postman Cache"
+
+# New user-level system targets
+Assert-Contains $allNames 'OneDrive Cache' "v4.2: has OneDrive Cache"
+Assert-Contains $allNames 'Outlook Temp' "v4.2: has Outlook Temp"
+Assert-Contains $allNames 'MS Office Cache' "v4.2: has MS Office Cache"
+Assert-Contains $allNames '.NET Temp' "v4.2: has .NET Temp"
+Assert-Contains $allNames 'Java Cache' "v4.2: has Java Cache"
+
+# New admin targets
+Assert-Contains $allNames 'Setup API Logs' "v4.2: has Setup API Logs (admin)"
+Assert-Contains $allNames 'Windows Installer Cache' "v4.2: has Windows Installer Cache (admin)"
+Assert-Contains $allNames 'System Panther' "v4.2: has System Panther (admin)"
+
+# Non-admin should still exclude admin targets
+$nonAdminTargets = Get-SystemJunkTargets
+$nonAdminNames = $nonAdminTargets | ForEach-Object { $_.Name }
+$hasAdminOnly = $nonAdminNames -contains 'Setup API Logs'
+Assert-True (-not $hasAdminOnly) "v4.2: non-admin excludes admin-only targets"
+

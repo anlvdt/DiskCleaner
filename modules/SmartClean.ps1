@@ -80,8 +80,8 @@ function Get-SmartRecommendations {
     }
 
     # Downloads folder large files
-    $dlFiles = $ScanResults.Large | Where-Object { $_.FullPath -match '\\Downloads\\' -and $_.Size -ge 100MB }
-    if ($dlFiles -and $dlFiles.Count -gt 0) {
+    $dlFiles = @($ScanResults.Large | Where-Object { $_.FullPath -match '\\Downloads\\' -and $_.Size -ge 100MB })
+    if ($dlFiles.Count -gt 0) {
         $dls = ($dlFiles | Measure-Object Size -Sum).Sum
         [void]$recs.Add([PSCustomObject]@{Priority = 'LOW'; Category = 'Downloads'; Message = "$($dlFiles.Count) large files in Downloads: $(FmtSize $dls)"; Savings = $dls })
     }
