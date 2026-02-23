@@ -43,8 +43,8 @@ $modPath = Join-Path $PSScriptRoot 'modules'
         <Style TargetType="ScrollBar"><Setter Property="Background" Value="#1e1e1e"/><Setter Property="Width" Value="10"/><Setter Property="MinWidth" Value="10"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Border Background="#1e1e1e" CornerRadius="5"><Track x:Name="PART_Track" IsDirectionReversed="True"><Track.Thumb><Thumb><Thumb.Template><ControlTemplate TargetType="Thumb"><Border x:Name="tb" Background="#3e3e42" CornerRadius="5" Margin="1"/><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="tb" Property="Background" Value="#0078d4"/></Trigger><Trigger Property="IsDragging" Value="True"><Setter TargetName="tb" Property="Background" Value="#1a8bff"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Thumb.Template></Thumb></Track.Thumb><Track.DecreaseRepeatButton><RepeatButton Command="ScrollBar.LineUpCommand" Opacity="0" Focusable="False"/></Track.DecreaseRepeatButton><Track.IncreaseRepeatButton><RepeatButton Command="ScrollBar.LineDownCommand" Opacity="0" Focusable="False"/></Track.IncreaseRepeatButton></Track></Border></ControlTemplate></Setter.Value></Setter><Style.Triggers><Trigger Property="Orientation" Value="Horizontal"><Setter Property="Height" Value="10"/><Setter Property="MinHeight" Value="10"/><Setter Property="Width" Value="Auto"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Border Background="#1e1e1e" CornerRadius="5"><Track x:Name="PART_Track" IsDirectionReversed="False"><Track.Thumb><Thumb><Thumb.Template><ControlTemplate TargetType="Thumb"><Border x:Name="tb" Background="#3e3e42" CornerRadius="5" Margin="1"/><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="tb" Property="Background" Value="#0078d4"/></Trigger><Trigger Property="IsDragging" Value="True"><Setter TargetName="tb" Property="Background" Value="#1a8bff"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Thumb.Template></Thumb></Track.Thumb><Track.DecreaseRepeatButton><RepeatButton Command="ScrollBar.LineLeftCommand" Opacity="0" Focusable="False"/></Track.DecreaseRepeatButton><Track.IncreaseRepeatButton><RepeatButton Command="ScrollBar.LineRightCommand" Opacity="0" Focusable="False"/></Track.IncreaseRepeatButton></Track></Border></ControlTemplate></Setter.Value></Setter></Trigger></Style.Triggers></Style>
         <Style TargetType="ScrollViewer"><Setter Property="Background" Value="Transparent"/></Style>
         <Style x:Key="Card" TargetType="Border"><Setter Property="Background" Value="#2d2d30"/><Setter Property="BorderBrush" Value="#3e3e42"/><Setter Property="BorderThickness" Value="1"/><Setter Property="CornerRadius" Value="10"/><Setter Property="Padding" Value="18"/><Setter Property="Margin" Value="5"/></Style>
-        <Style x:Key="BtnP" TargetType="Button"><Setter Property="Background" Value="#0078d4"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="12.5"/><Setter Property="Padding" Value="20,9"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#006cbd"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
-        <Style x:Key="BtnD" TargetType="Button"><Setter Property="Background" Value="#dc2626"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="12.5"/><Setter Property="Padding" Value="20,9"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#b91c1c"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+        <Style x:Key="BtnP" TargetType="Button"><Setter Property="Background" Value="#0078d4"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="13"/><Setter Property="Padding" Value="20,9"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}" BorderBrush="Transparent" BorderThickness="2"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#006cbd"/></Trigger><Trigger Property="IsFocused" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="#75beff"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+        <Style x:Key="BtnD" TargetType="Button"><Setter Property="Background" Value="#dc2626"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="13"/><Setter Property="Padding" Value="20,9"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="7" Padding="{TemplateBinding Padding}" BorderBrush="Transparent" BorderThickness="2"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#b91c1c"/></Trigger><Trigger Property="IsFocused" Value="True"><Setter TargetName="bd" Property="BorderBrush" Value="#ef4444"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
         <Style x:Key="BtnS" TargetType="Button"><Setter Property="Background" Value="#333333"/><Setter Property="Foreground" Value="#a0a0a0"/><Setter Property="FontSize" Value="12"/><Setter Property="Padding" Value="14,7"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}" BorderBrush="#3e3e42" BorderThickness="1"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#3e3e42"/><Setter Property="Foreground" Value="#d4d4d4"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
         <Style x:Key="BtnGreen" TargetType="Button"><Setter Property="Background" Value="#16825d"/><Setter Property="Foreground" Value="White"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="FontSize" Value="13"/><Setter Property="Padding" Value="24,11"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#12704f"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/><Setter Property="Foreground" Value="#475569"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
         <Style x:Key="TBtn" TargetType="Button"><Setter Property="Background" Value="Transparent"/><Setter Property="Foreground" Value="#808080"/><Setter Property="FontSize" Value="10"/><Setter Property="Width" Value="50"/><Setter Property="Height" Value="42"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/><Setter Property="FontFamily" Value="Segoe MDL2 Assets"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="bd" Background="{TemplateBinding Background}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#383838"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
@@ -63,7 +63,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
             <Grid.RowDefinitions><RowDefinition Height="42"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
             <!-- TITLE BAR -->
             <Border Grid.Row="0" Background="#252526" CornerRadius="10,10,0,0" x:Name="titleBar"><DockPanel>
-                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center"><Ellipse Width="10" Height="10" Fill="#0078d4" Margin="0,0,8,0"/><TextBlock x:Name="lblTitle" Text="DiskCleaner Pro" Foreground="#569cd6" FontSize="12.5" FontWeight="SemiBold"/><TextBlock Text="  v3.0" Foreground="#555555" FontSize="11"/></StackPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Margin="14,0" VerticalAlignment="Center"><Ellipse Width="10" Height="10" Fill="#0078d4" Margin="0,0,8,0"/><TextBlock x:Name="lblTitle" Text="DiskCleaner Pro" Foreground="#569cd6" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="  v3.0" Foreground="#555555" FontSize="11"/></StackPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right"><Button x:Name="btnMin" Content="&#xE921;" Style="{StaticResource TBtn}"/><Button x:Name="btnMax" Content="&#xE922;" Style="{StaticResource TBtn}"/><Button x:Name="btnClose" Content="&#xE8BB;" Style="{StaticResource XBtn}"/></StackPanel>
                 
             </DockPanel></Border>
@@ -157,7 +157,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <!-- Analyzer toolbar -->
                     <DockPanel Grid.Row="1" Margin="18,8,18,8">
                         <StackPanel Orientation="Horizontal">
-                            <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="300"><TextBlock x:Name="lblPath" Text="Select a folder to scan..." Foreground="#6e6e6e" FontSize="12.5"/></Border>
+                            <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="300"><TextBlock x:Name="lblPath" Text="Select a folder to scan..." Foreground="#6e6e6e" FontSize="13"/></Border>
                             <Button x:Name="btnBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0"/>
                             <Button x:Name="btnScan" Content="Scan" Style="{StaticResource BtnP}"/>
                             <Button x:Name="btnExport" Content="Export" Style="{StaticResource BtnS}" Margin="8,0" IsEnabled="False"/>
@@ -166,7 +166,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <!-- Stats -->
                     <Border Grid.Row="2" Padding="18,0,18,4"><UniformGrid Columns="6">
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="FILES" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statFiles" Text="--" Foreground="#569cd6" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
-                        <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="SIZE" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statSize" Text="--" Foreground="#0ea5e9" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
+                        <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="SIZE" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statSize" Text="--" Foreground="#0078d4" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="LARGE" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statLarge" Text="--" Foreground="#f59e0b" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="DUPS" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statDup" Text="--" Foreground="#ef4444" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="JUNK" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statJunk" Text="--" Foreground="#eab308" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
@@ -176,7 +176,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <DockPanel Grid.Row="3" Margin="18,4,18,4">
                         <TextBlock DockPanel.Dock="Right" x:Name="lblAnalyzerProgress" Text="" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/>
                         <Border Width="400" Height="10" Background="#333333" CornerRadius="5" HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <Border x:Name="analyzerProgressFill" Background="#0ea5e9" CornerRadius="5" HorizontalAlignment="Left" Width="0"/>
+                            <Border x:Name="analyzerProgressFill" Background="#0078d4" CornerRadius="5" HorizontalAlignment="Left" Width="0"/>
                         </Border>
                     </DockPanel>
                     <!-- Sub-tabs -->
@@ -230,7 +230,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <Border Grid.Row="1" Margin="18,0,18,4"><UniformGrid Columns="3">
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="FILES TO MOVE" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statOrgFiles" Text="--" Foreground="#569cd6" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
                         <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="CATEGORIES" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statOrgCats" Text="--" Foreground="#f59e0b" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
-                        <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="TOTAL SIZE" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statOrgSize" Text="--" Foreground="#0ea5e9" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
+                        <Border Style="{StaticResource Card}" Padding="14,10"><StackPanel><TextBlock Text="TOTAL SIZE" Foreground="#6e6e6e" FontSize="11" FontWeight="SemiBold"/><TextBlock x:Name="statOrgSize" Text="--" Foreground="#0078d4" FontSize="18" FontWeight="Bold"/></StackPanel></Border>
                     </UniformGrid></Border>
                     <Border Grid.Row="2" Style="{StaticResource Card}" Margin="18,4,18,8">
                         <DataGrid x:Name="gridOrganize"><DataGrid.Columns>
@@ -316,13 +316,14 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                 </Grid></TabItem>
                 <!-- TAB: SETTINGS -->
                 <TabItem Header="  Settings  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
-                    <StackPanel MaxWidth="550" HorizontalAlignment="Center">
+                    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
                         <TextBlock Text="Settings" Foreground="#d4d4d4" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
                         <!-- AI Classification Section -->
                         <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
                                 <TextBlock Text="AI CLASSIFICATION (OPTIONAL)" Foreground="#4ec9b0" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,8" Text="Enable AI to auto-classify files that can't be identified by extension. Uses Groq API with Llama 3.1 model."/>
+                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,8" Text="Enable AI to auto-classify files that can't be identified by extension. Uses Groq API with Llama 3.1 model."/>
                                 <TextBlock Foreground="#4ec9b0" FontSize="12" FontWeight="SemiBold" Margin="0,0,0,5" Text="[v] 100% FREE - NO CREDIT CARD NEEDED"/>
                                 <TextBlock Foreground="#4ec9b0" FontSize="11" Margin="0,0,0,5" Text="[v] Free 14,400 calls/day (more than enough for any use)"/>
                                 <TextBlock Foreground="#f59e0b" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,12" Text="API key is stored locally on YOUR machine ONLY. Never sent to the app author or anyone else. Open source - you can verify."/>
@@ -394,6 +395,9 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                                 </Grid>
                             </StackPanel>
                         </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                        <TextBlock Text="Automation" Foreground="#d4d4d4" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
                         <!-- Scheduled Auto-Clean -->
                         <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
@@ -409,65 +413,76 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                                 </StackPanel>
                             </StackPanel>
                         </Border>
+                        <!-- Keyboard Shortcuts -->
+                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
+                            <StackPanel>
+                                <TextBlock Text="KEYBOARD SHORTCUTS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                <Grid Margin="0,0,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="100"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="F5" Foreground="#d4d4d4" FontSize="12" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Run scan / refresh" Foreground="#858585" FontSize="12"/></Grid>
+                                <Grid Margin="0,0,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="100"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Ctrl+1..8" Foreground="#d4d4d4" FontSize="12" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Switch tabs" Foreground="#858585" FontSize="12"/></Grid>
+                                <Grid Margin="0,0,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="100"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Ctrl+O" Foreground="#d4d4d4" FontSize="12" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Browse for folder" Foreground="#858585" FontSize="12"/></Grid>
+                                <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="100"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Escape" Foreground="#d4d4d4" FontSize="12" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="Close dialogs" Foreground="#858585" FontSize="12"/></Grid>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
+                    </Grid>
                 </Border></ScrollViewer></TabItem>
                 <!-- TAB: ABOUT -->
                 <TabItem Header="  About  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
-                    <StackPanel MaxWidth="500" HorizontalAlignment="Center">
+                    <StackPanel>
                         <TextBlock Text="DiskCleaner Pro" Foreground="#d4d4d4" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,4"/>
                         <TextBlock Text="v4.1" Foreground="#569cd6" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                        <TextBlock Foreground="#94a3b8" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" LineHeight="22" Margin="0,0,0,6" Text="Free, open-source, AV-friendly disk cleanup tool for Windows. Built with PowerShell + WPF, no installation required. Outperforms Windows Storage Sense with deeper scanning, smarter analysis, and multi-layer safety protection."/>
+                        <TextBlock Foreground="#858585" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" LineHeight="22" Margin="0,0,0,6" Text="Free, open-source, AV-friendly disk cleanup tool for Windows. Built with PowerShell + WPF, no installation required. Outperforms Windows Storage Sense with deeper scanning, smarter analysis, and multi-layer safety protection."/>
                         <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" LineHeight="20" Margin="0,0,0,24" Text="Zero dependencies. Zero telemetry. 100% local processing. Your files never leave your machine."/>
                         <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
                                 <TextBlock Text="CORE FEATURES" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,14"/>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#1a8bff" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Deep Scanner" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Scans files in 7 phases: large files, duplicate detection, junk patterns, empty folders, file age, folder sizes" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Deep Scanner" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Scans files in 7 phases: large files, duplicate detection, junk patterns, empty folders, file age, folder sizes" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#f97316" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="System Cleaner" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Cleans 30+ targets: temp files, browser caches (Chrome, Edge, Firefox), app caches (Teams, Discord, Slack, Spotify, VS Code, Zoom), crash dumps, error reports, event logs. Zalo is excluded for safety - use Zalo Settings &gt; Data Management instead." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="System Cleaner" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Cleans 30+ targets: temp files, browser caches (Chrome, Edge, Firefox), app caches (Teams, Discord, Slack, Spotify, VS Code, Zoom), crash dumps, error reports, event logs. Zalo is excluded for safety - use Zalo Settings &gt; Data Management instead." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#8b5cf6" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Dev Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Detects 32+ artifact types: node_modules, __pycache__, build outputs, IDE configs, package caches" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Dev Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Detects 32+ artifact types: node_modules, __pycache__, build outputs, IDE configs, package caches" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#22c55e" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Organizer + AI" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Organizes files in 4 modes: by type, date, size, content. AI classification (Groq, free), PII detection, undo support" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Organizer + AI" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Organizes files in 4 modes: by type, date, size, content. AI classification (Groq, free), PII detection, undo support" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#ef4444" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="5-Layer SafeGuard" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Protects via 5 layers: critical path blacklist, attribute checks, path containment, Recycle Bin, keeplist" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="5-Layer SafeGuard" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Protects via 5 layers: critical path blacklist, attribute checks, path containment, Recycle Bin, keeplist" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#eab308" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart Clean + Broken Files" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Recommends priority-based actions: broken file detection, extension mismatch, empty files, symlink repair" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart Clean + Broken Files" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Recommends priority-based actions: broken file detection, extension mismatch, empty files, symlink repair" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#06b6d4" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Scan History" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Tracks usage trends via JSON snapshots: size changes, file count, duplicates, junk metrics over time" Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Scan History" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Tracks usage trends via JSON snapshots: size changes, file count, duplicates, junk metrics over time" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#c084fc" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Bulk Rename" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="5 rename modes: prefix, suffix, find-replace, sequential numbering, date prefix. Live preview before applying." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Bulk Rename" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="5 rename modes: prefix, suffix, find-replace, sequential numbering, date prefix. Live preview before applying." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#f472b6" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Watch" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Auto-organize new files in real-time using FileSystemWatcher. Files sorted immediately as they appear." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Watch" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Auto-organize new files in real-time using FileSystemWatcher. Files sorted immediately as they appear." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#38bdf8" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Disk Map Treemap" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Visual treemap of disk usage with drive selection buttons, usage bars, right-click context menu. Async scanning, never freezes UI." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Disk Map Treemap" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Visual treemap of disk usage with drive selection buttons, usage bars, right-click context menu. Async scanning, never freezes UI." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#a3e635" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Scheduled Auto-Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Windows Task Scheduler integration: automatic weekly cleanup every Sunday at 3AM. Enable/disable with one click." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Scheduled Auto-Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Windows Task Scheduler integration: automatic weekly cleanup every Sunday at 3AM. Enable/disable with one click." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                                 <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#fbbf24" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart UX Automation" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="40+ tooltips, auto-analyze on tab visit, quick-select buttons on all tabs, size filters for scan results, default paths for convenience." Foreground="#858585" FontSize="11.5" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart UX Automation" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="40+ tooltips, auto-analyze on tab visit, quick-select buttons on all tabs, size filters for scan results, default paths for convenience." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
                                 </Grid>
                             </StackPanel>
                         </Border>
@@ -497,8 +512,8 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                         <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
                             <StackPanel>
                                 <TextBlock Text="LINKS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                <Button x:Name="btnGithub" Content="GitHub: github.com/anlvdt" Foreground="#0ea5e9" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
-                                <Button x:Name="btnFacebook" Content="Facebook: Laptop Le An" Foreground="#0ea5e9" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
+                                <Button x:Name="btnGithub" Content="GitHub: github.com/anlvdt" Foreground="#0078d4" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
+                                <Button x:Name="btnFacebook" Content="Facebook: Laptop Le An" Foreground="#0078d4" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
                                 <Button x:Name="btnShopee" Content="Shopee: Laptop Le An (support by clicking)" Foreground="#ee4d2d" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
                             </StackPanel>
                         </Border>
@@ -506,11 +521,11 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                             <StackPanel>
                                 <TextBlock Text="CREDITS &amp; REFERENCES" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
                                 <TextBlock Text="Inspired by and references to open-source projects:" Foreground="#858585" FontSize="12" Margin="0,0,0,10"/>
-                                <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- huantt/clean-stack - Dev artifact detection patterns"/>
-                                <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- tfeldmann/organize - File organization concepts"/>
-                                <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- BleachBit - System junk cleanup patterns"/>
-                                <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- Windows Disk Cleanup &amp; Storage Sense - UX inspiration"/>
-                                <TextBlock Foreground="#94a3b8" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- WPF Dark Theme community patterns"/>
+                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- huantt/clean-stack - Dev artifact detection patterns"/>
+                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- tfeldmann/organize - File organization concepts"/>
+                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- BleachBit - System junk cleanup patterns"/>
+                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- Windows Disk Cleanup &amp; Storage Sense - UX inspiration"/>
+                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- WPF Dark Theme community patterns"/>
                             </StackPanel>
                         </Border>
                         <TextBlock Text="Made with care in Vietnam" Foreground="#555555" FontSize="11" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,8,0,0"/>
@@ -518,12 +533,18 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                 </Border></ScrollViewer></TabItem>
             </TabControl>
             <!-- FOOTER -->
-            <Border Grid.Row="2" Background="#252526" CornerRadius="0,0,10,10" Padding="18,10"><DockPanel>
+            <Border Grid.Row="2" Background="#252526" CornerRadius="0,0,10,10" Padding="18,8"><DockPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="lblStatusBar" Text="Ready" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <TextBlock x:Name="lblLastScan" Text="" Foreground="#555555" FontSize="11" VerticalAlignment="Center"/>
+                </StackPanel>
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button x:Name="btnModeToggle" Cursor="Hand" Background="Transparent" BorderThickness="0" Foreground="#858585" FontSize="11" Padding="14,8" Margin="0,0,4,0">
+                    <TextBlock Text="F5 Scan" Foreground="#555555" FontSize="10" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <TextBlock Text="Ctrl+1..8 Tabs" Foreground="#555555" FontSize="10" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <Button x:Name="btnModeToggle" Cursor="Hand" Background="Transparent" BorderThickness="0" Foreground="#858585" FontSize="11" Padding="14,6" Margin="0,0,4,0">
                         <StackPanel Orientation="Horizontal"><TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/><TextBlock x:Name="lblModeText" Text="Advanced" VerticalAlignment="Center"/></StackPanel>
                     </Button>
-                    <TextBlock Text="v3.0" Foreground="#3e3e42" FontSize="12" VerticalAlignment="Center"/>
+                    <TextBlock Text="v4.2" Foreground="#3e3e42" FontSize="12" VerticalAlignment="Center"/>
                 </StackPanel>
             </DockPanel></Border>
         </Grid>
@@ -592,14 +613,14 @@ function Show-Dialog {
     [void]$hdrP.Children.Add($hdrI); [void]$hdrP.Children.Add($hdrT); $hdr.Child = $hdrP
     [System.Windows.Controls.Grid]::SetRow($hdr, 0); [void]$grid.Children.Add($hdr)
     $body = New-Object System.Windows.Controls.Border; $body.Padding = '24,20'
-    $msgTb = New-Object System.Windows.Controls.TextBlock; $msgTb.Text = $Message; $msgTb.Foreground = MkColor '#94a3b8'; $msgTb.FontSize = 13; $msgTb.TextWrapping = 'Wrap'; $msgTb.LineHeight = 22
+    $msgTb = New-Object System.Windows.Controls.TextBlock; $msgTb.Text = $Message; $msgTb.Foreground = MkColor '#858585'; $msgTb.FontSize = 13; $msgTb.TextWrapping = 'Wrap'; $msgTb.LineHeight = 22
     $body.Child = $msgTb; [System.Windows.Controls.Grid]::SetRow($body, 1); [void]$grid.Children.Add($body)
     $ftr = New-Object System.Windows.Controls.Border; $ftr.Background = MkColor '#252526'; $ftr.CornerRadius = '0,0,12,12'; $ftr.Padding = '18,12'
     $btnPanel = New-Object System.Windows.Controls.StackPanel; $btnPanel.Orientation = 'Horizontal'; $btnPanel.HorizontalAlignment = 'Right'
     if ($Buttons -eq 'YesNo') {
         $btnNo = New-Object System.Windows.Controls.Border
         $btnNo.Background = MkColor '#1e293b'; $btnNo.CornerRadius = '7'; $btnNo.Padding = '20,9'; $btnNo.Margin = '0,0,8,0'; $btnNo.Cursor = 'Hand'
-        $btnNoTb = New-Object System.Windows.Controls.TextBlock; $btnNoTb.Text = 'Cancel'; $btnNoTb.Foreground = MkColor '#a0a0a0'; $btnNoTb.FontSize = 12.5; $btnNoTb.HorizontalAlignment = 'Center'
+        $btnNoTb = New-Object System.Windows.Controls.TextBlock; $btnNoTb.Text = 'Cancel'; $btnNoTb.Foreground = MkColor '#a0a0a0'; $btnNoTb.FontSize = 13; $btnNoTb.HorizontalAlignment = 'Center'
         $btnNo.Child = $btnNoTb; $btnNo.Tag = $dw
         $btnNo.Add_MouseLeftButtonDown([System.Windows.Input.MouseButtonEventHandler] { param($s, $e); $s.Tag.Tag = 'No'; $s.Tag.Close() })
         $btnNo.Add_MouseEnter([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor '#2d3f55' })
@@ -609,7 +630,7 @@ function Show-Dialog {
         $yesHv = if ($Icon -eq 'Warning') { '#b91c1c' }else { '#006cbd' }
         $btnYes = New-Object System.Windows.Controls.Border
         $btnYes.Background = MkColor $yesBg; $btnYes.CornerRadius = '7'; $btnYes.Padding = '20,9'; $btnYes.Cursor = 'Hand'
-        $btnYesTb = New-Object System.Windows.Controls.TextBlock; $btnYesTb.Text = 'Confirm'; $btnYesTb.Foreground = MkColor '#ffffff'; $btnYesTb.FontSize = 12.5; $btnYesTb.FontWeight = 'Medium'; $btnYesTb.HorizontalAlignment = 'Center'
+        $btnYesTb = New-Object System.Windows.Controls.TextBlock; $btnYesTb.Text = 'Confirm'; $btnYesTb.Foreground = MkColor '#ffffff'; $btnYesTb.FontSize = 13; $btnYesTb.FontWeight = 'Medium'; $btnYesTb.HorizontalAlignment = 'Center'
         $btnYes.Child = $btnYesTb; $btnYes.Tag = @{ Window = $dw; Bg = $yesBg }
         $btnYes.Add_MouseLeftButtonDown([System.Windows.Input.MouseButtonEventHandler] { param($s, $e); $s.Tag.Window.Tag = 'Yes'; $s.Tag.Window.Close() })
         $btnYes.Add_MouseEnter([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor $s.Tag.Bg.Replace('2563eb', '1d4ed8').Replace('dc2626', 'b91c1c') })
@@ -619,7 +640,7 @@ function Show-Dialog {
     else {
         $btnOk = New-Object System.Windows.Controls.Border
         $btnOk.Background = MkColor '#0078d4'; $btnOk.CornerRadius = '7'; $btnOk.Padding = '20,9'; $btnOk.Cursor = 'Hand'
-        $btnOkTb = New-Object System.Windows.Controls.TextBlock; $btnOkTb.Text = 'OK'; $btnOkTb.Foreground = MkColor '#ffffff'; $btnOkTb.FontSize = 12.5; $btnOkTb.FontWeight = 'Medium'; $btnOkTb.HorizontalAlignment = 'Center'
+        $btnOkTb = New-Object System.Windows.Controls.TextBlock; $btnOkTb.Text = 'OK'; $btnOkTb.Foreground = MkColor '#ffffff'; $btnOkTb.FontSize = 13; $btnOkTb.FontWeight = 'Medium'; $btnOkTb.HorizontalAlignment = 'Center'
         $btnOk.Child = $btnOkTb; $btnOk.Tag = $dw
         $btnOk.Add_MouseLeftButtonDown([System.Windows.Input.MouseButtonEventHandler] { param($s, $e); $s.Tag.Tag = 'OK'; $s.Tag.Close() })
         $btnOk.Add_MouseEnter([System.Windows.Input.MouseEventHandler] { param($s, $e); $s.Background = MkColor '#006cbd' })
@@ -1838,7 +1859,7 @@ function Add-SizeFilters {
     [void]$filterPanel.Children.Add($flbl)
     foreach ($sz in @(@{L = 'All'; V = 0 }, @{L = '>100 MB'; V = 100MB }, @{L = '>500 MB'; V = 500MB }, @{L = '>1 GB'; V = 1GB })) {
         $btn = New-Object System.Windows.Controls.Button; $btn.Content = $sz.L; $btn.Padding = '10,5'
-        $btn.FontSize = 10.5; $btn.Cursor = 'Hand'; $btn.Margin = '2,0'
+        $btn.FontSize = 11; $btn.Cursor = 'Hand'; $btn.Margin = '2,0'
         $btn.Background = MkColor '#333333'; $btn.Foreground = MkColor '#858585'; $btn.BorderThickness = '0'
         $btn.Template = $ui['btnBrowse'].Template
         $btn.Tag = $sz.V
@@ -1881,10 +1902,45 @@ if ($script:appSettings.LastOrgPath -and (Test-Path $script:appSettings.LastOrgP
 if ($script:appSettings.WindowWidth -gt 0 -and $script:appSettings.WindowHeight -gt 0) {
     $Window.Width = $script:appSettings.WindowWidth; $Window.Height = $script:appSettings.WindowHeight
 }
+# --- Keyboard shortcuts ---
+$Window.Add_PreviewKeyDown({
+        param($s, $e)
+        $key = $e.Key
+        $ctrl = [System.Windows.Input.Keyboard]::Modifiers -band [System.Windows.Input.ModifierKeys]::Control
+
+        # F5 = Scan/refresh based on active tab
+        if ($key -eq 'F5') {
+            $tabIdx = $ui['panelAdvanced'].SelectedIndex
+            switch ($tabIdx) {
+                0 { if ($ui['btnAnalyze']) { $ui['btnAnalyze'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent))) } }
+                1 { if ($ui['btnDevScan']) { $ui['btnDevScan'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent))) } }
+                2 { if ($ui['btnScan']) { $ui['btnScan'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent))) } }
+            }
+            $e.Handled = $true
+        }
+
+        # Ctrl+1..8 = Switch tabs
+        if ($ctrl) {
+            $num = switch ($key) { 'D1' { 0 } 'D2' { 1 } 'D3' { 2 } 'D4' { 3 } 'D5' { 4 } 'D6' { 5 } 'D7' { 6 } 'D8' { 7 } default { -1 } }
+            if ($num -ge 0 -and $num -lt $ui['panelAdvanced'].Items.Count) {
+                $ui['panelAdvanced'].SelectedIndex = $num; $e.Handled = $true
+            }
+        }
+
+        # Ctrl+O = Browse folder (Analyzer tab)
+        if ($ctrl -and $key -eq 'O') {
+            if ($ui['btnBrowse']) { $ui['btnBrowse'].RaiseEvent((New-Object System.Windows.RoutedEventArgs([System.Windows.Controls.Primitives.ButtonBase]::ClickEvent))) }
+            $e.Handled = $true
+        }
+    })
+
+# --- Status bar initial text ---
+$ui['lblStatusBar'].Text = 'Ready'
+$ui['lblLastScan'].Text = ''
 
 # --- Update title bar version ---
 $verBlock = $ui['lblTitle'].Parent.Children | Where-Object { $_ -is [System.Windows.Controls.TextBlock] -and $_.Text -match 'v\d' } | Select-Object -First 1
-if ($verBlock) { $verBlock.Text = '  v4.2' }
+if ($verBlock) { $verBlock.Text = '  v4.3' }
 
 $null = [Native.Win32]::ShowWindow([Native.Win32]::GetConsoleWindow(), 0)
 [void]$Window.ShowDialog()
