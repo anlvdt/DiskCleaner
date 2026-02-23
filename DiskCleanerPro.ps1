@@ -1726,9 +1726,9 @@ $devHeader = $ui['btnDevScan'].Parent  # StackPanel
 $devQLabel = New-Object System.Windows.Controls.TextBlock; $devQLabel.Text = 'Quick:'; $devQLabel.Foreground = MkColor '#6e6e6e'; $devQLabel.FontSize = 11; $devQLabel.VerticalAlignment = 'Center'; $devQLabel.Margin = '0,0,4,0'
 $devHeader.Children.Insert(0, $devQLabel)
 $devPaths = @(
-    @{ Name = 'MyApps'; Path = 'C:\MyApps' }
-    @{ Name = 'source'; Path = "$env:USERPROFILE\source" }
+    @{ Name = 'source\repos'; Path = "$env:USERPROFILE\source\repos" }
     @{ Name = 'repos'; Path = "$env:USERPROFILE\repos" }
+    @{ Name = 'Projects'; Path = "$env:USERPROFILE\Projects" }
     @{ Name = 'Desktop'; Path = [Environment]::GetFolderPath('Desktop') }
 )
 foreach ($dp in $devPaths) {
