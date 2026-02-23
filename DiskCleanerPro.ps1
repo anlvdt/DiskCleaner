@@ -668,8 +668,29 @@ Switch-AppMode; Update-DiskInfo
 
 # ===== TITLE BAR =====
 $ui['titleBar'].Add_MouseLeftButtonDown({ $Window.DragMove() })
+# Maximize: toggle icon + constrain to work area (prevent taskbar overflow)
+$script:preMaxBounds = $null
+$ui['btnMax'].Add_Click({
+        if ($Window.WindowState -eq 'Maximized' -or ($Window.Width -ge [System.Windows.SystemParameters]::WorkArea.Width - 2)) {
+            # Restore
+            $Window.WindowState = 'Normal'
+            if ($script:preMaxBounds) {
+                $Window.Left = $script:preMaxBounds.Left; $Window.Top = $script:preMaxBounds.Top
+                $Window.Width = $script:preMaxBounds.Width; $Window.Height = $script:preMaxBounds.Height
+            }
+            $ui['btnMax'].Content = [string][char]0xE922  # maximize icon
+        }
+        else {
+            # Save current bounds, then maximize to work area
+            $script:preMaxBounds = @{ Left = $Window.Left; Top = $Window.Top; Width = $Window.Width; Height = $Window.Height }
+            $wa = [System.Windows.SystemParameters]::WorkArea
+            $Window.WindowState = 'Normal'
+            $Window.Left = $wa.Left; $Window.Top = $wa.Top
+            $Window.Width = $wa.Width; $Window.Height = $wa.Height
+            $ui['btnMax'].Content = [string][char]0xE923  # restore icon
+        }
+    })
 $ui['btnMin'].Add_Click({ $Window.WindowState = 'Minimized' })
-$ui['btnMax'].Add_Click({ if ($Window.WindowState -eq 'Maximized') { $Window.WindowState = 'Normal' }else { $Window.WindowState = 'Maximized' } })
 $ui['btnClose'].Add_Click({ $Window.Close() })
 
 # ===== CLEAN TAB: Checkbox Model =====
