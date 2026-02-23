@@ -353,7 +353,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                             <StackPanel>
                                 <TextBlock Text="HOW TO GET FREE API KEY" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
                                 <TextBlock Foreground="#858585" FontSize="11" TextWrapping="Wrap" LineHeight="20" Text="1. Go to console.groq.com - sign in with Google/GitHub&#x0a;2. Click API Keys menu (console.groq.com/keys)&#x0a;3. Click 'Create API Key' - copy the key (gsk_...)&#x0a;4. Paste above, click Save Key - done!" Margin="0,0,0,10"/>
-                                <Button x:Name="btnOpenGroq" Content="Open console.groq.com/keys" Style="{StaticResource BtnP}" HorizontalAlignment="Stretch" Padding="0,8" FontSize="12" Margin="0,0,0,10"/>
+                                <Button x:Name="btnOpenGroq" Content="Open console.groq.com/keys" Style="{StaticResource BtnP}" HorizontalAlignment="Left" Padding="16,8" FontSize="12" Margin="0,0,0,10"/>
                                 <Border BorderBrush="#3e3e42" BorderThickness="0,1,0,0" Padding="0,10,0,0">
                                     <StackPanel>
                                         <TextBlock Text="AI DETAILS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
