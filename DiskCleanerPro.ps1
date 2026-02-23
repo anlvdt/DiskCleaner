@@ -84,8 +84,9 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                         <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="bd" Property="Background" Value="#12704f"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="bd" Property="Background" Value="#1e293b"/></Trigger></ControlTemplate.Triggers>
                     </ControlTemplate></Button.Template></Button>
                     <Border Background="#2d2d30" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="10" Padding="20,14" MinWidth="500">
-                        <TextBlock x:Name="lblSimpleResult" Text="Not cleaned yet. Click the button to start!" Foreground="#858585" FontSize="13" HorizontalAlignment="Center" TextAlignment="Center"/>
+                        <TextBlock x:Name="lblSimpleResult" Text="Not cleaned yet. Click the button above to start!" Foreground="#858585" FontSize="13" HorizontalAlignment="Center" TextAlignment="Center"/>
                     </Border>
+                    <TextBlock Text="Tip: Click 'Advanced' at the bottom to access Analyzer, Dev Cleanup, Organize, Rename, and Disk Map" Foreground="#555555" FontSize="11" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,12,0,0" TextWrapping="Wrap"/>
                     <Border Width="400" Height="12" Background="#333333" CornerRadius="6" Margin="0,14,0,0">
                         <Border x:Name="simpleProgressFill" Background="#16825d" CornerRadius="6" HorizontalAlignment="Left" Width="0"/>
                     </Border>
@@ -98,7 +99,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                 <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Clean" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Style="{StaticResource Card}" Margin="18,10,18,4"><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                         <DockPanel Grid.Row="0" Margin="0,0,0,10">
-                            <TextBlock Text="System Junk Cleaner" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Scan and clean temp files, caches, crash dumps" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/>
+                            <TextBlock Text="System Junk Cleaner" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="   1. Analyze   2. Review   3. Clean" Foreground="#555555" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0"/>
                             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
                                 <TextBlock x:Name="lblCleanTotal" Text="Click Analyze to scan sizes" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center" Margin="0,0,12,0"/>
                                 <Button x:Name="btnAnalyze" Content="Analyze" Style="{StaticResource BtnP}" Padding="16,10"/>
@@ -157,8 +158,12 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <!-- Analyzer toolbar -->
                     <DockPanel Grid.Row="1" Margin="18,8,18,8">
                         <StackPanel Orientation="Horizontal">
-                            <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="300"><TextBlock x:Name="lblPath" Text="Select a folder to scan..." Foreground="#6e6e6e" FontSize="13"/></Border>
-                            <Button x:Name="btnBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0"/>
+                            <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="14,9" MinWidth="260"><TextBlock x:Name="lblPath" Text="Select a folder to scan..." Foreground="#6e6e6e" FontSize="13"/></Border>
+                            <Button x:Name="btnBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0" Padding="14,8"/>
+                            <Button x:Name="btnScanDesktop" Content="Desktop" Style="{StaticResource BtnS}" Margin="0,0,4,0" Padding="12,8"/>
+                            <Button x:Name="btnScanDownloads" Content="Downloads" Style="{StaticResource BtnS}" Margin="0,0,4,0" Padding="12,8"/>
+                            <Button x:Name="btnScanDocuments" Content="Documents" Style="{StaticResource BtnS}" Margin="0,0,4,0" Padding="12,8"/>
+                            <Button x:Name="btnScanC" Content="C:\" Style="{StaticResource BtnS}" Margin="0,0,8,0" Padding="12,8"/>
                             <Button x:Name="btnScan" Content="Scan" Style="{StaticResource BtnP}"/>
                             <Button x:Name="btnExport" Content="Export" Style="{StaticResource BtnS}" Margin="8,0" IsEnabled="False"/>
                         </StackPanel>
@@ -941,6 +946,16 @@ function Stop-FolderScan {
 
 $ui['btnBrowse'].Add_Click({ $dlg = New-Object System.Windows.Forms.FolderBrowserDialog; $dlg.Description = 'Select folder'; if ($dlg.ShowDialog() -eq 'OK') { $ui['lblPath'].Text = $dlg.SelectedPath; Start-FolderScan $dlg.SelectedPath } })
 $ui['btnScan'].Add_Click({ if ($AppArgs.IsScanning) { Stop-FolderScan } else { Start-FolderScan $ui['lblPath'].Text } })
+# Quick-select folder buttons for Analyzer
+$ui['btnScanDesktop'].Add_Click({ $p = [Environment]::GetFolderPath('Desktop'); $ui['lblPath'].Text = $p; $ui['lblPath'].Foreground = MkColor '#d4d4d4'; Start-FolderScan $p })
+$ui['btnScanDownloads'].Add_Click({ $p = (New-Object -ComObject Shell.Application).Namespace('shell:Downloads').Self.Path; $ui['lblPath'].Text = $p; $ui['lblPath'].Foreground = MkColor '#d4d4d4'; Start-FolderScan $p })
+$ui['btnScanDocuments'].Add_Click({ $p = [Environment]::GetFolderPath('MyDocuments'); $ui['lblPath'].Text = $p; $ui['lblPath'].Foreground = MkColor '#d4d4d4'; Start-FolderScan $p })
+$ui['btnScanC'].Add_Click({ $ui['lblPath'].Text = 'C:\'; $ui['lblPath'].Foreground = MkColor '#d4d4d4'; Start-FolderScan 'C:\' })
+# Add icons to quick-select buttons
+Set-BtnIcon 'btnScanDesktop'   "`u{E7F4}" 'Desktop'
+Set-BtnIcon 'btnScanDownloads' "`u{E896}" 'Downloads'
+Set-BtnIcon 'btnScanDocuments' "`u{E8A5}" 'Documents'
+Set-BtnIcon 'btnScanC'         "`u{EDA2}" 'C:\'
 
 
 
