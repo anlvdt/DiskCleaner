@@ -544,6 +544,32 @@ $XAML.SelectNodes("//*[@*[contains(translate(name(),'x','X'),'Name')]]") | ForEa
 }
 function MkColor([string]$h) { New-Object System.Windows.Media.SolidColorBrush([System.Windows.Media.ColorConverter]::ConvertFromString($h)) }
 
+# ===== SETTINGS PERSISTENCE =====
+$script:settingsFile = Join-Path $env:USERPROFILE '.diskcleaner\settings.json'
+function Load-AppSettings {
+    if (Test-Path $script:settingsFile) {
+        try { return Get-Content $script:settingsFile -Raw | ConvertFrom-Json } catch {}
+    }
+    return @{ LastScanPath = ''; LastOrgPath = ''; WindowWidth = 0; WindowHeight = 0 }
+}
+function Save-AppSettings {
+    $settings = @{
+        LastScanPath = $(if ($ui['lblPath']) { $ui['lblPath'].Text } else { '' })
+        LastOrgPath  = $(if ($ui['lblOrgPath']) { $ui['lblOrgPath'].Text } else { '' })
+        WindowWidth  = $Window.ActualWidth
+        WindowHeight = $Window.ActualHeight
+    }
+    $dir = Split-Path $script:settingsFile -Parent
+    if (-not (Test-Path $dir)) { $null = New-Item $dir -ItemType Directory -Force }
+    $settings | ConvertTo-Json | Set-Content $script:settingsFile -Force
+}
+
+# Load settings at startup
+$script:appSettings = Load-AppSettings
+
+# Save settings on window close
+$Window.Add_Closing({ Save-AppSettings })
+
 # ===== DIALOG =====
 function Show-Dialog {
     param([string]$Message, [string]$Title = 'DiskCleaner Pro', [string]$Buttons = 'OK', [string]$Icon = 'Info')
@@ -1845,9 +1871,20 @@ function Add-SizeFilters {
 # Hook into scan completion to save large items and add filters
 $script:origScanCompleteHooked = $false
 
+# --- Restore saved settings ---
+if ($script:appSettings.LastScanPath -and (Test-Path $script:appSettings.LastScanPath)) {
+    $ui['lblPath'].Text = $script:appSettings.LastScanPath; $ui['lblPath'].Foreground = MkColor '#d4d4d4'
+}
+if ($script:appSettings.LastOrgPath -and (Test-Path $script:appSettings.LastOrgPath)) {
+    $ui['lblOrgPath'].Text = $script:appSettings.LastOrgPath; $ui['lblOrgPath'].Foreground = MkColor '#d4d4d4'
+}
+if ($script:appSettings.WindowWidth -gt 0 -and $script:appSettings.WindowHeight -gt 0) {
+    $Window.Width = $script:appSettings.WindowWidth; $Window.Height = $script:appSettings.WindowHeight
+}
+
 # --- Update title bar version ---
 $verBlock = $ui['lblTitle'].Parent.Children | Where-Object { $_ -is [System.Windows.Controls.TextBlock] -and $_.Text -match 'v\d' } | Select-Object -First 1
-if ($verBlock) { $verBlock.Text = '  v4.1' }
+if ($verBlock) { $verBlock.Text = '  v4.2' }
 
 $null = [Native.Win32]::ShowWindow([Native.Win32]::GetConsoleWindow(), 0)
 [void]$Window.ShowDialog()
