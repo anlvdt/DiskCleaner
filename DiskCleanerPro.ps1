@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     DiskCleaner Pro v3.0 - Windows Native Disk Cleanup Tool
 .DESCRIPTION
@@ -95,7 +95,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
             <!-- ADVANCED TABS -->
             <TabControl x:Name="panelAdvanced" Grid.Row="1" Background="#1e1e1e" BorderThickness="0" Padding="0" Visibility="Collapsed">
                 <!-- TAB: CLEAN -->
-                <TabItem Header="  Clean  "><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Clean" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Style="{StaticResource Card}" Margin="18,10,18,4"><Grid><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                         <DockPanel Grid.Row="0" Margin="0,0,0,10">
                             <TextBlock Text="System Junk Cleaner" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Scan and clean temp files, caches, crash dumps" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/>
@@ -126,7 +126,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                         </StackPanel>
                     </DockPanel>
                 </Grid></TabItem>
-                <TabItem Header="  Dev Cleanup  "><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE943;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Dev" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <DockPanel Grid.Row="0" Margin="18,14,18,8">
                         <TextBlock Text="Dev Cleanup" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Detects and cleans developer build artifacts" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/>
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -149,7 +149,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     <Button Grid.Row="3" x:Name="btnDevClean" Content="Clean Selected" Style="{StaticResource BtnD}" HorizontalAlignment="Right" Margin="18,0,18,14"/>
                 </Grid></TabItem>
                 <!-- TAB: DISK ANALYZER -->
-                <TabItem Header="  Disk Analyzer  "><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE9D9;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Analyzer" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                     <!-- Analyzer header -->
                     <DockPanel Grid.Row="0" Margin="18,14,18,0">
                         <TextBlock Text="Disk Analyzer" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Scans folders for large files, duplicates, junk and old files" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/>
@@ -208,7 +208,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </TabControl>
                 </Grid></TabItem>
                 <!-- TAB: ORGANIZE -->
-                <TabItem Header="  Organize  "><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE8B7;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Organize" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
                         <DockPanel Margin="0,0,0,10"><TextBlock Text="File Organizer" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Moves files into categorized folders, no files deleted" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/></DockPanel>
                         <DockPanel Margin="0,0,0,6">
@@ -253,7 +253,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: RENAME -->
-                <TabItem Header="  Rename  "><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE8AC;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Rename" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="18,14,18,8"><StackPanel>
                         <DockPanel Margin="0,0,0,10"><TextBlock Text="Bulk Rename" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/><TextBlock Text="  -  Rename multiple files at once with patterns" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/></DockPanel>
                         <DockPanel Margin="0,0,0,8">
@@ -293,7 +293,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: DISK MAP -->
-                <TabItem Header="  Disk Map  "><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE909;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Disk Map" VerticalAlignment="Center"/></StackPanel></TabItem.Header><Grid Background="#1e1e1e"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                     <Border Grid.Row="0" Margin="18,14,18,4"><DockPanel>
                         <TextBlock Text="Disk Map" Foreground="#d4d4d4" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         <TextBlock Text="  -  Visual disk usage treemap" Foreground="#6e6e6e" FontSize="11" VerticalAlignment="Center"/>
@@ -315,7 +315,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </DockPanel>
                 </Grid></TabItem>
                 <!-- TAB: SETTINGS -->
-                <TabItem Header="  Settings  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE713;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="Settings" VerticalAlignment="Center"/></StackPanel></TabItem.Header><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
                     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Margin="0,0,10,0">
                         <TextBlock Text="Settings" Foreground="#d4d4d4" FontSize="22" FontWeight="Bold" Margin="0,0,0,20"/>
@@ -389,7 +389,7 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                     </Grid>
                 </Border></ScrollViewer></TabItem>
                 <!-- TAB: ABOUT -->
-                <TabItem Header="  About  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
+                <TabItem><TabItem.Header><StackPanel Orientation="Horizontal"><TextBlock Text="&#xE946;" FontFamily="Segoe MDL2 Assets" FontSize="12" VerticalAlignment="Center" Margin="4,0,6,0"/><TextBlock Text="About" VerticalAlignment="Center"/></StackPanel></TabItem.Header><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
                     <StackPanel>
                         <TextBlock Text="DiskCleaner Pro" Foreground="#d4d4d4" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,4"/>
                         <TextBlock Text="v4.3" Foreground="#569cd6" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,12"/>
