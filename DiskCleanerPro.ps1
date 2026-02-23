@@ -265,25 +265,27 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                             <Button DockPanel.Dock="Right" x:Name="btnRenBrowse" Content="Browse" Style="{StaticResource BtnS}" Margin="8,0,0,0" Padding="14,8"/>
                             <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="14,8"><TextBlock x:Name="lblRenPath" Text="Select a folder..." Foreground="#6e6e6e" FontSize="12" TextTrimming="CharacterEllipsis"/></Border>
                         </DockPanel>
-                        <DockPanel>
+                        <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Mode:" Foreground="#858585" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
                             <Button x:Name="btnRenPrefix" Content="Add Prefix" Style="{StaticResource BtnP}" Margin="0,0,6,0" Padding="14,8"/>
                             <Button x:Name="btnRenSuffix" Content="Add Suffix" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
                             <Button x:Name="btnRenReplace" Content="Replace Text" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
                             <Button x:Name="btnRenSeq" Content="Sequential" Style="{StaticResource BtnS}" Margin="0,0,6,0" Padding="14,8"/>
                             <Button x:Name="btnRenDate" Content="Date Prefix" Style="{StaticResource BtnS}" Margin="0,0,0,0" Padding="14,8"/>
-                        </DockPanel>
+                        </StackPanel>
                     </StackPanel></Border>
                     <Border Grid.Row="1" Margin="18,0,18,8"><DockPanel>
-                        <TextBlock Text="Find:" Foreground="#858585" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="10,7" MinWidth="150" Margin="0,0,12,0">
-                            <TextBox x:Name="txtRenFind" Background="Transparent" BorderThickness="0" Foreground="#d4d4d4" FontSize="12"/>
-                        </Border>
-                        <TextBlock Text="Replace:" Foreground="#858585" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                        <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="10,7" MinWidth="150" Margin="0,0,12,0">
-                            <TextBox x:Name="txtRenReplace" Background="Transparent" BorderThickness="0" Foreground="#d4d4d4" FontSize="12"/>
-                        </Border>
-                        <Button x:Name="btnRenPreview" Content="Preview" Style="{StaticResource BtnP}" Padding="16,8"/>
+                        <Button DockPanel.Dock="Right" x:Name="btnRenPreview" Content="Preview" Style="{StaticResource BtnP}" Padding="16,8" Margin="12,0,0,0"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Find:" Foreground="#858585" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="10,7" MinWidth="150" Margin="0,0,12,0">
+                                <TextBox x:Name="txtRenFind" Background="Transparent" BorderThickness="0" Foreground="#d4d4d4" FontSize="12"/>
+                            </Border>
+                            <TextBlock Text="Replace:" Foreground="#858585" FontSize="12" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                            <Border Background="#252526" BorderBrush="#3e3e42" BorderThickness="1" CornerRadius="7" Padding="10,7" MinWidth="150" Margin="0,0,0,0">
+                                <TextBox x:Name="txtRenReplace" Background="Transparent" BorderThickness="0" Foreground="#d4d4d4" FontSize="12"/>
+                            </Border>
+                        </StackPanel>
                     </DockPanel></Border>
                     <Border Grid.Row="2" Style="{StaticResource Card}" Margin="18,0,18,8">
                         <DataGrid x:Name="gridRename"><DataGrid.Columns>
