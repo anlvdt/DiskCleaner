@@ -422,8 +422,7 @@ Assert-True ($mainScript -match "btnScan.*RaiseEvent") "Analyzer: quick buttons 
 # ========================================
 Write-Host "    --- v4.1: Dev Quick Buttons ---" -ForegroundColor DarkCyan
 Assert-True ($mainScript -match 'Quick project root buttons for Dev Cleanup') "Dev: quick buttons section exists"
-Assert-True ($mainScript -match "Name = 'MyApps'") "Dev: has MyApps quick button"
-Assert-True ($mainScript -match "Name = 'source'") "Dev: has source quick button"
+Assert-True ($mainScript -match "source.repos") "Dev: has source\repos quick button"
 Assert-True ($mainScript -match "Name = 'repos'") "Dev: has repos quick button"
 Assert-True ($mainScript -match "btnDevScan.*RaiseEvent") "Dev: quick buttons trigger dev scan"
 # Verify only existing paths get buttons

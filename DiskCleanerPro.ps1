@@ -1878,3 +1878,4 @@ if ($verBlock) { $verBlock.Text = '  v4.3' }
 
 $null = [Native.Win32]::ShowWindow([Native.Win32]::GetConsoleWindow(), 0)
 [void]$Window.ShowDialog()
+
