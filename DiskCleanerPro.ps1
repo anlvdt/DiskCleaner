@@ -341,58 +341,20 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                                 </DockPanel>
                             </StackPanel>
                         </Border>
-                        <!-- How to get API Key -->
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
+                        <!-- How to get API Key + AI Details (compact) -->
+                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,14" Margin="0,0,0,16">
                             <StackPanel>
-                                <TextBlock Text="HOW TO GET FREE API KEY" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                                <TextBlock Foreground="#f59e0b" FontSize="11" Margin="0,0,0,10" Text="(!) 100% Free - No credit card - No charges ever"/>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#0078d4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="1" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Go to console.groq.com" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Sign in with your Google or GitHub account" Foreground="#858585" FontSize="11" TextWrapping="Wrap"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#0078d4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="2" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Go to API Keys page" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Click on API Keys menu (or go directly to: console.groq.com/keys)" Foreground="#858585" FontSize="11" TextWrapping="Wrap"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#0078d4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="3" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Create API Key" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Click 'Create API Key' and copy the key (starts with gsk_...)" Foreground="#858585" FontSize="11" TextWrapping="Wrap"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="32"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="24" Height="24" CornerRadius="12" Background="#22c55e" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,2,0,0"><TextBlock Text="4" Foreground="White" FontSize="12" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Paste &amp; Save" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Paste your key in the box above, click Save Key. AI is now active!" Foreground="#858585" FontSize="11" TextWrapping="Wrap"/></StackPanel>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
-                        <Button x:Name="btnOpenGroq" Content="Open console.groq.com/keys" Style="{StaticResource BtnP}" HorizontalAlignment="Stretch" Padding="0,12" Margin="0,0,0,16" FontSize="13"/>
-                        <!-- AI Info -->
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="AI DETAILS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Provider" Foreground="#858585" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="Groq (groq.com)" Foreground="#d4d4d4" FontSize="12"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Model" Foreground="#858585" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="Llama 3.1 8B Instant" Foreground="#d4d4d4" FontSize="12"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Cost" Foreground="#858585" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="FREE - 14,400 calls/day (no time limit)" Foreground="#4ec9b0" FontSize="12" FontWeight="SemiBold"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Credit Card" Foreground="#858585" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="NOT required" Foreground="#4ec9b0" FontSize="12" FontWeight="SemiBold"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,6"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Rate Limit" Foreground="#858585" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="30 req/min, 14,400 req/day" Foreground="#d4d4d4" FontSize="12"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="120"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Privacy" Foreground="#858585" FontSize="12"/>
-                                    <TextBlock Grid.Column="1" Text="Key stored locally ONLY, never sent to author or anyone" Foreground="#f59e0b" FontSize="12" TextWrapping="Wrap"/>
-                                </Grid>
+                                <TextBlock Text="HOW TO GET FREE API KEY" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <TextBlock Foreground="#858585" FontSize="11" TextWrapping="Wrap" LineHeight="20" Text="1. Go to console.groq.com - sign in with Google/GitHub&#x0a;2. Click API Keys menu (console.groq.com/keys)&#x0a;3. Click 'Create API Key' - copy the key (gsk_...)&#x0a;4. Paste above, click Save Key - done!" Margin="0,0,0,10"/>
+                                <Button x:Name="btnOpenGroq" Content="Open console.groq.com/keys" Style="{StaticResource BtnP}" HorizontalAlignment="Stretch" Padding="0,8" FontSize="12" Margin="0,0,0,10"/>
+                                <Border BorderBrush="#3e3e42" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="AI DETAILS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                        <Grid Margin="0,0,0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Provider" Foreground="#858585" FontSize="11"/><TextBlock Grid.Column="1" Text="Groq - Llama 3.1 8B Instant" Foreground="#d4d4d4" FontSize="11"/></Grid>
+                                        <Grid Margin="0,0,0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Cost" Foreground="#858585" FontSize="11"/><TextBlock Grid.Column="1" Text="FREE - 14,400 calls/day, no card" Foreground="#4ec9b0" FontSize="11" FontWeight="SemiBold"/></Grid>
+                                        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Privacy" Foreground="#858585" FontSize="11"/><TextBlock Grid.Column="1" Text="Key stored locally only" Foreground="#f59e0b" FontSize="11"/></Grid>
+                                    </StackPanel>
+                                </Border>
                             </StackPanel>
                         </Border>
                     </StackPanel>
@@ -430,105 +392,62 @@ $modPath = Join-Path $PSScriptRoot 'modules'
                 <TabItem Header="  About  "><ScrollViewer VerticalScrollBarVisibility="Auto"><Border Background="#1e1e1e" Padding="32,24">
                     <StackPanel>
                         <TextBlock Text="DiskCleaner Pro" Foreground="#d4d4d4" FontSize="28" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,4"/>
-                        <TextBlock Text="v4.1" Foreground="#569cd6" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                        <TextBlock Foreground="#858585" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" LineHeight="22" Margin="0,0,0,6" Text="Free, open-source, AV-friendly disk cleanup tool for Windows. Built with PowerShell + WPF, no installation required. Outperforms Windows Storage Sense with deeper scanning, smarter analysis, and multi-layer safety protection."/>
-                        <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" LineHeight="20" Margin="0,0,0,24" Text="Zero dependencies. Zero telemetry. 100% local processing. Your files never leave your machine."/>
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
+                        <TextBlock Text="v4.3" Foreground="#569cd6" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" TextAlignment="Center" LineHeight="20" Margin="0,0,0,4" Text="Free, open-source disk cleanup tool for Windows. PowerShell + WPF, no installation required."/>
+                        <TextBlock Foreground="#858585" FontSize="11" TextAlignment="Center" Margin="0,0,0,16" Text="Zero dependencies. Zero telemetry. 100% local processing."/>
+                        <!-- FEATURES - 2 column grid -->
+                        <Border Background="#2d2d30" CornerRadius="8" Padding="18,14" Margin="0,0,0,12">
                             <StackPanel>
-                                <TextBlock Text="CORE FEATURES" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,14"/>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#1a8bff" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Deep Scanner" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Scans files in 7 phases: large files, duplicate detection, junk patterns, empty folders, file age, folder sizes" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#f97316" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="System Cleaner" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Cleans 30+ targets: temp files, browser caches (Chrome, Edge, Firefox), app caches (Teams, Discord, Slack, Spotify, VS Code, Zoom), crash dumps, error reports, event logs. Zalo is excluded for safety - use Zalo Settings &gt; Data Management instead." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#8b5cf6" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Dev Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Detects 32+ artifact types: node_modules, __pycache__, build outputs, IDE configs, package caches" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#22c55e" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Organizer + AI" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Organizes files in 4 modes: by type, date, size, content. AI classification (Groq, free), PII detection, undo support" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#ef4444" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="5-Layer SafeGuard" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Protects via 5 layers: critical path blacklist, attribute checks, path containment, Recycle Bin, keeplist" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#eab308" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart Clean + Broken Files" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Recommends priority-based actions: broken file detection, extension mismatch, empty files, symlink repair" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#06b6d4" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Scan History" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Tracks usage trends via JSON snapshots: size changes, file count, duplicates, junk metrics over time" Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#c084fc" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Bulk Rename" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="5 rename modes: prefix, suffix, find-replace, sequential numbering, date prefix. Live preview before applying." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#f472b6" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Folder Watch" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Auto-organize new files in real-time using FileSystemWatcher. Files sorted immediately as they appear." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#38bdf8" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Disk Map Treemap" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Visual treemap of disk usage with drive selection buttons, usage bars, right-click context menu. Async scanning, never freezes UI." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,10"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#a3e635" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Scheduled Auto-Clean" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="Windows Task Scheduler integration: automatic weekly cleanup every Sunday at 3AM. Enable/disable with one click." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
-                                </Grid>
-                                <Grid Margin="0,0,0,0"><Grid.ColumnDefinitions><ColumnDefinition Width="28"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <Border Grid.Column="0" Width="14" Height="14" CornerRadius="7" Background="#fbbf24" VerticalAlignment="Top" Margin="0,3,0,0"/>
-                                    <StackPanel Grid.Column="1"><TextBlock Text="Smart UX Automation" Foreground="#d4d4d4" FontSize="13" FontWeight="SemiBold"/><TextBlock Text="40+ tooltips, auto-analyze on tab visit, quick-select buttons on all tabs, size filters for scan results, default paths for convenience." Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="18"/></StackPanel>
+                                <TextBlock Text="FEATURES" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Grid.RowDefinitions><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/><RowDefinition/></Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,8"><Border Width="10" Height="10" CornerRadius="5" Background="#0078d4" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Deep Scanner - 7-phase analysis" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8"><Border Width="10" Height="10" CornerRadius="5" Background="#f97316" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="System Cleaner - 57+ targets" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,8"><Border Width="10" Height="10" CornerRadius="5" Background="#8b5cf6" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Dev Clean - 32+ artifact types" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8"><Border Width="10" Height="10" CornerRadius="5" Background="#22c55e" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Folder Organizer + AI classify" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,8"><Border Width="10" Height="10" CornerRadius="5" Background="#ef4444" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="5-Layer SafeGuard protection" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8"><Border Width="10" Height="10" CornerRadius="5" Background="#eab308" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Smart Clean + Broken Files" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,8"><Border Width="10" Height="10" CornerRadius="5" Background="#06b6d4" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Scan History + trends" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8"><Border Width="10" Height="10" CornerRadius="5" Background="#8b5cf6" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Bulk Rename - 5 modes" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,8"><Border Width="10" Height="10" CornerRadius="5" Background="#f97316" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Folder Watch - auto-organize" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,8"><Border Width="10" Height="10" CornerRadius="5" Background="#0078d4" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Disk Map - visual treemap" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,0"><Border Width="10" Height="10" CornerRadius="5" Background="#22c55e" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Scheduled Auto-Clean" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
+                                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,0"><Border Width="10" Height="10" CornerRadius="5" Background="#eab308" VerticalAlignment="Center" Margin="0,0,8,0"/><TextBlock Text="Settings persistence + UX" Foreground="#d4d4d4" FontSize="11"/></StackPanel>
                                 </Grid>
                             </StackPanel>
                         </Border>
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="AUTHOR" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                <TextBlock Text="Le Van An (Vietnam IT)" Foreground="#d4d4d4" FontSize="14" FontWeight="Medium"/>
-                                <TextBlock Text="@anlvdt" Foreground="#858585" FontSize="12" Margin="0,4,0,0"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="SUPPORT THE DEVELOPER" Foreground="#f59e0b" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,12"/>
-                                <TextBlock Text="If you find this tool useful, please consider supporting:" Foreground="#858585" FontSize="12" Margin="0,0,0,12"/>
-                                <Grid Margin="0,0,0,8"><Grid.ColumnDefinitions><ColumnDefinition Width="100"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="MB Bank" Foreground="#1a8bff" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="0360126996868" Foreground="#d4d4d4" FontSize="14" FontWeight="Medium" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="2" Text="LE VAN AN" Foreground="#858585" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                </Grid>
-                                <Grid Margin="0,0,0,8"><Grid.ColumnDefinitions><ColumnDefinition Width="100"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Momo" Foreground="#d82d8b" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="1" Text="0976896621" Foreground="#d4d4d4" FontSize="14" FontWeight="Medium" VerticalAlignment="Center"/>
-                                    <TextBlock Grid.Column="2" Text="LE VAN AN" Foreground="#858585" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                </Grid>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="LINKS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                                <Button x:Name="btnGithub" Content="GitHub: github.com/anlvdt" Foreground="#0078d4" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
-                                <Button x:Name="btnFacebook" Content="Facebook: Laptop Le An" Foreground="#0078d4" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
-                                <Button x:Name="btnShopee" Content="Shopee: Laptop Le An (support by clicking)" Foreground="#ee4d2d" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="13" HorizontalAlignment="Left" Padding="0,4"/>
-                            </StackPanel>
-                        </Border>
-                        <Border Background="#2d2d30" CornerRadius="8" Padding="20,16" Margin="0,0,0,16">
-                            <StackPanel>
-                                <TextBlock Text="CREDITS &amp; REFERENCES" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,10"/>
-                                <TextBlock Text="Inspired by and references to open-source projects:" Foreground="#858585" FontSize="12" Margin="0,0,0,10"/>
-                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- huantt/clean-stack - Dev artifact detection patterns"/>
-                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- tfeldmann/organize - File organization concepts"/>
-                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- BleachBit - System junk cleanup patterns"/>
-                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- Windows Disk Cleanup &amp; Storage Sense - UX inspiration"/>
-                                <TextBlock Foreground="#858585" FontSize="12" TextWrapping="Wrap" LineHeight="22" Margin="0,0,0,4" Text="- WPF Dark Theme community patterns"/>
-                            </StackPanel>
-                        </Border>
-                        <TextBlock Text="Made with care in Vietnam" Foreground="#555555" FontSize="11" HorizontalAlignment="Center" TextAlignment="Center" Margin="0,8,0,0"/>
+                        <!-- Author + Links + Support + Credits in 2 columns -->
+                        <Grid Margin="0,0,0,12"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                            <!-- Left: Author + Links -->
+                            <Border Grid.Column="0" Background="#2d2d30" CornerRadius="8" Padding="18,14" Margin="0,0,6,0">
+                                <StackPanel>
+                                    <TextBlock Text="AUTHOR" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                    <TextBlock Text="Le Van An (Vietnam IT)" Foreground="#d4d4d4" FontSize="13" FontWeight="Medium"/>
+                                    <TextBlock Text="@anlvdt" Foreground="#858585" FontSize="11" Margin="0,2,0,10"/>
+                                    <Border BorderBrush="#3e3e42" BorderThickness="0,1,0,0" Padding="0,8,0,0">
+                                        <StackPanel>
+                                            <Button x:Name="btnGithub" Content="GitHub: github.com/anlvdt" Foreground="#0078d4" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="11" HorizontalAlignment="Left" Padding="0,3"/>
+                                            <Button x:Name="btnFacebook" Content="Facebook: Laptop Le An" Foreground="#0078d4" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="11" HorizontalAlignment="Left" Padding="0,3"/>
+                                            <Button x:Name="btnShopee" Content="Shopee: Laptop Le An" Foreground="#ee4d2d" Background="Transparent" BorderThickness="0" Cursor="Hand" FontSize="11" HorizontalAlignment="Left" Padding="0,3"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                            <!-- Right: Support + Credits -->
+                            <Border Grid.Column="1" Background="#2d2d30" CornerRadius="8" Padding="18,14" Margin="6,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="SUPPORT" Foreground="#f59e0b" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                    <Grid Margin="0,0,0,4"><Grid.ColumnDefinitions><ColumnDefinition Width="60"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="MB Bank" Foreground="#0078d4" FontSize="11" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="0360126996868 - LE VAN AN" Foreground="#d4d4d4" FontSize="11"/></Grid>
+                                    <Grid Margin="0,0,0,8"><Grid.ColumnDefinitions><ColumnDefinition Width="60"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><TextBlock Grid.Column="0" Text="Momo" Foreground="#d82d8b" FontSize="11" FontWeight="SemiBold"/><TextBlock Grid.Column="1" Text="0976896621 - LE VAN AN" Foreground="#d4d4d4" FontSize="11"/></Grid>
+                                    <Border BorderBrush="#3e3e42" BorderThickness="0,1,0,0" Padding="0,8,0,0">
+                                        <StackPanel>
+                                            <TextBlock Text="CREDITS" Foreground="#569cd6" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                                            <TextBlock Foreground="#858585" FontSize="10" LineHeight="16" TextWrapping="Wrap" Text="huantt/clean-stack, tfeldmann/organize, BleachBit, Windows Disk Cleanup, WPF Dark Theme community"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                        <TextBlock Text="Made with care in Vietnam" Foreground="#555555" FontSize="11" HorizontalAlignment="Center" Margin="0,4,0,0"/>
                     </StackPanel>
                 </Border></ScrollViewer></TabItem>
             </TabControl>
